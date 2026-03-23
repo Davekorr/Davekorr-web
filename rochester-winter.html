@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rochester, Winter 2026 — Davekorr</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--ink:#0f0e0d;--paper:#f5f2ed;--paper-2:#ede9e2;--accent:#b85c2a;--muted:#8a8278;--rule:#d4cfc8;--serif:'Playfair Display',Georgia,serif;--sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:300;overflow-x:hidden;}
+    ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--paper);}::-webkit-scrollbar-thumb{background:var(--accent);}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.25rem 3rem;background:rgba(245,242,237,0.95);border-bottom:1px solid var(--rule);backdrop-filter:blur(8px);}
+    .nav-logo{font-family:var(--serif);font-size:1.3rem;font-weight:900;letter-spacing:-0.02em;color:var(--ink);text-decoration:none;}
+    .nav-logo span{color:var(--accent);}
+    .nav-back{font-family:var(--mono);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:0.5rem;transition:color 0.2s;}
+    .nav-back:hover{color:var(--accent);}
+    .hero{width:100%;height:100vh;position:relative;overflow:hidden;}
+    .hero img{width:100%;height:100%;object-fit:cover;object-position:center 40%;display:block;}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.7) 100%);}
+    .hero-content{position:absolute;bottom:0;left:0;right:0;padding:4rem 3rem;}
+    .hero-eyebrow{font-family:var(--mono);font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:0.75rem;}
+    .hero-title{font-family:var(--serif);font-size:clamp(2.5rem,6vw,5rem);font-weight:900;line-height:1.0;letter-spacing:-0.03em;color:#fff;margin-bottom:0.5rem;}
+    .hero-title em{font-style:italic;color:rgba(255,255,255,0.7);}
+    .hero-meta{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-top:1rem;display:flex;gap:2rem;flex-wrap:wrap;}
+    .hero-scroll{position:absolute;bottom:2rem;right:3rem;font-family:var(--mono);font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.35);display:flex;flex-direction:column;align-items:center;gap:0.5rem;animation:pulse 2s infinite;}
+    .hero-scroll::after{content:'';width:1px;height:40px;background:linear-gradient(to bottom,rgba(255,255,255,0.35),transparent);}
+    @keyframes pulse{0%,100%{opacity:0.35;}50%{opacity:0.9;}}
+    .about-section{padding:5rem 3rem;display:grid;grid-template-columns:280px 1fr;gap:5rem;max-width:1300px;margin:0 auto;border-bottom:1px solid var(--rule);}
+    .fact-label{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:0.25rem;}
+    .fact-value{font-size:0.88rem;color:var(--ink);margin-bottom:1.5rem;line-height:1.5;}
+    .wip-note{display:inline-flex;align-items:center;gap:0.5rem;margin-top:0.5rem;font-family:var(--mono);font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);border:1px solid var(--rule);padding:0.4rem 0.85rem;}
+    .about-text{font-size:1.05rem;line-height:1.85;color:var(--ink);}
+    .about-text p{margin-bottom:1.2rem;}
+    .about-text p:first-child::first-letter{font-family:var(--serif);font-size:3.5rem;font-weight:900;float:left;line-height:0.8;margin-right:0.1em;margin-top:0.12em;color:var(--accent);}
+    .gallery-section{padding:4rem 3rem 6rem;max-width:1300px;margin:0 auto;}
+    .gallery-header{display:flex;align-items:baseline;gap:1.5rem;margin-bottom:3rem;padding-bottom:1.25rem;border-bottom:1px solid var(--rule);}
+    .gallery-num{font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.12em;}
+    .gallery-title{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.5rem);font-weight:700;letter-spacing:-0.02em;}
+    .gallery-title em{font-style:italic;color:var(--accent);}
+    .masonry{columns:3;column-gap:2rem;}
+    .gallery-item{break-inside:avoid;margin-bottom:2rem;cursor:pointer;position:relative;}
+    .img-wrap{background:#fff;box-shadow:0 4px 20px rgba(0,0,0,0.1),0 1px 4px rgba(0,0,0,0.06);transition:transform 0.35s ease,box-shadow 0.35s ease;position:relative;}
+    .gallery-item:hover .img-wrap{transform:translateY(-5px) rotate(0.3deg);box-shadow:0 16px 48px rgba(0,0,0,0.15);}
+    .img-wrap img{width:100%;display:block;}
+    .img-caption{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);position:absolute;bottom:12px;left:0;right:0;text-align:center;padding:0 10px;}
+    .lightbox{position:fixed;inset:0;z-index:200;background:rgba(6,6,5,0.97);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+    .lightbox.open{opacity:1;pointer-events:all;}
+    .lightbox-img{max-width:80vw;max-height:80vh;object-fit:contain;display:block;background:#fff;padding:14px 14px 50px 14px;box-shadow:0 20px 80px rgba(0,0,0,0.7);}
+    .lightbox-caption{position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.35);white-space:nowrap;}
+    .lightbox-close{position:absolute;top:1.5rem;right:2rem;background:none;border:1px solid #2a2a2a;color:#666;font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.5rem 1rem;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+    .lightbox-close:hover{border-color:var(--accent);color:var(--accent);}
+    .lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);background:none;border:1px solid #2a2a2a;color:#555;font-size:1rem;padding:1rem 1.25rem;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+    .lightbox-nav:hover{border-color:var(--accent);color:var(--accent);}
+    .lightbox-prev{left:2rem;}.lightbox-next{right:2rem;}
+    .lightbox-counter{position:absolute;top:1.5rem;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:0.6rem;letter-spacing:0.15em;color:rgba(255,255,255,0.25);text-transform:uppercase;}
+    footer{background:var(--ink);color:var(--paper);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;}
+    .footer-logo{font-family:var(--serif);font-size:1rem;font-weight:900;}
+    .footer-logo span{color:var(--accent);}
+    .footer-info{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;color:#555;}
+    .fade-up{opacity:0;transform:translateY(20px);transition:opacity 0.7s ease,transform 0.7s ease;}
+    .fade-up.visible{opacity:1;transform:none;}
+    @media(max-width:900px){nav{padding:1rem 1.5rem;}.hero-content{padding:2.5rem 1.5rem;}.hero-meta{gap:1rem;}.about-section{grid-template-columns:1fr;gap:2rem;padding:3rem 1.5rem;}.gallery-section{padding:3rem 1.5rem 4rem;}.masonry{columns:2;column-gap:1.25rem;}footer{flex-direction:column;gap:0.75rem;text-align:center;padding:1.5rem;}}
+    @media(max-width:560px){.masonry{columns:1;}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Dave<span>korr</span></a>
+  <a href="index.html#portfolios" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    <span>All Portfolios</span>
+  </a>
+</nav>
+<div class="hero">
+  <img src="images/roc-hero.jpg" alt="Rochester Winter 2026"/>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Portfolio — Home</p>
+    <h1 class="hero-title">Rochester,<br><em>Winter 2026</em></h1>
+    <div class="hero-meta"><span>Winter 2026</span><span>Fujifilm X-T5</span><span>Rochester, NY</span></div>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</div>
+<div class="about-section">
+  <div class="about-facts fade-up">
+    <p class="fact-label">Location</p><p class="fact-value">Rochester, New York</p>
+    <p class="fact-label">Date</p><p class="fact-value">Winter 2026</p>
+    <p class="fact-label">Camera</p><p class="fact-value">Fujifilm X-T5</p>
+    <p class="fact-label">Frames</p><p class="fact-value">13 photographs</p>
+    <p class="fact-label">Status</p><p class="fact-value"><span class="wip-note">Work in Progress</span></p>
+  </div>
+  <div class="about-text fade-up">
+    <p>Rochester is home. It got under my skin slowly, the way good cities do. There is a vintage quality to this place that is hard to put into words. The brick buildings, the Genesee River cutting through it all, the old industrial bones still visible everywhere you look. And then there is Kodak. George Eastman built his company here in 1892 and in doing so made Rochester the birthplace of modern photography. For someone who shoots on film-inspired Fujifilm cameras, that history is not just interesting. It feels personal.</p>
+    <p>This winter I have been splitting time between Rochester and Buffalo, shooting both cities as the season does what it does up here. The cold is real and it is persistent. But winter light in upstate New York has a quality you cannot find anywhere else. Low sun, long shadows, snow that turns ordinary scenes into something worth pointing a camera at.</p>
+    <p>This portfolio is a work in progress. Rochester deserves more frames than this and it will get them. Come back for additions throughout the season.</p>
+  </div>
+</div>
+<div class="gallery-section">
+  <div class="gallery-header fade-up">
+    <span class="gallery-num">13 frames —</span>
+    <h2 class="gallery-title">The <em>Work</em></h2>
+  </div>
+  <div class="masonry">
+    <div class="gallery-item" onclick="openLightbox(0)">
+        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
+          <img src="images/roc-deer.jpg" alt="Deer in the Snow Forest" loading="lazy"/>
+        </div>
+        <p class="img-caption">Deer in the Snow Forest</p>
+      </div>
+<div class="gallery-item" onclick="openLightbox(1)">
+        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
+          <img src="images/roc-lobby.jpg" alt="City Light" loading="lazy"/>
+        </div>
+        <p class="img-caption">City Light</p>
+      </div>
+<div class="gallery-item" onclick="openLightbox(2)">
+        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
+          <img src="images/roc-sledding.jpg" alt="Sledding at Dusk" loading="lazy"/>
+        </div>
+        <p class="img-caption">Sledding at Dusk</p>
+      </div>
+<div class="gallery-item" onclick="openLightbox(3)">
+        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
+          <img src="images/roc-dock.jpg" alt="Frozen Dock at Sunset" loading="lazy"/>
+        </div>
+        <p class="img-caption">Frozen Dock at Sunset</p>
+      </div>
+<div class="gallery-item" onclick="openLightbox(4)">
+        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
+          <img src="images/roc-hill.jpg" alt="The Hill" loading="lazy"/>
+        </div>
+        <p class="img-caption">The Hill</p>
+      </div>
+<div class="gallery-item" onclick="openLightbox(5)">
+        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
+          <img src="images/roc-geese.jpg" alt="Canada Geese" loading="lazy"/>
+        </div>
+        <p class="img-caption">Canada Geese</p>
+      </div>
+<div class="gallery-item" onclick="openLightbox(6)">
+        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
+          <img src="images/roc-downtown-aerial.jpg" alt="Downtown from Above" loading="lazy"/>
+        </div>
+        <p class="img-caption">Downtown from Above</p>
+      </div>
+<div class="gallery-item" onclick="openLightbox(7)">
+        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
+          <img src="images/roc-genesee-sign.jpg" alt="Genesee Beer and Ale" loading="lazy"/>
+        </div>
+        <p class="img-caption">Genesee Beer and Ale</p>
+      </div>
+<div class="gallery-item" onclick="openLightbox(8)">
+        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
+          <img src="images/roc-genesee-river.jpg" alt="Genesee River, Winter" loading="lazy"/>
+        </div>
+        <p class="img-caption">Genesee River, Winter</p>
+      </div>
+<div class="gallery-item" onclick="openLightbox(9)">
+        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
+          <img src="images/roc-blizzard.jpg" alt="Blizzard, Downtown Rochester" loading="lazy"/>
+        </div>
+        <p class="img-caption">Blizzard, Downtown Rochester</p>
+      </div>
+<div class="gallery-item" onclick="openLightbox(10)">
+        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
+          <img src="images/roc-icerink.jpg" alt="Ice Rink Reflection" loading="lazy"/>
+        </div>
+        <p class="img-caption">Ice Rink Reflection</p>
+      </div>
+<div class="gallery-item" onclick="openLightbox(11)">
+        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
+          <img src="images/roc-christmas.jpg" alt="Christmas on the Street" loading="lazy"/>
+        </div>
+        <p class="img-caption">Christmas on the Street</p>
+      </div>
+
+  </div>
+</div>
+<footer>
+  <span class="footer-logo">Dave<span>korr</span></span>
+  <span class="footer-info">© 2026 Dave Korr · Rochester, NY · Fujifilm X</span>
+</footer>
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">Close ✕</button>
+  <button class="lightbox-nav lightbox-prev" onclick="navLightbox(-1)">←</button>
+  <button class="lightbox-nav lightbox-next" onclick="navLightbox(1)">→</button>
+  <div class="lightbox-counter" id="lb-counter"></div>
+  <img class="lightbox-img" id="lb-img" src="" alt=""/>
+  <p class="lightbox-caption" id="lb-caption"></p>
+</div>
+<script>
+const photos = [{"src": "images/roc-deer.jpg", "label": "Deer in the Snow Forest"}, {"src": "images/roc-lobby.jpg", "label": "City Light"}, {"src": "images/roc-sledding.jpg", "label": "Sledding at Dusk"}, {"src": "images/roc-dock.jpg", "label": "Frozen Dock at Sunset"}, {"src": "images/roc-hill.jpg", "label": "The Hill"}, {"src": "images/roc-geese.jpg", "label": "Canada Geese"}, {"src": "images/roc-downtown-aerial.jpg", "label": "Downtown from Above"}, {"src": "images/roc-genesee-sign.jpg", "label": "Genesee Beer and Ale"}, {"src": "images/roc-genesee-river.jpg", "label": "Genesee River, Winter"}, {"src": "images/roc-blizzard.jpg", "label": "Blizzard, Downtown Rochester"}, {"src": "images/roc-icerink.jpg", "label": "Ice Rink Reflection"}, {"src": "images/roc-christmas.jpg", "label": "Christmas on the Street"}];
+let current = 0;
+function openLightbox(i){current=i;updateLightbox();document.getElementById('lightbox').classList.add('open');document.body.style.overflow='hidden';}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');document.body.style.overflow='';}
+function navLightbox(d){current=(current+d+photos.length)%photos.length;updateLightbox();}
+function updateLightbox(){const p=photos[current];const img=document.getElementById('lb-img');img.src=p.src;img.alt=p.label;document.getElementById('lb-caption').textContent=p.label;document.getElementById('lb-counter').textContent=(current+1)+' / '+photos.length;}
+document.getElementById('lightbox').addEventListener('click',function(e){if(e.target===this)closeLightbox();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e.key==='ArrowRight')navLightbox(1);if(e.key==='ArrowLeft')navLightbox(-1);});
+const obs=new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*100);obs.unobserve(e.target);}});},{threshold:0.1});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

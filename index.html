@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Davekorr — Photography</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --ink:#0f0e0d;--paper:#f5f2ed;--paper-2:#ede9e2;
+      --accent:#b85c2a;--muted:#8a8278;--rule:#d4cfc8;
+      --serif:'Playfair Display',Georgia,serif;
+      --sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+    }
+    html{scroll-behavior:smooth;}
+    body{background:var(--ink);color:var(--paper);font-family:var(--sans);font-weight:300;overflow-x:hidden;}
+    ::-webkit-scrollbar{width:4px;}
+    ::-webkit-scrollbar-track{background:var(--ink);}
+    ::-webkit-scrollbar-thumb{background:var(--accent);}
+
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.25rem 3rem;background:rgba(15,14,13,0.92);border-bottom:1px solid #1e1e1e;backdrop-filter:blur(10px);}
+    .nav-logo{font-family:var(--serif);font-size:1.3rem;font-weight:900;letter-spacing:-0.02em;color:var(--paper);text-decoration:none;}
+    .nav-logo span{color:var(--accent);}
+    .nav-links{display:flex;gap:2.5rem;list-style:none;}
+    .nav-links a{font-family:var(--mono);font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:#555;text-decoration:none;transition:color 0.2s;}
+    .nav-links a:hover{color:var(--paper);}
+
+    .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8rem 3rem 6rem;text-align:center;position:relative;overflow:hidden;}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(184,92,42,0.1) 0%,transparent 65%);pointer-events:none;}
+    .hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,#2a2a2a 30%,#2a2a2a 70%,transparent);}
+    .hero-eyebrow{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--accent);margin-bottom:2rem;opacity:0;animation:fadeUp 0.8s ease 0.2s forwards;}
+    .hero h1{font-family:var(--serif);font-size:clamp(3.5rem,9vw,8rem);font-weight:900;line-height:0.95;letter-spacing:-0.04em;color:var(--paper);margin-bottom:2rem;opacity:0;animation:fadeUp 0.8s ease 0.4s forwards;}
+    .hero h1 em{font-style:italic;color:rgba(255,255,255,0.25);}
+    .hero-bio{font-size:1.05rem;line-height:1.8;color:rgba(255,255,255,0.45);max-width:42ch;margin:0 auto 1rem;opacity:0;animation:fadeUp 0.8s ease 0.6s forwards;}
+    .hero-quote{font-family:var(--serif);font-size:0.95rem;font-style:italic;color:rgba(255,255,255,0.2);max-width:50ch;margin:0 auto 3rem;line-height:1.65;opacity:0;animation:fadeUp 0.8s ease 0.7s forwards;}
+    .hero-socials{display:flex;align-items:center;justify-content:center;gap:1rem;opacity:0;animation:fadeUp 0.8s ease 0.9s forwards;}
+    .hero-social{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);text-decoration:none;display:flex;align-items:center;gap:0.5rem;border:1px solid #2a2a2a;padding:0.65rem 1.25rem;transition:border-color 0.25s,color 0.25s;}
+    .hero-social:hover{border-color:var(--accent);color:var(--accent);}
+    .hero-social svg{width:13px;height:13px;fill:currentColor;flex-shrink:0;}
+    .hero-divider{width:1px;height:28px;background:#2a2a2a;}
+    .hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:0.55rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.18);display:flex;flex-direction:column;align-items:center;gap:0.5rem;animation:pulse 2.5s infinite;}
+    .hero-scroll::after{content:'';width:1px;height:36px;background:linear-gradient(to bottom,rgba(255,255,255,0.18),transparent);}
+    @keyframes pulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+
+    section{padding:6rem 3rem;}
+    .section-header{display:flex;align-items:baseline;gap:1.5rem;margin-bottom:3.5rem;padding-bottom:1.25rem;border-bottom:1px solid #1e1e1e;}
+    .section-number{font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.12em;}
+    .section-title{font-family:var(--serif);font-size:clamp(2rem,4vw,3.2rem);font-weight:700;letter-spacing:-0.02em;line-height:1;color:var(--paper);}
+    .section-title em{font-style:italic;color:var(--accent);}
+
+    #portfolios{background:var(--ink);border-top:1px solid #1e1e1e;}
+    .portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#1e1e1e;}
+    .portfolio-card{position:relative;overflow:hidden;cursor:pointer;text-decoration:none;display:block;background:var(--ink);}
+    .portfolio-card-img{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;transition:transform 0.6s ease;filter:brightness(0.8) saturate(0.9);}
+    .portfolio-card:hover .portfolio-card-img{transform:scale(1.05);filter:brightness(0.9) saturate(1);}
+    .portfolio-card-placeholder{width:100%;aspect-ratio:2/3;background:#0e0e0d;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.75rem;color:#2a2a2a;font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;}
+    .portfolio-card-placeholder svg{width:28px;height:28px;opacity:0.15;}
+    .portfolio-card-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(0,0,0,0.9) 100%);}
+    .portfolio-card-info{position:absolute;bottom:0;left:0;right:0;padding:2rem 1.75rem;}
+    .portfolio-card-tag{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:0.5rem;}
+    .portfolio-card-title{font-family:var(--serif);font-size:1.4rem;font-weight:700;color:#fff;line-height:1.15;margin-bottom:0.6rem;}
+    .portfolio-card-meta{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+    .portfolio-card-arrow{position:absolute;top:1.5rem;right:1.5rem;width:34px;height:34px;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s,border-color 0.3s;}
+    .portfolio-card:hover .portfolio-card-arrow{opacity:1;border-color:var(--accent);}
+    .portfolio-card-arrow svg{width:14px;height:14px;stroke:var(--paper);}
+    .coming-badge{display:inline-block;margin-top:0.5rem;font-family:var(--mono);font-size:0.52rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.2rem 0.6rem;border:1px solid #2a2a2a;color:#444;}
+
+    #blog{background:#0a0a09;border-top:1px solid #1e1e1e;}
+    #blog .section-header{border-color:#1e1e1e;}
+    .blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#1e1e1e;margin-bottom:2rem;}
+    .blog-card{background:#0a0a09;padding:2.5rem 2rem;position:relative;transition:background 0.2s;}
+    .blog-card:hover{background:#111;}
+    .blog-card-badge{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;display:block;}
+    .blog-card-title{font-family:var(--serif);font-size:1.2rem;font-weight:700;line-height:1.3;margin-bottom:0.75rem;color:var(--paper);}
+    .blog-card-excerpt{font-size:0.85rem;color:#555;line-height:1.65;margin-bottom:1.5rem;}
+    .blog-card-meta{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:#333;border-top:1px solid #1e1e1e;padding-top:1rem;}
+    .blog-coming-tag{position:absolute;top:1.25rem;right:1.25rem;font-family:var(--mono);font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.2rem 0.6rem;border:1px solid #1e1e1e;color:#333;}
+    .blog-note{padding:2rem;background:#0e0e0d;border:1px solid #1e1e1e;border-left:3px solid var(--accent);font-size:0.88rem;color:#444;line-height:1.7;}
+    .blog-note strong{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:0.4rem;}
+
+    footer{background:#080807;padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #1a1a1a;}
+    .footer-logo{font-family:var(--serif);font-size:1rem;font-weight:900;color:var(--paper);}
+    .footer-logo span{color:var(--accent);}
+    .footer-copy{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;color:#333;}
+    .footer-made{font-family:var(--mono);font-size:0.6rem;color:#2a2a2a;}
+
+    .fade-up{opacity:0;transform:translateY(20px);transition:opacity 0.7s ease,transform 0.7s ease;}
+    .fade-up.visible{opacity:1;transform:none;}
+
+    @media(max-width:900px){nav{padding:1rem 1.5rem;}.nav-links{gap:1.5rem;}.hero{padding:7rem 1.5rem 5rem;}section{padding:4rem 1.5rem;}.portfolio-grid{grid-template-columns:1fr 1fr;}.blog-grid{grid-template-columns:1fr;}footer{flex-direction:column;gap:0.75rem;text-align:center;padding:1.5rem;}}
+    @media(max-width:560px){.nav-links{display:none;}.portfolio-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">Dave<span>korr</span></a>
+  <ul class="nav-links">
+    <li><a href="#portfolios">Portfolios</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="mailto:hello@davekorr.com">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <p class="hero-eyebrow">Photography · Rochester, NY</p>
+  <h1>Dave<em>korr</em></h1>
+  <p class="hero-bio">Hey, I'm Dave. A photographer based out of Rochester, NY. Welcome to my canvas.</p>
+  <p class="hero-quote">"Which of my photographs is my favorite? The one I'm going to take tomorrow." — Imogen Cunningham</p>
+  <div class="hero-socials">
+    <a href="https://instagram.com/dave_korir" target="_blank" class="hero-social">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      @dave_korir
+    </a>
+    <div class="hero-divider"></div>
+    <a href="mailto:hello@davekorr.com" class="hero-social">
+      <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      hello@davekorr.com
+    </a>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</div>
+
+<section id="portfolios">
+  <div class="section-header fade-up">
+    <span class="section-number">01 —</span>
+    <h2 class="section-title">The <em>Portfolios</em></h2>
+  </div>
+  <div class="portfolio-grid">
+
+    <a href="st-augustine.html" class="portfolio-card fade-up">
+      <img class="portfolio-card-img" src="images/sta-hero.jpg" alt="St Augustine Florida"/>
+      <div class="portfolio-card-overlay"></div>
+      <div class="portfolio-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="portfolio-card-info">
+        <p class="portfolio-card-tag">Travel</p>
+        <h3 class="portfolio-card-title">St Augustine, Florida</h3>
+        <p class="portfolio-card-meta">January 2026 · 10 frames · Fujifilm X-T5</p>
+      </div>
+    </a>
+
+    <a href="rochester-winter.html" class="portfolio-card fade-up">
+      <img class="portfolio-card-img" src="images/roc-hero.jpg" alt="Rochester Winter 2026"/>
+      <div class="portfolio-card-overlay"></div>
+      <div class="portfolio-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="portfolio-card-info">
+        <p class="portfolio-card-tag">Home</p>
+        <h3 class="portfolio-card-title">Rochester, Winter 2026</h3>
+        <p class="portfolio-card-meta">Winter 2026 · 13 frames · Work in Progress</p>
+      </div>
+    </a>
+
+    <div class="portfolio-card fade-up">
+      <div class="portfolio-card-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+      </div>
+      <div class="portfolio-card-overlay"></div>
+      <div class="portfolio-card-info">
+        <p class="portfolio-card-tag">Travel</p>
+        <h3 class="portfolio-card-title">Chicago</h3>
+        <p class="portfolio-card-meta"><span class="coming-badge">Coming Soon</span></p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="blog">
+  <div class="section-header fade-up">
+    <span class="section-number">02 —</span>
+    <h2 class="section-title">The <em>Blog</em></h2>
+  </div>
+  <div class="blog-grid">
+    <div class="blog-card fade-up">
+      <span class="blog-coming-tag">Coming Soon</span>
+      <span class="blog-card-badge">Wildlife</span>
+      <h3 class="blog-card-title">Patience as a Photographic Technique</h3>
+      <p class="blog-card-excerpt">On learning to wait. The best wildlife frames usually happen in the ten minutes after you have decided to leave.</p>
+      <div class="blog-card-meta">Dave Korr · Rochester, NY</div>
+    </div>
+    <div class="blog-card fade-up">
+      <span class="blog-coming-tag">Coming Soon</span>
+      <span class="blog-card-badge">Street</span>
+      <h3 class="blog-card-title">How to Disappear on a City Street</h3>
+      <p class="blog-card-excerpt">Street photography is about presence, not stealth. How to work a scene without disrupting it.</p>
+      <div class="blog-card-meta">Dave Korr · Rochester, NY</div>
+    </div>
+    <div class="blog-card fade-up">
+      <span class="blog-coming-tag">Coming Soon</span>
+      <span class="blog-card-badge">Travel</span>
+      <h3 class="blog-card-title">Shooting Light You Have Never Seen Before</h3>
+      <p class="blog-card-excerpt">Every new place has its own quality of light. The challenge is learning to read it fast before it changes on you.</p>
+      <div class="blog-card-meta">Dave Korr · Rochester, NY</div>
+    </div>
+  </div>
+  <div class="blog-note fade-up">
+    <strong>A note on the blog</strong>
+    Every article here is written by me. No filler. When I publish it is because I have something worth saying. A genuine reflection on process, technique, or the experience of making photographs. Check back soon, or reach out if there is a topic you would like me to cover.
+  </div>
+</section>
+
+<footer>
+  <span class="footer-logo">Dave<span>korr</span></span>
+  <span class="footer-copy">© 2026 Dave Korr. All rights reserved.</span>
+  <span class="footer-made">Rochester, NY · Fujifilm X</span>
+</footer>
+
+<script>
+const obs=new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);obs.unobserve(e.target);}});},{threshold:0.1});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
