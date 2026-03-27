@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio | Dave Korr</title>
+  <meta
+    name="description"
+    content="Portfolio of Dave Korr, a photographer based in Rochester, New York."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Cormorant+Garamond:wght@500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --bg: #0b0b0b;
+      --panel: #111111;
+      --panel-soft: rgba(255, 255, 255, 0.04);
+      --text: #f5f1eb;
+      --muted: rgba(245, 241, 235, 0.75);
+      --line: rgba(255, 255, 255, 0.12);
+      --glass: rgba(255, 255, 255, 0.04);
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+      --max-width: 1280px;
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: radial-gradient(circle at top, #161616 0%, #0b0b0b 48%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .site-shell {
+      min-height: 100vh;
+      padding: 22px 24px 40px;
+    }
+
+    .nav {
+      max-width: var(--max-width);
+      margin: 0 auto 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      background: rgba(15, 15, 15, 0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      font-size: 0.96rem;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--text);
+    }
+
+    .hero {
+      max-width: var(--max-width);
+      margin: 0 auto 36px;
+      padding: 32px 0 6px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--glass);
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(3rem, 7vw, 5.2rem);
+      line-height: 0.95;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .hero p {
+      max-width: 700px;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    .portfolio-grid {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 28px;
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .card-image {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      background: #161616;
+    }
+
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.01);
+      transition: transform 0.45s ease;
+    }
+
+    .card:hover .card-image img {
+      transform: scale(1.05);
+    }
+
+    .card-image::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.55) 0%,
+        rgba(0, 0, 0, 0.1) 45%,
+        rgba(0, 0, 0, 0.12) 100%
+      );
+      pointer-events: none;
+    }
+
+    .card-content {
+      padding: 22px 22px 24px;
+    }
+
+    .card-topline {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
+    .card h2 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 2rem;
+      line-height: 1.05;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel-soft);
+      color: var(--text);
+      font-size: 0.94rem;
+      font-weight: 500;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .card-link:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .footer {
+      max-width: var(--max-width);
+      margin: 42px auto 0;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 900px) {
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .site-shell {
+        padding: 16px 16px 30px;
+      }
+
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .hero {
+        padding-top: 20px;
+      }
+
+      .footer {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-shell">
+    <nav class="nav">
+      <a href="index.html" class="brand">Dave Korr</a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="portfolio.html" class="active">Portfolio</a></li>
+        <li><a href="mailto:hello@davekorr.com">Contact</a></li>
+        <li><a href="https://instagram.com/dave_korir" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+      </ul>
+    </nav>
+
+    <header class="hero">
+      <div class="eyebrow">Portfolio</div>
+      <h1>Selected work and places.</h1>
+      <p>
+        A growing collection of images shaped by place, season, and atmosphere.
+        Explore the current portfolios below.
+      </p>
+    </header>
+
+    <main class="portfolio-grid">
+      <article class="card">
+        <div class="card-image">
+          <img src="images/rochester-cover.jpg" alt="Rochester portfolio cover image" />
+        </div>
+        <div class="card-content">
+          <span class="card-topline">Collection 01</span>
+          <h2>Rochester</h2>
+          <a href="rochester-winter.html" class="card-link">View Portfolio →</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-image">
+          <img src="images/sta-cyclist.jpg" alt="St. Augustine portfolio cover image" />
+        </div>
+        <div class="card-content">
+          <span class="card-topline">Collection 02</span>
+          <h2>St. Augustine</h2>
+          <a href="st-augustine.html" class="card-link">View Portfolio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="footer">
+      <span>Dave Korr</span>
+      <span>Photography, place, and perspective.</span>
+    </footer>
+  </div>
+</body>
+</html>
