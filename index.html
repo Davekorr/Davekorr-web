@@ -1,93 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Davekorr Portfolio</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Davekorr — Photography</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f0f0f;
-      color: white;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
 
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 20px;
-    }
+<style>
+body{margin:0;background:#0f0e0d;color:#f5f2ed;font-family:'DM Sans',sans-serif;}
+nav{position:fixed;width:100%;padding:20px 40px;display:flex;justify-content:space-between;background:#0f0e0ddd;}
+.nav-logo{font-family:'Playfair Display';font-weight:900;font-size:22px;color:#fff;text-decoration:none;}
+.hero{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
+.hero h1{font-family:'Playfair Display';font-size:80px;margin:0;}
+.hero p{color:#aaa;max-width:500px;}
+.hero-socials a{color:#aaa;text-decoration:none;margin:0 10px;}
 
-    h1 {
-      text-align: center;
-      margin-bottom: 40px;
-    }
+section{padding:80px 40px;}
+.portfolio-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
+.portfolio-card{position:relative;display:block;text-decoration:none;color:#fff;}
+.portfolio-card-img{width:100%;height:400px;object-fit:cover;}
+.portfolio-card-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent,black);}
+.portfolio-card-info{position:absolute;bottom:20px;left:20px;}
+.portfolio-card-title{font-size:24px;font-family:'Playfair Display';}
+.portfolio-card-meta{font-size:12px;color:#aaa;}
 
-    .portfolio-card {
-      display: block;
-      overflow: hidden;
-      border-radius: 12px;
-    }
-
-    .portfolio-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s ease;
-    }
-
-    .portfolio-card:hover img {
-      transform: scale(1.05);
-    }
-  </style>
+footer{padding:30px;text-align:center;color:#555;}
+</style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>Photography Portfolio</h1>
 
-    <div class="grid">
+<nav>
+<a href="#" class="nav-logo">Davekorr</a>
+</nav>
 
-      <a href="rochester-winter.html" class="portfolio-card">
-        <img src="images/roc-blizzard.jpg" alt="Rochester Blizzard">
-      </a>
+<div class="hero">
+<h1>Davekorr</h1>
+<p>Photographer based in Rochester, NY. Exploring light, seasons, and stillness.</p>
 
-      <a href="rochester-winter.html" class="portfolio-card">
-        <img src="images/roc-dock.jpg" alt="Rochester Dock">
-      </a>
+<div class="hero-socials">
+<a href="https://instagram.com/dave_korir" target="_blank">Instagram</a>
+<a href="mailto:youremail@gmail.com">Email</a>
+</div>
+</div>
 
-      <a href="rochester-winter.html" class="portfolio-card">
-        <img src="images/roc-deer.jpg" alt="Rochester Deer">
-      </a>
+<section id="portfolios">
+<h2>Portfolios</h2>
 
-      <a href="rochester-winter.html" class="portfolio-card">
-        <img src="images/roc-genesee-river.jpg" alt="Genesee River">
-      </a>
+<div class="portfolio-grid">
 
-      <a href="st-augustine.html" class="portfolio-card">
-        <img src="images/sta-hero.jpg" alt="St Augustine Hero">
-      </a>
+<a href="rochester-winter.html" class="portfolio-card">
+<img class="portfolio-card-img" src="images/roc-hero.jpg">
+<div class="portfolio-card-overlay"></div>
+<div class="portfolio-card-info">
+<div class="portfolio-card-title">Rochester, Winter 2026</div>
+<div class="portfolio-card-meta">Fujifilm X-T5 · Rochester</div>
+</div>
+</a>
 
-      <a href="st-augustine.html" class="portfolio-card">
-        <img src="images/sta-fountain.jpg" alt="St Augustine Fountain">
-      </a>
+<a href="st-augustine.html" class="portfolio-card">
+<img class="portfolio-card-img" src="images/sta-hero.jpg">
+<div class="portfolio-card-overlay"></div>
+<div class="portfolio-card-info">
+<div class="portfolio-card-title">St Augustine</div>
+<div class="portfolio-card-meta">Florida · Travel</div>
+</div>
+</a>
 
-      <a href="st-augustine.html" class="portfolio-card">
-        <img src="images/sta-highway.jpg" alt="St Augustine Highway">
-      </a>
+</div>
+</section>
 
-      <a href="st-augustine.html" class="portfolio-card">
-        <img src="images/sta-rocks.jpg" alt="St Augustine Rocks">
-      </a>
+<footer>
+© Davekorr
+</footer>
 
-    </div>
-  </div>
 </body>
 </html>
