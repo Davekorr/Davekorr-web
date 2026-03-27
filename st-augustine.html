@@ -1,189 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>St Augustine, Florida 2026 — Davekorr</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>St. Augustine | Dave Korr</title>
+  <meta name="description" content="St. Augustine — a portfolio by Dave Korr." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet" />
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    :root{--ink:#0f0e0d;--paper:#f5f2ed;--paper-2:#ede9e2;--accent:#b85c2a;--muted:#8a8278;--rule:#d4cfc8;--serif:'Playfair Display',Georgia,serif;--sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace;}
-    html{scroll-behavior:smooth;}
-    body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:300;overflow-x:hidden;}
-    ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--paper);}::-webkit-scrollbar-thumb{background:var(--accent);}
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.25rem 3rem;background:rgba(245,242,237,0.95);border-bottom:1px solid var(--rule);backdrop-filter:blur(8px);}
-    .nav-logo{font-family:var(--serif);font-size:1.3rem;font-weight:900;letter-spacing:-0.02em;color:var(--ink);text-decoration:none;}
-    .nav-logo span{color:var(--accent);}
-    .nav-back{font-family:var(--mono);font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:0.5rem;transition:color 0.2s;}
-    .nav-back:hover{color:var(--accent);}
-    .hero{width:100%;height:100vh;position:relative;overflow:hidden;}
-    .hero img{width:100%;height:100%;object-fit:cover;object-position:center 30%;display:block;}
-    .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.65) 100%);}
-    .hero-content{position:absolute;bottom:0;left:0;right:0;padding:4rem 3rem;}
-    .hero-eyebrow{font-family:var(--mono);font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:0.75rem;}
-    .hero-title{font-family:var(--serif);font-size:clamp(2.5rem,6vw,5rem);font-weight:900;line-height:1.0;letter-spacing:-0.03em;color:#fff;margin-bottom:0.5rem;}
-    .hero-title em{font-style:italic;color:rgba(255,255,255,0.7);}
-    .hero-meta{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-top:1rem;display:flex;gap:2rem;flex-wrap:wrap;}
-    .hero-scroll{position:absolute;bottom:2rem;right:3rem;font-family:var(--mono);font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.35);display:flex;flex-direction:column;align-items:center;gap:0.5rem;animation:pulse 2s infinite;}
-    .hero-scroll::after{content:'';width:1px;height:40px;background:linear-gradient(to bottom,rgba(255,255,255,0.35),transparent);}
-    @keyframes pulse{0%,100%{opacity:0.35;}50%{opacity:0.9;}}
-    .about-section{padding:5rem 3rem;display:grid;grid-template-columns:280px 1fr;gap:5rem;max-width:1300px;margin:0 auto;border-bottom:1px solid var(--rule);}
-    .fact-label{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:0.25rem;}
-    .fact-value{font-size:0.88rem;color:var(--ink);margin-bottom:1.5rem;line-height:1.5;}
-    .about-text{font-size:1.05rem;line-height:1.85;color:var(--ink);}
-    .about-text p{margin-bottom:1.2rem;}
-    .about-text p:first-child::first-letter{font-family:var(--serif);font-size:3.5rem;font-weight:900;float:left;line-height:0.8;margin-right:0.1em;margin-top:0.12em;color:var(--accent);}
-    .gallery-section{padding:4rem 3rem 6rem;max-width:1300px;margin:0 auto;}
-    .gallery-header{display:flex;align-items:baseline;gap:1.5rem;margin-bottom:3rem;padding-bottom:1.25rem;border-bottom:1px solid var(--rule);}
-    .gallery-num{font-family:var(--mono);font-size:0.65rem;color:var(--accent);letter-spacing:0.12em;}
-    .gallery-title{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.5rem);font-weight:700;letter-spacing:-0.02em;}
-    .gallery-title em{font-style:italic;color:var(--accent);}
-    .masonry{columns:3;column-gap:2rem;}
-    .gallery-item{break-inside:avoid;margin-bottom:2rem;cursor:pointer;position:relative;}
-    .img-wrap{background:#fff;box-shadow:0 4px 20px rgba(0,0,0,0.1),0 1px 4px rgba(0,0,0,0.06);transition:transform 0.35s ease,box-shadow 0.35s ease;position:relative;}
-    .gallery-item:hover .img-wrap{transform:translateY(-5px) rotate(0.3deg);box-shadow:0 16px 48px rgba(0,0,0,0.15);}
-    .img-wrap img{width:100%;display:block;}
-    .img-caption{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);position:absolute;bottom:12px;left:0;right:0;text-align:center;padding:0 10px;}
-    .lightbox{position:fixed;inset:0;z-index:200;background:rgba(6,6,5,0.97);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;}
-    .lightbox.open{opacity:1;pointer-events:all;}
-    .lightbox-img{max-width:80vw;max-height:80vh;object-fit:contain;display:block;background:#fff;padding:14px 14px 50px 14px;box-shadow:0 20px 80px rgba(0,0,0,0.7);}
-    .lightbox-caption{position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.35);white-space:nowrap;}
-    .lightbox-close{position:absolute;top:1.5rem;right:2rem;background:none;border:1px solid #2a2a2a;color:#666;font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.5rem 1rem;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
-    .lightbox-close:hover{border-color:var(--accent);color:var(--accent);}
-    .lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);background:none;border:1px solid #2a2a2a;color:#555;font-size:1rem;padding:1rem 1.25rem;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
-    .lightbox-nav:hover{border-color:var(--accent);color:var(--accent);}
-    .lightbox-prev{left:2rem;}.lightbox-next{right:2rem;}
-    .lightbox-counter{position:absolute;top:1.5rem;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:0.6rem;letter-spacing:0.15em;color:rgba(255,255,255,0.25);text-transform:uppercase;}
-    footer{background:var(--ink);color:var(--paper);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;}
-    .footer-logo{font-family:var(--serif);font-size:1rem;font-weight:900;}
-    .footer-logo span{color:var(--accent);}
-    .footer-info{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;color:#555;}
-    .fade-up{opacity:0;transform:translateY(20px);transition:opacity 0.7s ease,transform 0.7s ease;}
-    .fade-up.visible{opacity:1;transform:none;}
-    @media(max-width:900px){nav{padding:1rem 1.5rem;}.hero-content{padding:2.5rem 1.5rem;}.hero-meta{gap:1rem;}.about-section{grid-template-columns:1fr;gap:2rem;padding:3rem 1.5rem;}.gallery-section{padding:3rem 1.5rem 4rem;}.masonry{columns:2;column-gap:1.25rem;}footer{flex-direction:column;gap:0.75rem;text-align:center;padding:1.5rem;}}
-    @media(max-width:560px){.masonry{columns:1;}}
-  </style>
+    :root{
+      --bg:#0b0b0b;
+      --text:#f5f1eb;
+      --muted:rgba(245,241,235,.74);
+      --line:rgba(255,255,255,.12);
+      --shadow:0 18px 40px rgba(0,0,0,.32);
+      --max-width:1280px;
+      --accent:#d3a76b;
+      --accent-soft:rgba(211,167,107,.14);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:"Inter",sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(211,167,107,.08) 0%, transparent 28%),
+        radial-gradient(circle at bottom right, rgba(211,167,107,.06) 0%, transparent 22%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.6
+    }
+    a{color:inherit;text-decoration:none}
+    img{display:block;max-width:100%}
+    .site-shell{min-height:100vh;padding:22px 24px 40px}
+    .nav{
+      max-width:var(--max-width);
+      margin:0 auto 24px;
+      display:flex;align-items:center;justify-content:space-between;gap:20px;
+      padding:14px 18px;border:1px solid var(--line);
+      background:rgba(15,15,15,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+      border-radius:18px;box-shadow:var(--shadow);position:sticky;top:16px;z-index:30
+    }
+    .brand{font-family:"Cormorant Garamond",serif;font-size:1.75rem;font-weight:600;letter-spacing:.03em}
+    .nav-links{list-style:none;display:flex;align-items:center;gap:22px;font-size:.96rem}
+    .nav-links a{color:var(--muted);transition:color .2s ease}
+    .nav-links a:hover,.nav-links a.active{color:var(--text)}
+    .hero{
+      max-width:var(--max-width);margin:0 auto 34px;position:relative;min-height:72vh;
+      border-radius:30px;overflow:hidden;border:1px solid var(--line);background:#111;
+      box-shadow:var(--shadow);isolation:isolate
+    }
+    .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center}
+    .hero::after{
+      content:"";position:absolute;inset:0;
+      background:
+        linear-gradient(to top,rgba(0,0,0,.82) 0%,rgba(0,0,0,.28) 42%,rgba(0,0,0,.14) 100%),
+        linear-gradient(to right,rgba(0,0,0,.50) 0%,rgba(0,0,0,.12) 55%,rgba(0,0,0,.20) 100%);
+      z-index:1
+    }
+    .hero-content{
+      position:relative;z-index:2;height:100%;min-height:72vh;display:flex;
+      flex-direction:column;justify-content:flex-end;padding:36px 36px 34px
+    }
+    .hero-eyebrow{
+      display:inline-flex;align-items:center;gap:10px;width:fit-content;margin-bottom:18px;
+      padding:8px 12px;border:1px solid rgba(255,255,255,.14);border-radius:999px;
+      background:rgba(10,10,10,.24);color:rgba(245,241,235,.82);
+      backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+      font-size:.78rem;text-transform:uppercase;letter-spacing:.12em
+    }
+    .hero-title{
+      max-width:760px;font-family:"Cormorant Garamond",serif;
+      font-size:clamp(3.5rem,9vw,6.2rem);line-height:.93;font-weight:600;
+      margin-bottom:16px;text-shadow:0 10px 28px rgba(0,0,0,.35)
+    }
+    .hero-title em{font-style:italic;color:#f0d8b3;font-weight:500}
+    .hero-meta{display:flex;flex-wrap:wrap;gap:10px}
+    .hero-meta span{
+      padding:8px 12px;border-radius:999px;background:rgba(10,10,10,.32);
+      border:1px solid rgba(255,255,255,.12);color:rgba(245,241,235,.84);font-size:.82rem;
+      backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)
+    }
+    .intro-grid{
+      max-width:var(--max-width);margin:0 auto 34px;display:grid;
+      grid-template-columns:320px minmax(0,1fr);gap:28px;align-items:start
+    }
+    .facts-card,.story-card{
+      border:1px solid var(--line);border-radius:24px;
+      background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.025));
+      box-shadow:var(--shadow)
+    }
+    .facts-card{padding:24px;position:sticky;top:96px}
+    .facts-title{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:18px}
+    .facts-list{display:grid;gap:16px}
+    .fact-label{font-size:.76rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(245,241,235,.55);margin-bottom:4px}
+    .fact-value{font-size:1rem;color:var(--text)}
+    .story-card{padding:28px 28px 30px}
+    .story-kicker{
+      display:inline-block;margin-bottom:14px;padding:8px 12px;border-radius:999px;
+      border:1px solid rgba(211,167,107,.20);background:var(--accent-soft);color:#e4bf8f;
+      font-size:.78rem;text-transform:uppercase;letter-spacing:.12em
+    }
+    .story-card p{color:var(--muted);font-size:1.03rem;margin-bottom:1rem}
+    .story-card p:last-child{margin-bottom:0}
+    .gallery-section{max-width:var(--max-width);margin:0 auto}
+    .gallery-head{margin-bottom:20px}
+    .gallery-kicker{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:8px}
+    .gallery-title{font-family:"Cormorant Garamond",serif;font-size:clamp(2.2rem,5vw,3.4rem);line-height:.98;font-weight:600}
+    .masonry{columns:3;column-gap:20px}
+    .gallery-item{
+      break-inside:avoid;margin-bottom:20px;cursor:pointer;border-radius:22px;overflow:hidden;
+      border:1px solid var(--line);background:#141414;box-shadow:var(--shadow);
+      transition:transform .25s ease,border-color .25s ease
+    }
+    .gallery-item:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.2)}
+    .img-wrap{background:#0e0e0e;padding:10px 10px 0 10px}
+    .img-wrap img{width:100%;height:auto;border-radius:14px}
+    .img-caption{padding:14px 16px 16px;color:var(--muted);font-size:.92rem}
+    .footer{
+      max-width:var(--max-width);margin:42px auto 0;padding-top:22px;border-top:1px solid var(--line);
+      display:flex;justify-content:space-between;gap:18px;color:var(--muted);font-size:.9rem
+    }
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;flex-direction:column;padding:24px;z-index:999}
+    .lightbox.open{display:flex}
+    .lightbox-img{max-width:min(92vw,1200px);max-height:76vh;border-radius:18px;box-shadow:0 22px 60px rgba(0,0,0,.45)}
+    .lightbox-caption{margin-top:14px;color:rgba(245,241,235,.82);font-size:.98rem;text-align:center}
+    .lightbox-counter{margin-bottom:12px;color:rgba(245,241,235,.64);font-size:.85rem;letter-spacing:.08em;text-transform:uppercase}
+    .lightbox-close,.lightbox-nav{
+      position:absolute;border:1px solid rgba(255,255,255,.14);background:rgba(20,20,20,.48);
+      color:var(--text);border-radius:999px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+      cursor:pointer;transition:background .2s ease,transform .2s ease
+    }
+    .lightbox-close:hover,.lightbox-nav:hover{background:rgba(255,255,255,.12);transform:translateY(-1px)}
+    .lightbox-close{top:22px;right:22px;padding:10px 16px;font-size:.9rem}
+    .lightbox-nav{top:50%;transform:translateY(-50%);width:46px;height:46px;font-size:1.15rem}
+    .lightbox-prev{left:24px}.lightbox-next{right:24px}
+    .fade-up{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+    .fade-up.visible{opacity:1;transform:none}
+    @media (max-width:980px){.intro-grid{grid-template-columns:1fr}.facts-card{position:static}.masonry{columns:2}}
+    @media (max-width:720px){
+      .site-shell{padding:16px 16px 30px}.nav{flex-direction:column;align-items:flex-start;gap:12px}.nav-links{flex-wrap:wrap;gap:14px}
+      .hero,.hero-content{min-height:68vh}.hero-content{padding:24px 20px 22px}.lightbox-nav{display:none}
+    }
+    @media (max-width:560px){.masonry{columns:1}.story-card,.facts-card{padding:22px 18px}.footer{flex-direction:column}}
+</style>
 </head>
 <body>
-<nav>
-  <a href="index.html" class="nav-logo">Dave<span>korr</span></a>
-  <a href="index.html#portfolios" class="nav-back">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-    <span>All Portfolios</span>
-  </a>
-</nav>
-<div class="hero">
-  <img src="images/sta-hero.jpg" alt="St Augustine Florida"/>
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <p class="hero-eyebrow">Portfolio — Travel</p>
-    <h1 class="hero-title">St Augustine,<br><em>Florida</em></h1>
-    <div class="hero-meta"><span>January 2026</span><span>Fujifilm X-T5</span><span>Viltrox 35mm · 18–135mm</span></div>
-  </div>
-  <div class="hero-scroll">Scroll</div>
-</div>
-<div class="about-section">
-  <div class="about-facts fade-up">
-    <p class="fact-label">Location</p><p class="fact-value">St Augustine, Florida</p>
-    <p class="fact-label">Date</p><p class="fact-value">January 2026</p>
-    <p class="fact-label">Camera</p><p class="fact-value">Fujifilm X-T5</p>
-    <p class="fact-label">Lenses</p><p class="fact-value">Viltrox 35mm f/1.8<br>Fujinon 18–135mm</p>
-    <p class="fact-label">Frames</p><p class="fact-value">10 photographs</p>
-  </div>
-  <div class="about-text fade-up">
-    <p>St Augustine, Florida is the oldest continuously occupied European settlement in the United States, founded by Spanish colonists in 1565, more than 50 years before the Pilgrims landed at Plymouth Rock. Walking its streets feels like moving through layers of time: Spanish colonial architecture, Gilded Age hotels built by Henry Flagler, palm-lined boulevards, and the Atlantic just minutes away.</p>
-    <p>The city sits on the northeast Florida coast where the Matanzas River meets the sea, and that geography shapes everything. The light, the pace, the way people move. In January the tourists thin out and the city breathes differently. That is when you find the real St Augustine: a cyclist cutting through morning shadows, a heron standing perfectly still at dusk, a full moon rising over the inlet like it has a thousand times before.</p>
-    <p>Partly, this trip was a deliberate escape. Rochester in January is grey, frozen, and unrelenting, and Florida's northeast coast felt like a reasonable act of self-preservation. Shot over three days in January 2026 with the X-T5, Viltrox 35mm and the 18–135mm for reach. The city gave a lot to work with.</p>
-  </div>
-</div>
-<div class="gallery-section">
-  <div class="gallery-header fade-up">
-    <span class="gallery-num">10 frames —</span>
-    <h2 class="gallery-title">The <em>Work</em></h2>
-  </div>
-  <div class="masonry">
-    <div class="gallery-item" onclick="openLightbox(0)">
-        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
-          <img src="images/sta-airport.jpg" alt="Airport Gate" loading="lazy"/>
-        </div>
-        <p class="img-caption">Airport Gate</p>
+  <div class="site-shell">
+    <nav class="nav">
+      <a href="index.html" class="brand">Dave Korr</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="portfolio.html" class="active">Portfolio</a></li>
+        <li><a href="mailto:hello@davekorr.com">Contact</a></li>
+        <li><a href="https://instagram.com/dave_korir" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+      </ul>
+    </nav>
+
+    <header class="hero">
+      <img src="images/sta-cyclist.jpg" alt="St. Augustine | Dave Korr" />
+      <div class="hero-content">
+        <p class="hero-eyebrow">Portfolio · Travel</p>
+        <h1 class="hero-title">St. Augustine</h1>
+        <div class="hero-meta"><span>Florida</span><span>St. Augustine</span><span>Fujifilm X</span><span>Travel Work</span><span>4 Frames</span></div>
       </div>
-<div class="gallery-item" onclick="openLightbox(1)">
-        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
-          <img src="images/sta-heron-moon.jpg" alt="Heron and Full Moon" loading="lazy"/>
+    </header>
+
+    <section class="intro-grid">
+      <aside class="facts-card fade-up">
+        <div class="facts-title">Trip Notes</div>
+        <div class="facts-list">
+          <div><div class="fact-label">Location</div><div class="fact-value">St. Augustine, Florida</div></div><div><div class="fact-label">Season</div><div class="fact-value">Travel portfolio</div></div><div><div class="fact-label">Camera</div><div class="fact-value">Fujifilm X</div></div><div><div class="fact-label">Mood</div><div class="fact-value">Light, texture, atmosphere</div></div><div><div class="fact-label">Frames</div><div class="fact-value">4 Photographs</div></div>
         </div>
-        <p class="img-caption">Heron and Full Moon</p>
-      </div>
-<div class="gallery-item" onclick="openLightbox(2)">
-        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
-          <img src="images/sta-cyclist.jpg" alt="Cyclist at Hanke Hall" loading="lazy"/>
-        </div>
-        <p class="img-caption">Cyclist at Hanke Hall</p>
-      </div>
-<div class="gallery-item" onclick="openLightbox(3)">
-        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
-          <img src="images/sta-truck.jpg" alt="Vintage Truck" loading="lazy"/>
-        </div>
-        <p class="img-caption">Vintage Truck</p>
-      </div>
-<div class="gallery-item" onclick="openLightbox(4)">
-        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
-          <img src="images/sta-cathedral.jpg" alt="Cathedral Tower" loading="lazy"/>
-        </div>
-        <p class="img-caption">Cathedral Tower</p>
-      </div>
-<div class="gallery-item" onclick="openLightbox(5)">
-        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
-          <img src="images/sta-rocks.jpg" alt="Atlantic Rocks" loading="lazy"/>
-        </div>
-        <p class="img-caption">Atlantic Rocks</p>
-      </div>
-<div class="gallery-item" onclick="openLightbox(6)">
-        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
-          <img src="images/sta-fountain.jpg" alt="City Fountain" loading="lazy"/>
-        </div>
-        <p class="img-caption">City Fountain</p>
-      </div>
-<div class="gallery-item" onclick="openLightbox(7)">
-        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
-          <img src="images/sta-highway.jpg" alt="Coastal Highway" loading="lazy"/>
-        </div>
-        <p class="img-caption">Coastal Highway</p>
-      </div>
-<div class="gallery-item" onclick="openLightbox(8)">
-        <div class="img-wrap" style="padding:10px 10px 38px 10px;">
-          <img src="images/sta-heron-dusk.jpg" alt="Heron at Dusk" loading="lazy"/>
-        </div>
-        <p class="img-caption">Heron at Dusk</p>
+      </aside>
+
+      <article class="story-card fade-up">
+        <div class="story-kicker">Field Notes</div>
+        <p>St. Augustine moves at a different pace. The light is softer, the walls hold texture, and the streets seem built for wandering rather than rushing.</p><p>What stands out here is not scale but surface — worn stone, painted facades, bicycles, shadows, and the kind of coastal brightness that turns ordinary corners into photographs.</p><p>This set is less about chasing action and more about observing atmosphere. The place reveals itself slowly, which is exactly why it works on camera.</p>
+      </article>
+    </section>
+
+    <section class="gallery-section">
+      <div class="gallery-head fade-up">
+        <div class="gallery-kicker">4 Frames</div>
+        <h2 class="gallery-title">St. Augustine</h2>
       </div>
 
+      <div class="masonry">
+        <div class="gallery-item fade-up" onclick="openLightbox(0)">
+          <div class="img-wrap"><img src="images/sta-cyclist.jpg" alt="St. Augustine Cyclist" loading="lazy" /></div>
+          <p class="img-caption">St. Augustine Cyclist</p>
+        </div>
+        <div class="gallery-item fade-up" onclick="openLightbox(1)">
+          <div class="img-wrap"><img src="images/sta-02.jpg" alt="St. Augustine Frame 02" loading="lazy" /></div>
+          <p class="img-caption">St. Augustine Frame 02</p>
+        </div>
+        <div class="gallery-item fade-up" onclick="openLightbox(2)">
+          <div class="img-wrap"><img src="images/sta-03.jpg" alt="St. Augustine Frame 03" loading="lazy" /></div>
+          <p class="img-caption">St. Augustine Frame 03</p>
+        </div>
+        <div class="gallery-item fade-up" onclick="openLightbox(3)">
+          <div class="img-wrap"><img src="images/sta-04.jpg" alt="St. Augustine Frame 04" loading="lazy" /></div>
+          <p class="img-caption">St. Augustine Frame 04</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>Dave Korr</span>
+      <span>St. Augustine · Rochester, New York</span>
+    </footer>
   </div>
-</div>
-<footer>
-  <span class="footer-logo">Dave<span>korr</span></span>
-  <span class="footer-info">© 2026 Dave Korr · Rochester, NY · Fujifilm X</span>
-</footer>
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-close" onclick="closeLightbox()">Close ✕</button>
-  <button class="lightbox-nav lightbox-prev" onclick="navLightbox(-1)">←</button>
-  <button class="lightbox-nav lightbox-next" onclick="navLightbox(1)">→</button>
-  <div class="lightbox-counter" id="lb-counter"></div>
-  <img class="lightbox-img" id="lb-img" src="" alt=""/>
-  <p class="lightbox-caption" id="lb-caption"></p>
-</div>
-<script>
-const photos = [{"src": "images/sta-airport.jpg", "label": "Airport Gate"}, {"src": "images/sta-heron-moon.jpg", "label": "Heron and Full Moon"}, {"src": "images/sta-cyclist.jpg", "label": "Cyclist at Hanke Hall"}, {"src": "images/sta-truck.jpg", "label": "Vintage Truck"}, {"src": "images/sta-cathedral.jpg", "label": "Cathedral Tower"}, {"src": "images/sta-rocks.jpg", "label": "Atlantic Rocks"}, {"src": "images/sta-fountain.jpg", "label": "City Fountain"}, {"src": "images/sta-highway.jpg", "label": "Coastal Highway"}, {"src": "images/sta-heron-dusk.jpg", "label": "Heron at Dusk"}];
-let current = 0;
-function openLightbox(i){current=i;updateLightbox();document.getElementById('lightbox').classList.add('open');document.body.style.overflow='hidden';}
-function closeLightbox(){document.getElementById('lightbox').classList.remove('open');document.body.style.overflow='';}
-function navLightbox(d){current=(current+d+photos.length)%photos.length;updateLightbox();}
-function updateLightbox(){const p=photos[current];const img=document.getElementById('lb-img');img.src=p.src;img.alt=p.label;document.getElementById('lb-caption').textContent=p.label;document.getElementById('lb-counter').textContent=(current+1)+' / '+photos.length;}
-document.getElementById('lightbox').addEventListener('click',function(e){if(e.target===this)closeLightbox();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();if(e.key==='ArrowRight')navLightbox(1);if(e.key==='ArrowLeft')navLightbox(-1);});
-const obs=new IntersectionObserver((entries)=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*100);obs.unobserve(e.target);}});},{threshold:0.1});
-document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
-</script>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()">Close ✕</button>
+    <button class="lightbox-nav lightbox-prev" onclick="navLightbox(-1)">←</button>
+    <button class="lightbox-nav lightbox-next" onclick="navLightbox(1)">→</button>
+    <div class="lightbox-counter" id="lb-counter"></div>
+    <img class="lightbox-img" id="lb-img" src="" alt="" />
+    <p class="lightbox-caption" id="lb-caption"></p>
+  </div>
+
+  
+  <script>
+    const photos = [{"src":"images/sta-cyclist.jpg","label":"St. Augustine Cyclist"},{"src":"images/sta-02.jpg","label":"St. Augustine Frame 02"},{"src":"images/sta-03.jpg","label":"St. Augustine Frame 03"},{"src":"images/sta-04.jpg","label":"St. Augustine Frame 04"}];
+    let current = 0;
+    function openLightbox(i){current=i;updateLightbox();document.getElementById("lightbox").classList.add("open");document.body.style.overflow="hidden";}
+    function closeLightbox(){document.getElementById("lightbox").classList.remove("open");document.body.style.overflow="";}
+    function navLightbox(d){current=(current+d+photos.length)%photos.length;updateLightbox();}
+    function updateLightbox(){
+      const p=photos[current],img=document.getElementById("lb-img");
+      img.src=p.src; img.alt=p.label;
+      document.getElementById("lb-caption").textContent=p.label;
+      document.getElementById("lb-counter").textContent=(current+1)+" / "+photos.length;
+    }
+    document.getElementById("lightbox").addEventListener("click",function(e){if(e.target===this)closeLightbox();});
+    document.addEventListener("keydown",(e)=>{
+      const open=document.getElementById("lightbox").classList.contains("open");
+      if(!open)return;
+      if(e.key==="Escape")closeLightbox();
+      if(e.key==="ArrowRight")navLightbox(1);
+      if(e.key==="ArrowLeft")navLightbox(-1);
+    });
+    const obs=new IntersectionObserver((entries)=>{
+      entries.forEach((entry,i)=>{
+        if(entry.isIntersecting){
+          setTimeout(()=>entry.target.classList.add("visible"), i*90);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {threshold:.1});
+    document.querySelectorAll(".fade-up").forEach((el)=>obs.observe(el));
+  </script>
+
 </body>
 </html>
