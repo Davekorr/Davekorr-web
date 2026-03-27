@@ -1,316 +1,418 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Dave Korr</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dave Korr | Photographer</title>
+  <meta
+    name="description"
+    content="Dave Korr is a photographer based in Rochester, New York. Welcome to my canvas."
+  />
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Cormorant+Garamond:wght@500;600&display=swap"
+    rel="stylesheet"
+  />
 
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  />
 
-  :root {
-    --text: #f5f2ed;
-    --muted: rgba(245, 242, 237, 0.72);
-    --line: rgba(245, 242, 237, 0.22);
-    --shadow: rgba(0, 0, 0, 0.45);
-  }
-
-  html, body {
-    height: 100%;
-  }
-
-  body {
-    font-family: 'Inter', sans-serif;
-    color: var(--text);
-    background: #000;
-    overflow: hidden;
-  }
-
-  .hero {
-    position: relative;
-    min-height: 100vh;
-    width: 100%;
-    background-image:
-      linear-gradient(to top, rgba(0,0,0,0.86) 0%, rgba(0,0,0,0.40) 38%, rgba(0,0,0,0.10) 65%, rgba(0,0,0,0.18) 100%),
-      url('images/Boston-hero.jpg');
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-start;
-    padding: 56px 60px;
-    isolation: isolate;
-  }
-
-  .hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(circle at 22% 78%, rgba(0,0,0,0.08), transparent 34%),
-      radial-gradient(circle at 78% 18%, rgba(0,0,0,0.12), transparent 28%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .content {
-    position: relative;
-    z-index: 2;
-    max-width: 640px;
-    animation: fadeUp 1s ease-out both;
-  }
-
-  .eyebrow {
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 14px;
-  }
-
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    font-size: clamp(2.8rem, 6vw, 5.2rem);
-    line-height: 0.95;
-    letter-spacing: -0.03em;
-    text-shadow: 0 10px 32px var(--shadow);
-    margin-bottom: 16px;
-  }
-
-  .tagline {
-    max-width: 34rem;
-    font-size: clamp(0.95rem, 1.2vw, 1.05rem);
-    line-height: 1.6;
-    color: var(--muted);
-    margin-bottom: 30px;
-    text-shadow: 0 6px 18px var(--shadow);
-  }
-
-  .nav {
-    display: flex;
-    gap: 24px;
-    flex-wrap: wrap;
-    margin-bottom: 28px;
-  }
-
-  .nav a {
-    position: relative;
-    display: inline-block;
-    text-decoration: none;
-    color: var(--text);
-    font-size: 0.88rem;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    opacity: 0.9;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-  }
-
-  .nav a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -7px;
-    width: 0%;
-    height: 1px;
-    background: var(--text);
-    transition: width 0.25s ease;
-  }
-
-  .nav a:hover,
-  .nav a:focus-visible {
-    opacity: 1;
-    transform: translateY(-1px);
-  }
-
-  .nav a:hover::after,
-  .nav a:focus-visible::after {
-    width: 100%;
-  }
-
-  .socials {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .socials a {
-    width: 42px;
-    height: 42px;
-    border-radius: 999px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: var(--text);
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.14);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.22);
-    transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
-    opacity: 0.92;
-  }
-
-  .socials a:hover,
-  .socials a:focus-visible {
-    transform: translateY(-2px);
-    background: rgba(255,255,255,0.14);
-    border-color: rgba(255,255,255,0.28);
-    opacity: 1;
-  }
-
-  .socials i {
-    font-size: 1rem;
-  }
-
-  .corner-note {
-    position: absolute;
-    right: 28px;
-    bottom: 22px;
-    z-index: 2;
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: rgba(245, 242, 237, 0.58);
-    text-align: right;
-    line-height: 1.5;
-    text-shadow: 0 4px 18px rgba(0,0,0,0.3);
-  }
-
-  @keyframes fadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(22px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media (max-width: 900px) {
-    .hero {
-      padding: 38px 32px;
-      background-position: center center;
+  <style>
+    :root {
+      --text: #f5f1eb;
+      --muted: rgba(245, 241, 235, 0.82);
+      --line: rgba(255, 255, 255, 0.16);
+      --glass: rgba(15, 15, 15, 0.18);
+      --glass-strong: rgba(15, 15, 15, 0.3);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      --max-width: 1280px;
     }
 
-    .content {
-      max-width: 100%;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    .corner-note {
-      right: 20px;
-      bottom: 16px;
-      font-size: 0.66rem;
-    }
-  }
-
-  @media (max-width: 640px) {
+    html,
     body {
-      overflow: auto;
+      height: 100%;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      color: var(--text);
+      background: #0b0b0b;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
     .hero {
-      min-height: 100svh;
-      padding: 26px 22px 32px;
-      align-items: flex-end;
-      background-position: center center;
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background:
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.42)),
+        linear-gradient(to right, rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.12)),
+        url("images/Boston-hero.jpg") center center / cover no-repeat;
     }
 
-    .eyebrow {
-      margin-bottom: 10px;
-      letter-spacing: 0.18em;
-    }
-
-    h1 {
-      margin-bottom: 12px;
-    }
-
-    .tagline {
-      font-size: 0.92rem;
-      line-height: 1.55;
-      margin-bottom: 24px;
-      max-width: 22rem;
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.42) 0%,
+        rgba(0, 0, 0, 0.08) 40%,
+        rgba(0, 0, 0, 0.12) 100%
+      );
+      pointer-events: none;
     }
 
     .nav {
-      gap: 14px 18px;
-      margin-bottom: 22px;
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      padding: 22px 24px;
     }
 
-    .nav a {
-      font-size: 0.8rem;
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      list-style: none;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--text);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding: 48px 24px 64px;
+      display: flex;
+      align-items: flex-end;
+      flex: 1;
+    }
+
+    .hero-copy {
+      max-width: var(--max-width);
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-end;
+    }
+
+    .copy-block {
+      max-width: 640px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 16px;
+      padding: 8px 12px;
+      font-size: 0.78rem;
       letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(3.5rem, 10vw, 7.2rem);
+      font-weight: 600;
+      line-height: 0.95;
+      letter-spacing: 0.01em;
+      margin-bottom: 14px;
+      text-wrap: balance;
+    }
+
+    .subline {
+      font-size: clamp(1rem, 2.5vw, 1.22rem);
+      color: var(--muted);
+      margin-bottom: 12px;
+      max-width: 540px;
+      line-height: 1.6;
+    }
+
+    .headline-secondary {
+      font-size: clamp(1.15rem, 2.8vw, 1.5rem);
+      font-weight: 500;
+      line-height: 1.45;
+      margin-bottom: 28px;
+      color: var(--text);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 0 20px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: transform 0.2s ease, background 0.2s ease, border 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: rgba(255, 255, 255, 0.95);
+      color: #111;
+    }
+
+    .btn-primary:hover {
+      background: #ffffff;
+    }
+
+    .btn-secondary {
+      background: var(--glass-strong);
+      color: var(--text);
+      border-color: var(--line);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(15, 15, 15, 0.4);
+    }
+
+    .socials {
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
 
     .socials a {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: var(--glass);
+      color: var(--text);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: transform 0.2s ease, background 0.2s ease;
     }
 
-    .corner-note {
-      position: static;
-      margin-top: 24px;
-      text-align: left;
-      font-size: 0.64rem;
-      color: rgba(245, 242, 237, 0.5);
+    .socials a:hover {
+      transform: translateY(-1px);
+      background: rgba(15, 15, 15, 0.36);
     }
-  }
 
-  @media (prefers-reduced-motion: reduce) {
-    .content,
-    .nav a,
-    .socials a,
-    .nav a::after {
-      animation: none !important;
-      transition: none !important;
+    .footer-note {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding: 0 24px 24px;
     }
-  }
-</style>
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      color: rgba(245, 241, 235, 0.78);
+      font-size: 0.88rem;
+    }
+
+    .footer-inner span:last-child {
+      text-align: right;
+    }
+
+    @media (max-width: 900px) {
+      .nav-inner {
+        padding: 14px 16px;
+      }
+
+      .nav-links {
+        gap: 16px;
+        font-size: 0.9rem;
+      }
+
+      .copy-block {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav {
+        padding: 16px;
+      }
+
+      .nav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .hero-content {
+        padding: 28px 16px 40px;
+      }
+
+      .footer-note {
+        padding: 0 16px 16px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-inner span:last-child {
+        text-align: left;
+      }
+
+      .hero-actions {
+        width: 100%;
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        margin-bottom: 10px;
+      }
+
+      .subline {
+        margin-bottom: 10px;
+      }
+
+      .headline-secondary {
+        margin-bottom: 22px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <header class="hero">
+    <nav class="nav">
+      <div class="nav-inner">
+        <a href="index.html" class="brand">Dave Korr</a>
 
-<section class="hero">
-  <div class="content">
-    <div class="eyebrow">Photography</div>
-
-    <h1>Dave Korr</h1>
-
-    <p class="tagline">
-      Which of my photographs is my favorite? The one i'm going to take tomorrow-Imogen Cunningham
-    </p>
-
-    <nav class="nav" aria-label="Portfolio sections">
-      <a href="rochester-winter.html">Rochester</a>
-      <a href="st-augustine.html">St. Augustine</a>
+        <ul class="nav-links">
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="mailto:hello@davekorr.com">Contact</a></li>
+        </ul>
+      </div>
     </nav>
 
-    <div class="socials" aria-label="Social links">
-      <a href="https://instagram.com/dave_korir" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-        <i class="fab fa-instagram" aria-hidden="true"></i>
-      </a>
-      <a href="mailto:hello@davekorr.com" aria-label="Email">
-        <i class="fas fa-envelope" aria-hidden="true"></i>
-      </a>
-    </div>
+    <main class="hero-content">
+      <div class="hero-copy">
+        <div class="copy-block">
+          <div class="eyebrow">Photography</div>
 
-    <div class="corner-note">
-      Davekorr.com<br>
-      Enter the work
-    </div>
-  </div>
-</section>
+          <h1>Dave</h1>
 
+          <p class="subline">Photographer based in Rochester, New York</p>
+
+          <p class="headline-secondary">Welcome to my canvas.</p>
+
+          <div class="hero-actions">
+            <a href="portfolio.html" class="btn btn-primary">View Portfolio</a>
+            <a href="mailto:hello@davekorr.com" class="btn btn-secondary">Contact</a>
+          </div>
+
+          <div class="socials">
+            <a
+              href="https://instagram.com/dave_korir"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+
+            <a href="mailto:hello@davekorr.com" aria-label="Email">
+              <i class="fa-solid fa-envelope"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="footer-note">
+      <div class="footer-inner">
+        <span>Rochester, New York</span>
+        <span>Portfolio, place, and perspective.</span>
+      </div>
+    </div>
+  </header>
 </body>
 </html>
