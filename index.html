@@ -1,205 +1,316 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Dave Korr</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<title>Dave Korr</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --text: #f5f2ed;
+    --muted: rgba(245, 242, 237, 0.72);
+    --line: rgba(245, 242, 237, 0.22);
+    --shadow: rgba(0, 0, 0, 0.45);
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    background: #000;
+    overflow: hidden;
+  }
+
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    background-image:
+      linear-gradient(to top, rgba(0,0,0,0.86) 0%, rgba(0,0,0,0.40) 38%, rgba(0,0,0,0.10) 65%, rgba(0,0,0,0.18) 100%),
+      url('images/roc-hero.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 56px 60px;
+    isolation: isolate;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 22% 78%, rgba(0,0,0,0.08), transparent 34%),
+      radial-gradient(circle at 78% 18%, rgba(0,0,0,0.12), transparent 28%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    max-width: 640px;
+    animation: fadeUp 1s ease-out both;
+  }
+
+  .eyebrow {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: clamp(2.8rem, 6vw, 5.2rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    text-shadow: 0 10px 32px var(--shadow);
+    margin-bottom: 16px;
+  }
+
+  .tagline {
+    max-width: 34rem;
+    font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 30px;
+    text-shadow: 0 6px 18px var(--shadow);
+  }
+
+  .nav {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+
+  .nav a {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.9;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -7px;
+    width: 0%;
+    height: 1px;
+    background: var(--text);
+    transition: width 0.25s ease;
+  }
+
+  .nav a:hover,
+  .nav a:focus-visible {
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+
+  .nav a:hover::after,
+  .nav a:focus-visible::after {
+    width: 100%;
+  }
+
+  .socials {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .socials a {
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--text);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+    transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+    opacity: 0.92;
+  }
+
+  .socials a:hover,
+  .socials a:focus-visible {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.14);
+    border-color: rgba(255,255,255,0.28);
+    opacity: 1;
+  }
+
+  .socials i {
+    font-size: 1rem;
+  }
+
+  .corner-note {
+    position: absolute;
+    right: 28px;
+    bottom: 22px;
+    z-index: 2;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(245, 242, 237, 0.58);
+    text-align: right;
+    line-height: 1.5;
+    text-shadow: 0 4px 18px rgba(0,0,0,0.3);
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(22px);
     }
-
-    html, body {
-      height: 100%;
-      font-family: 'Inter', sans-serif;
-      color: white;
-      overflow: hidden;
-      background: black;
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
+  }
 
-    /* HERO */
+  @media (max-width: 900px) {
     .hero {
-      position: relative;
-      height: 100vh;
-      width: 100%;
-      background:
-        linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0.2)),
-        url('images/roc-hero.jpg') center/cover no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: slowZoom 20s ease-in-out infinite alternate;
+      padding: 38px 32px;
+      background-position: center center;
     }
 
-    /* CONTENT */
     .content {
-      text-align: center;
-      animation: fadeUp 1.2s ease forwards;
-      padding: 20px;
+      max-width: 100%;
+    }
+
+    .corner-note {
+      right: 20px;
+      bottom: 16px;
+      font-size: 0.66rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    body {
+      overflow: auto;
+    }
+
+    .hero {
+      min-height: 100svh;
+      padding: 26px 22px 32px;
+      align-items: flex-end;
+      background-position: center center;
+    }
+
+    .eyebrow {
+      margin-bottom: 10px;
+      letter-spacing: 0.18em;
     }
 
     h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.2rem, 5vw, 3.5rem);
-      letter-spacing: 1px;
       margin-bottom: 12px;
     }
 
     .tagline {
-      font-weight: 300;
-      font-size: 0.95rem;
-      opacity: 0.75;
-      margin-bottom: 35px;
-      letter-spacing: 1px;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      margin-bottom: 24px;
+      max-width: 22rem;
     }
 
-    /* NAV */
-    .nav-links {
-      display: flex;
-      gap: 40px;
-      justify-content: center;
-      margin-bottom: 50px;
+    .nav {
+      gap: 14px 18px;
+      margin-bottom: 22px;
     }
 
-    .nav-links a {
-      text-decoration: none;
-      color: white;
-      font-size: 0.9rem;
-      letter-spacing: 1.5px;
-      position: relative;
-      opacity: 0.75;
-      transition: opacity 0.3s ease;
-    }
-
-    .nav-links a:hover {
-      opacity: 1;
-    }
-
-    /* UNDERLINE ANIMATION */
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: -5px;
-      width: 0%;
-      height: 1px;
-      background: white;
-      transition: width 0.3s ease;
-    }
-
-    .nav-links a:hover::after {
-      width: 100%;
-    }
-
-    /* SOCIALS */
-    .socials {
-      position: absolute;
-      bottom: 25px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.75rem;
-      opacity: 0.6;
-      letter-spacing: 1px;
+    .nav a {
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
     }
 
     .socials a {
-      color: white;
-      text-decoration: none;
-      margin: 0 8px;
-      transition: opacity 0.3s ease;
+      width: 40px;
+      height: 40px;
     }
 
-    .socials a:hover {
-      opacity: 1;
+    .corner-note {
+      position: static;
+      margin-top: 24px;
+      text-align: left;
+      font-size: 0.64rem;
+      color: rgba(245, 242, 237, 0.5);
     }
+  }
 
-    /* SCROLL BLUR EFFECT */
-    body.scrolled .hero {
-      filter: blur(4px) brightness(0.7);
-      transition: filter 0.5s ease;
+  @media (prefers-reduced-motion: reduce) {
+    .content,
+    .nav a,
+    .socials a,
+    .nav a::after {
+      animation: none !important;
+      transition: none !important;
     }
-
-    /* ANIMATIONS */
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(25px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes slowZoom {
-      from {
-        background-size: 100%;
-      }
-      to {
-        background-size: 110%;
-      }
-    }
-
-    /* MOBILE OPTIMIZATION */
-    @media (max-width: 768px) {
-
-      .hero {
-        animation: none; /* avoid jitter on mobile */
-      }
-
-      .nav-links {
-        flex-direction: column;
-        gap: 18px;
-      }
-
-      .tagline {
-        font-size: 0.85rem;
-      }
-
-      .socials {
-        bottom: 15px;
-        font-size: 0.7rem;
-      }
-    }
-
-  </style>
+  }
+</style>
 </head>
-
 <body>
 
-  <div class="hero">
-    <div class="content">
-      <h1>Dave Korr</h1>
-      <div class="tagline">Light / Color / Place</div>
+<section class="hero">
+  <div class="content">
+    <div class="eyebrow">Photography</div>
 
-      <div class="nav-links">
-        <a href="rochester-winter.html">Rochester</a>
-        <a href="st-augustine.html">St. Augustine</a>
-      </div>
+    <h1>Dave Korr</h1>
+
+    <p class="tagline">
+      Frames shaped by light, color, and place — from Rochester winter to St. Augustine warmth.
+    </p>
+
+    <nav class="nav" aria-label="Portfolio sections">
+      <a href="rochester-winter.html">Rochester</a>
+      <a href="st-augustine.html">St. Augustine</a>
+    </nav>
+
+    <div class="socials" aria-label="Social links">
+      <a href="https://instagram.com/YOUR_HANDLE" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <i class="fab fa-instagram" aria-hidden="true"></i>
+      </a>
+      <a href="mailto:youremail@example.com" aria-label="Email">
+        <i class="fas fa-envelope" aria-hidden="true"></i>
+      </a>
     </div>
 
-    <div class="socials">
-      <a href="https://instagram.com/YOUR_HANDLE" target="_blank">Instagram</a> ·
-      <a href="mailto:youremail@example.com">Email</a>
+    <div class="corner-note">
+      Davekorr.com<br>
+      Enter the work
     </div>
   </div>
-
-  <script>
-    // Scroll blur trigger (future-proof if you add content below)
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 20) {
-        document.body.classList.add('scrolled');
-      } else {
-        document.body.classList.remove('scrolled');
-      }
-    });
-  </script>
+</section>
 
 </body>
 </html>
