@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chicago, Summer 2025 | Dave Korr</title>
+  <meta name="description" content="Chicago, Summer 2025 — a travel portfolio by Dave Korr." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#0b0b0b;--text:#f5f1eb;--muted:rgba(245,241,235,.74);--line:rgba(255,255,255,.12);--shadow:0 18px 40px rgba(0,0,0,.32);--max-width:1280px;--accent:#d3a76b;--accent-soft:rgba(211,167,107,.14)}
+    *{box-sizing:border-box;margin:0;padding:0} html{scroll-behavior:smooth}
+    body{font-family:"Inter",sans-serif;background:radial-gradient(circle at top,rgba(211,167,107,.08) 0%,transparent 28%),radial-gradient(circle at bottom right,rgba(211,167,107,.06) 0%,transparent 22%),var(--bg);color:var(--text);line-height:1.6}
+    a{color:inherit;text-decoration:none} img{display:block;max-width:100%}
+    .site-shell{min-height:100vh;padding:22px 24px 40px}
+    .nav{max-width:var(--max-width);margin:0 auto 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px 18px;border:1px solid var(--line);background:rgba(15,15,15,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:18px;box-shadow:var(--shadow);position:sticky;top:16px;z-index:30}
+    .brand{font-family:"Cormorant Garamond",serif;font-size:1.75rem;font-weight:600;letter-spacing:.03em}
+    .nav-links{list-style:none;display:flex;align-items:center;gap:22px;font-size:.96rem}
+    .nav-links a{color:var(--muted);transition:color .2s ease}.nav-links a:hover,.nav-links a.active{color:var(--text)}
+    .hero{max-width:var(--max-width);margin:0 auto 34px;position:relative;min-height:72vh;border-radius:30px;overflow:hidden;border:1px solid var(--line);background:#111;box-shadow:var(--shadow);isolation:isolate}
+    .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center}
+    .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.82) 0%,rgba(0,0,0,.28) 42%,rgba(0,0,0,.14) 100%),linear-gradient(to right,rgba(0,0,0,.5) 0%,rgba(0,0,0,.12) 55%,rgba(0,0,0,.2) 100%);z-index:1}
+    .hero-content{position:relative;z-index:2;height:100%;min-height:72vh;display:flex;flex-direction:column;justify-content:flex-end;padding:36px 36px 34px}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:10px;width:fit-content;margin-bottom:18px;padding:8px 12px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(10,10,10,.24);color:rgba(245,241,235,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:.78rem;text-transform:uppercase;letter-spacing:.12em}
+    .hero-title{max-width:760px;font-family:"Cormorant Garamond",serif;font-size:clamp(3.5rem,9vw,6.2rem);line-height:.93;font-weight:600;margin-bottom:16px;text-shadow:0 10px 28px rgba(0,0,0,.35)}
+    .hero-title em{font-style:italic;color:#f0d8b3;font-weight:500}
+    .hero-meta{display:flex;flex-wrap:wrap;gap:10px}.hero-meta span{padding:8px 12px;border-radius:999px;background:rgba(10,10,10,.32);border:1px solid rgba(255,255,255,.12);color:rgba(245,241,235,.84);font-size:.82rem;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+    .intro-grid{max-width:var(--max-width);margin:0 auto 34px;display:grid;grid-template-columns:320px minmax(0,1fr);gap:28px;align-items:start}
+    .facts-card,.story-card{border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.025));box-shadow:var(--shadow)}
+    .facts-card{padding:24px;position:sticky;top:96px}.facts-title{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:18px}.facts-list{display:grid;gap:16px}
+    .fact-label{font-size:.76rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(245,241,235,.55);margin-bottom:4px}.fact-value{font-size:1rem;color:var(--text)}
+    .story-card{padding:28px 28px 30px}.story-kicker{display:inline-block;margin-bottom:14px;padding:8px 12px;border-radius:999px;border:1px solid rgba(211,167,107,.20);background:var(--accent-soft);color:#e4bf8f;font-size:.78rem;text-transform:uppercase;letter-spacing:.12em}
+    .story-card p{color:var(--muted);font-size:1.03rem;margin-bottom:1rem}.story-card p:last-child{margin-bottom:0}
+    .gallery-section{max-width:var(--max-width);margin:0 auto}.gallery-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:20px}
+    .gallery-kicker{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:8px}
+    .gallery-title{font-family:"Cormorant Garamond",serif;font-size:clamp(2.2rem,5vw,3.4rem);line-height:.98;font-weight:600}
+    .gallery-note{color:var(--muted);font-size:.94rem;max-width:340px;text-align:right}
+    .masonry{columns:3;column-gap:20px}.gallery-item{break-inside:avoid;margin-bottom:20px;cursor:pointer;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:#141414;box-shadow:var(--shadow);transition:transform .25s ease,border-color .25s ease}
+    .gallery-item:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.2)} .img-wrap{background:#0e0e0e;padding:10px 10px 0 10px}.img-wrap img{width:100%;height:auto;border-radius:14px}
+    .img-caption{padding:14px 16px 16px;color:var(--muted);font-size:.92rem}
+    .footer{max-width:var(--max-width);margin:42px auto 0;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:18px;color:var(--muted);font-size:.9rem}
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;flex-direction:column;padding:24px;z-index:999}.lightbox.open{display:flex}
+    .lightbox-img{max-width:min(92vw,1200px);max-height:76vh;border-radius:18px;box-shadow:0 22px 60px rgba(0,0,0,.45)} .lightbox-caption{margin-top:14px;color:rgba(245,241,235,.82);font-size:.98rem;text-align:center}
+    .lightbox-counter{margin-bottom:12px;color:rgba(245,241,235,.64);font-size:.85rem;letter-spacing:.08em;text-transform:uppercase}
+    .lightbox-close,.lightbox-nav{position:absolute;border:1px solid rgba(255,255,255,.14);background:rgba(20,20,20,.48);color:var(--text);border-radius:999px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;transition:background .2s ease,transform .2s ease}
+    .lightbox-close:hover,.lightbox-nav:hover{background:rgba(255,255,255,.12);transform:translateY(-1px)}
+    .lightbox-close{top:22px;right:22px;padding:10px 16px;font-size:.9rem}.lightbox-nav{top:50%;transform:translateY(-50%);width:46px;height:46px;font-size:1.15rem}.lightbox-prev{left:24px}.lightbox-next{right:24px}
+    .fade-up{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}.fade-up.visible{opacity:1;transform:none}
+    @media (max-width:980px){.intro-grid{grid-template-columns:1fr}.facts-card{position:static}.masonry{columns:2}}
+    @media (max-width:720px){.site-shell{padding:16px 16px 30px}.nav{flex-direction:column;align-items:flex-start;gap:12px}.nav-links{flex-wrap:wrap;gap:14px}.hero,.hero-content{min-height:68vh}.hero-content{padding:24px 20px 22px}.gallery-head{flex-direction:column;align-items:flex-start}.gallery-note{text-align:left}.lightbox-nav{display:none}}
+    @media (max-width:560px){.masonry{columns:1}.story-card,.facts-card{padding:22px 18px}.footer{flex-direction:column}}
+  </style>
+</head>
+<body>
+  <div class="site-shell">
+    <nav class="nav">
+      <a href="index.html" class="brand">Dave Korr</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="portfolio.html" class="active">Portfolio</a></li>
+        <li><a href="mailto:hello@davekorr.com">Contact</a></li>
+        <li><a href="https://instagram.com/dave_korir" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+      </ul>
+    </nav>
+
+    <header class="hero">
+      <img src="images/chi-flag-skyline.jpg" alt="Chicago Flag and Skyline" />
+      <div class="hero-content">
+        <p class="hero-eyebrow">Portfolio · Travel</p>
+        <h1 class="hero-title">Chicago,<br><em>Summer 2025</em></h1>
+        <div class="hero-meta">
+          <span>Summer 2025</span><span>Chicago, Illinois</span><span>Fujifilm X · iPhone</span><span>10 Frames</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="intro-grid">
+      <aside class="facts-card fade-up">
+        <div class="facts-title">Trip Notes</div>
+        <div class="facts-list">
+          <div><div class="fact-label">Location</div><div class="fact-value">Chicago, Illinois</div></div>
+          <div><div class="fact-label">Date</div><div class="fact-value">Summer 2025</div></div>
+          <div><div class="fact-label">Camera</div><div class="fact-value">Fujifilm X · iPhone</div></div>
+          <div><div class="fact-label">Duration</div><div class="fact-value">4 Days</div></div>
+          <div><div class="fact-label">Frames</div><div class="fact-value">10 Photographs</div></div>
+        </div>
+      </aside>
+
+      <article class="story-card fade-up">
+        <div class="story-kicker">Field Notes</div>
+        <p>Sit Chicago on a map and it makes immediate sense. Planted at the southwestern tip of Lake Michigan, midway between the coasts, it became the place where everything had to pass through. The railroads came, then the stockyards, then the money, then the people. By the early twentieth century Chicago was one of the fastest growing cities on earth and it carried that energy like a fact about itself.</p>
+        <p>The Great Chicago Fire of 1871 burned most of it to the ground. The city rebuilt in a decade. That tells you everything you need to know about the character of this place.</p>
+        <p>Chicago gave the world the skyscraper, the blues, and deep dish pizza. It gave jazz a northern home when musicians rode the Illinois Central Railroad up from New Orleans during the Great Migration. On any given summer night in the 1920s, Louis Armstrong was playing the South Side and the city was rewriting what American music could sound like. That thread runs forward. Chicago gave us house music in the eighties, Kanye West in the nineties, Chance the Rapper after that. The city has never stopped producing.</p>
+        <p>Barack Obama organized communities on the South Side before he organized a country. Oprah Winfrey built a media empire from a local television station on State Street. These are not coincidences. Chicago has always been a place where ambition finds room.</p>
+        <p>The food scene reflects the same restlessness. Deep dish at Lou Malnati's is the obligation and worth every calorie. But Chicago also does the Italian beef sandwich, the Chicago-style hot dog loaded with everything except ketchup, and some of the best Mexican food outside of Mexico itself. The city's Pilsen neighborhood and Little Village carry a culinary tradition that takes margaritas seriously. Not the sour mix version. The real one, lime-forward and cold, served in a salted glass with something grilled alongside it, eaten outside while the summer light holds on longer than it has any right to.</p>
+        <p>I came for four days in the summer of 2025 with the Chicago City Pass in hand. The pass bundles the major attractions into one purchase and it does something useful beyond saving money. It gives you an anchor. Each morning started with a destination. The Art Institute. The 360 Chicago deck. The Shedd Aquarium. The Field Museum. One landmark per day, then let the streets take over from there.</p>
+        <p>The Loop at golden hour with the El train rattling overhead. The Bean catching the skyline in its surface. The Wrigley Building white against that specific Chicago blue sky. This is architecture that earned its reputation over a century and has not stopped earning it. Of all the American cities I have visited so far, Chicago is my favorite. It is a real city — dense, loud, lived in, and completely sure of itself. No performance required.</p>
+      </article>
+    </section>
+
+    <section class="gallery-section">
+      <div class="gallery-head fade-up">
+        <div><div class="gallery-kicker">10 Frames</div><h2 class="gallery-title">Chicago, <em>Summer 2025</em></h2></div>
+        <p class="gallery-note">A tighter editorial treatment within the same site system — consistent shell, different interior mood.</p>
+      </div>
+
+      <div class="masonry">
+        <div class="gallery-item fade-up" onclick="openLightbox(0)"><div class="img-wrap"><img src="images/chi-flag-skyline.jpg" alt="Chicago Flag and Skyline" loading="lazy" /></div><p class="img-caption">Chicago Flag and Skyline</p></div>
+        <div class="gallery-item fade-up" onclick="openLightbox(1)"><div class="img-wrap"><img src="images/chi-loop-pulse.jpg" alt="Pulse of the Loop" loading="lazy" /></div><p class="img-caption">Pulse of the Loop</p></div>
+        <div class="gallery-item fade-up" onclick="openLightbox(2)"><div class="img-wrap"><img src="images/chi-el-train.jpg" alt="The El, Afternoon Light" loading="lazy" /></div><p class="img-caption">The El, Afternoon Light</p></div>
+        <div class="gallery-item fade-up" onclick="openLightbox(3)"><div class="img-wrap"><img src="images/chi-morning-bus.jpg" alt="Morning Crosstown" loading="lazy" /></div><p class="img-caption">Morning Crosstown</p></div>
+        <div class="gallery-item fade-up" onclick="openLightbox(4)"><div class="img-wrap"><img src="images/chi-wrigley-blue.jpg" alt="Wrigley Building" loading="lazy" /></div><p class="img-caption">Wrigley Building</p></div>
+        <div class="gallery-item fade-up" onclick="openLightbox(5)"><div class="img-wrap"><img src="images/chi-wrigley-tower.jpg" alt="Wrigley, Trump Tower, Sun Flare" loading="lazy" /></div><p class="img-caption">Wrigley, Trump Tower, Sun Flare</p></div>
+        <div class="gallery-item fade-up" onclick="openLightbox(6)"><div class="img-wrap"><img src="images/chi-plane-sky.jpg" alt="Overhead, Chicago Blue" loading="lazy" /></div><p class="img-caption">Overhead, Chicago Blue</p></div>
+        <div class="gallery-item fade-up" onclick="openLightbox(7)"><div class="img-wrap"><img src="images/chi-lamp-dusk.jpg" alt="River North at Dusk" loading="lazy" /></div><p class="img-caption">River North at Dusk</p></div>
+        <div class="gallery-item fade-up" onclick="openLightbox(8)"><div class="img-wrap"><img src="images/chi-bean.jpg" alt="Cloud Gate, Millennium Park" loading="lazy" /></div><p class="img-caption">Cloud Gate, Millennium Park</p></div>
+        <div class="gallery-item fade-up" onclick="openLightbox(9)"><div class="img-wrap"><img src="images/chi-art-institute.jpg" alt="Art Institute Lions, Michigan Ave" loading="lazy" /></div><p class="img-caption">Art Institute Lions, Michigan Ave</p></div>
+      </div>
+    </section>
+
+    <footer class="footer"><span>Dave Korr</span><span>Chicago, Summer 2025 · Rochester, New York</span></footer>
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()">Close ✕</button>
+    <button class="lightbox-nav lightbox-prev" onclick="navLightbox(-1)">←</button>
+    <button class="lightbox-nav lightbox-next" onclick="navLightbox(1)">→</button>
+    <div class="lightbox-counter" id="lb-counter"></div>
+    <img class="lightbox-img" id="lb-img" src="" alt="" />
+    <p class="lightbox-caption" id="lb-caption"></p>
+  </div>
+
+  <script>
+    const photos=[{"src":"images/chi-flag-skyline.jpg","label":"Chicago Flag and Skyline"},{"src":"images/chi-loop-pulse.jpg","label":"Pulse of the Loop"},{"src":"images/chi-el-train.jpg","label":"The El, Afternoon Light"},{"src":"images/chi-morning-bus.jpg","label":"Morning Crosstown"},{"src":"images/chi-wrigley-blue.jpg","label":"Wrigley Building"},{"src":"images/chi-wrigley-tower.jpg","label":"Wrigley, Trump Tower, Sun Flare"},{"src":"images/chi-plane-sky.jpg","label":"Overhead, Chicago Blue"},{"src":"images/chi-lamp-dusk.jpg","label":"River North at Dusk"},{"src":"images/chi-bean.jpg","label":"Cloud Gate, Millennium Park"},{"src":"images/chi-art-institute.jpg","label":"Art Institute Lions, Michigan Ave"}];
+    let current=0;
+    function openLightbox(i){current=i;updateLightbox();document.getElementById("lightbox").classList.add("open");document.body.style.overflow="hidden";}
+    function closeLightbox(){document.getElementById("lightbox").classList.remove("open");document.body.style.overflow="";}
+    function navLightbox(d){current=(current+d+photos.length)%photos.length;updateLightbox();}
+    function updateLightbox(){const p=photos[current],img=document.getElementById("lb-img");img.src=p.src;img.alt=p.label;document.getElementById("lb-caption").textContent=p.label;document.getElementById("lb-counter").textContent=(current+1)+" / "+photos.length;}
+    document.getElementById("lightbox").addEventListener("click",function(e){if(e.target===this)closeLightbox();});
+    document.addEventListener("keydown",(e)=>{const open=document.getElementById("lightbox").classList.contains("open");if(!open)return;if(e.key==="Escape")closeLightbox();if(e.key==="ArrowRight")navLightbox(1);if(e.key==="ArrowLeft")navLightbox(-1);});
+    const obs=new IntersectionObserver((entries)=>{entries.forEach((entry,i)=>{if(entry.isIntersecting){setTimeout(()=>entry.target.classList.add("visible"),i*90);obs.unobserve(entry.target);}});},{threshold:.1});
+    document.querySelectorAll(".fade-up").forEach((el)=>obs.observe(el));
+  </script>
+</body>
+</html>
