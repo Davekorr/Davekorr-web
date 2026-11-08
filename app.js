@@ -419,31 +419,15 @@
       return '<button type="button" class="pl-pin" data-act="album" data-id="' + esc(a.id) + '" style="left:' + x + '%;top:' + y + '%" aria-label="' + esc(a.name) + ', ' + ps.length + ' photos">' +
         '<span class="pl-bub"><img src="' + esc(ps[0].thumb) + '" alt=""><i>' + ps.length + '</i></span><span class="pl-lbl">' + esc(a.name.split(',')[0]) + '</span></button>';
     }).join('');
-    return '<div class="pl-wrap"><div class="pl-map"><svg viewBox="' + M.vb.join(' ') + '" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="' + M.nation + '" fill="#2a2523" stroke="#4a403b" stroke-width="1"/><path d="' + M.states + '" fill="none" stroke="#3a3330" stroke-width=".6"/></svg>' + pins + '</div></div>';
+    return '<div class="pl-wrap"><div class="pl-map"><svg viewBox="' + M.vb.join(' ') + '" preserveAspectRatio="xMidYMid meet" aria-hidden="true">' +
+      '<defs><linearGradient id="oc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1633"/><stop offset="1" stop-color="#16285a"/></linearGradient></defs>' +
+      '<rect x="' + M.vb[0] + '" y="' + M.vb[1] + '" width="' + M.vb[2] + '" height="' + M.vb[3] + '" fill="url(#oc)"/>' +
+      '<path d="' + M.nation + '" fill="#3f8a75" stroke="#2f6e5e" stroke-width=".8"/><path d="' + M.states + '" fill="none" stroke="rgba(255,255,255,.14)" stroke-width=".5"/>' +
+      [190, 330, 470].map(function (y) { return '<line x1="' + M.vb[0] + '" x2="' + (M.vb[0] + M.vb[2]) + '" y1="' + y + '" y2="' + y + '" stroke="rgba(255,255,255,.28)" stroke-width=".8" stroke-dasharray="3 3"/>'; }).join('') +
+      '<text x="905" y="360" text-anchor="middle" class="pl-ocean">North<tspan x="905" dy="13">Atlantic</tspan><tspan x="905" dy="13">Ocean</tspan></text>' +
+      '<text x="690" y="455" text-anchor="middle" class="pl-ocean">Gulf of<tspan x="690" dy="13">Mexico</tspan></text>' +
+      '</svg>' + pins + '</div></div>';
   }
-  function printSheet(p) {
-    var P = S.prints; if (!P || !p) return;
-    var host = document.querySelector('.viewer'); if (!host) return;
-    var old = host.querySelector('.ps'); if (old) { old.remove(); return; }
-    var sz = 0, pa = 0, d = document.createElement('div'); d.className = 'ps';
-    function draw() {
-      d.innerHTML = '<div class="ps-h"><b>Order a print</b><span class="ps-tag">MOCKUP · Option B</span><button type="button" class="ps-x" aria-label="Close">✕</button></div>' +
-        '<div class="ps-row"><img src="' + esc(p.thumb) + '" alt=""><div><b>' + esc(p.title || p.alt) + '</b><span>Printed by ' + esc(P.lab) + ' · ships in 5–7 days</span></div></div>' +
-        '<div class="ps-lbl">Size</div><div class="ps-opts">' + P.sizes.map(function (s, i) { return '<button type="button" data-sz="' + i + '" class="' + (i === sz ? 'on' : '') + '">' + esc(s.size) + '<small>' + (s.price ? '$' + s.price : '[PRICE]') + '</small></button>'; }).join('') + '</div>' +
-        '<div class="ps-lbl">Paper</div><div class="ps-opts">' + P.papers.map(function (s, i) { return '<button type="button" data-pa="' + i + '" class="' + (i === pa ? 'on' : '') + '">' + esc(s) + '</button>'; }).join('') + '</div>' +
-        '<button type="button" class="pill primary ps-buy">Checkout · ' + esc(P.sizes[sz].size) + ' ' + esc(P.papers[pa]) + '</button>';
-    }
-    d.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var t = e.target.closest('button'); if (!t) return;
-      if (t.classList.contains('ps-x')) return d.remove();
-      if (t.dataset.sz) { sz = +t.dataset.sz; draw(); }
-      else if (t.dataset.pa) { pa = +t.dataset.pa; draw(); }
-      else if (t.classList.contains('ps-buy')) toast('Mockup: this would open a Stripe checkout');
-    });
-    draw(); host.appendChild(d);
-  }
-
   /* ---------- Photos ---------- */
   function Photos(root, opts) {
     var tab = 'library', album = null, list = [], vi = -1, info = false;
@@ -494,7 +478,7 @@
         v = document.createElement('div'); v.className = 'viewer'; v.tabIndex = -1; app.appendChild(v);
         v.innerHTML = '<div class="v-top"><button class="back" type="button" data-act="close">‹ Back</button><div class="v-title"><b></b><span></span></div><span style="width:60px;text-align:right;color:var(--muted);font-size:13px" data-count></span></div>' +
           '<div class="v-stage"><button type="button" class="v-nav prev" data-act="prev" aria-label="Previous photo">‹</button><button type="button" class="v-nav next" data-act="next" aria-label="Next photo">›</button></div>' +
-          '<div class="v-strip"></div><div class="v-tools"><button type="button" data-act="share" aria-label="Copy link">' + I.share + '</button><button type="button" data-act="like" aria-label="Favorite">' + I.heart + '</button><button type="button" data-act="info" aria-label="Info">' + I.info + '</button><button type="button" data-act="print" aria-label="Order a print">' + I.print + '</button></div>';
+          '<div class="v-strip"></div><div class="v-tools"><button type="button" data-act="share" aria-label="Copy link">' + I.share + '</button><button type="button" data-act="like" aria-label="Favorite">' + I.heart + '</button><button type="button" data-act="info" aria-label="Info">' + I.info + '</button></div>';
         swipeStage($('.v-stage', v));
         v.addEventListener('keydown', function (e) {
           if (e.key === 'ArrowRight') viewer(vi + 1); else if (e.key === 'ArrowLeft') viewer(vi - 1); else if (e.key === 'Escape') closeViewer();
@@ -542,7 +526,6 @@
       var act = b.dataset.act;
       if (act === 'view') viewer(+b.dataset.i);
       else if (act === 'album') { album = b.dataset.id; draw(); }
-      else if (act === 'print') printSheet(list[vi]);
       else if (act === 'back') { album = null; tab = 'albums'; draw(); }
       else if (act === 'more') { var st = b.closest('.alb-story'); st.classList.toggle('open'); b.textContent = st.classList.contains('open') ? 'Show less' : 'Read more'; }
       else if (act === 'close') closeViewer();
@@ -575,18 +558,20 @@
     }
     root.addEventListener('click', function (e) {
       var b = e.target.closest('.sf-tabs button'); if (b) { cur = +b.dataset.i; draw(); return; }
-      var sb = e.target.closest('[data-shop]'); if (sb) toast('Mockup: this would open the Pixieset store');
     });
     function update(o) { o = o || {}; if (o.tab) { S.projects.forEach(function (p, i) { if (p.id === o.tab) cur = i; }); draw(); } }
     draw(); update(arguments[1]); return { update: update };
   }
 
   function storePage() {
+    var SH = S.shop || { prices: [] }, from = SH.prices.length ? '$' + SH.prices[0].price : '';
+    var btn = function (id) { return SH.shopUrl ? '<a class="pill primary" href="' + esc(SH.shopUrl) + '" target="_blank" rel="noopener">Shop prints ↗</a>' : '<span class="pill st-soon">Opening soon</span>'; };
     var cards = S.albums.map(function (a) {
       var ps = albumPhotos(a.id); if (!ps.length) return '';
-      return '<div class="st-card"><img src="' + esc(ps[0].thumb) + '" alt=""><div class="st-meta"><b>' + esc(a.name) + '</b><span>' + ps.length + ' images · prints from [PRICE]</span><button type="button" class="pill primary" data-shop="' + esc(a.id) + '">Shop prints</button></div></div>';
+      return '<div class="st-card"><img src="' + esc(ps[0].thumb) + '" alt=""><div class="st-meta"><b>' + esc(a.name) + '</b><span>' + ps.length + ' images · prints from ' + from + '</span>' + btn(a.id) + '</div></div>';
     }).join('');
-    return '<div class="st"><div class="st-tag">MOCKUP · Option A — Pixieset store</div><h3>Dave Korr — Print Shop</h3><p>Signed, made-to-order prints. Choose a collection, pick a size and paper; your print is produced by a professional lab and shipped to you.</p><div class="st-grid">' + cards + '</div></div>';
+    var table = '<div class="st-prices">' + SH.prices.map(function (p) { return '<div><b>' + esc(p.size) + '</b><span>$' + p.price + '</span></div>'; }).join('') + '</div>';
+    return '<div class="st"><h3>Dave Korr — Print Shop</h3><p>Signed, made-to-order prints on lustre or fine-art paper, produced by a professional lab and shipped to you.</p>' + table + '<div class="st-grid">' + cards + '</div></div>';
   }
 
   /* ---------- Notes (Johnny Decimal notes, leave a note, testimonials) ---------- */

@@ -165,7 +165,7 @@ window.SITE = {
   /* ---------- Safari tabs (your projects) ---------- */
   projects: [
     { id: 'shop', type: 'store', title: 'Print Shop', url: 'https://gallery.davekorr.com',
-      desc: '[MOCKUP — Option A] Pixieset store on gallery.davekorr.com' },
+      desc: 'Signed, made-to-order prints' },
     { title: 'davekorr.com', url: 'https://davekorr.com',
       desc: 'Photography portfolio — Rochester, New York.',
       image: 'img/letchworth-3.jpg',
@@ -192,13 +192,13 @@ window.SITE = {
     // { name: 'Jane D.', text: 'Loved the Letchworth set!' }
   ],
 
-  /* ---------- Prints (MOCKUP — Option B: order from the photo viewer, fulfilled by Printique) ----------
-     price: null shows [PRICE]. checkoutUrl would be a Stripe Payment Link per size. */
-  prints: {
-    lab: 'Printique',
-    papers: ['Lustre', 'Matte', 'Metallic'],
-    sizes: [ { size: '8 × 10', price: null }, { size: '12 × 18', price: null },
-             { size: '16 × 24', price: null }, { size: '20 × 30', price: null } ]
+  /* ---------- Print shop (Pixieset store) ----------
+     shopUrl: your Pixieset store link once it exists (e.g. 'https://gallery.davekorr.com').
+     While it is null, the Shop buttons say "Opening soon". Prices are open-edition, lustre/fine-art paper. */
+  shop: {
+    shopUrl: null,
+    prices: [ { size: '8 × 10', price: 40 }, { size: '12 × 18', price: 75 },
+              { size: '16 × 24', price: 125 }, { size: '20 × 30', price: 195 } ]
   },
 
   /* ---------- Music (current playlist) ----------
