@@ -1,418 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dave Korr | Photographer</title>
-  <meta
-    name="description"
-    content="Dave Korr is a photographer based in Rochester, New York. Welcome to my canvas."
-  />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Cormorant+Garamond:wght@500;600&display=swap"
-    rel="stylesheet"
-  />
-
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-  />
-
-  <style>
-    :root {
-      --text: #f5f1eb;
-      --muted: rgba(245, 241, 235, 0.82);
-      --line: rgba(255, 255, 255, 0.16);
-      --glass: rgba(15, 15, 15, 0.18);
-      --glass-strong: rgba(15, 15, 15, 0.3);
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-      --max-width: 1280px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html,
-    body {
-      height: 100%;
-    }
-
-    body {
-      font-family: "Inter", sans-serif;
-      color: var(--text);
-      background: #0b0b0b;
-      overflow-x: hidden;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background:
-        linear-gradient(to bottom, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.42)),
-        linear-gradient(to right, rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.12)),
-        url("images/Boston-hero.jpg") center center / cover no-repeat;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.42) 0%,
-        rgba(0, 0, 0, 0.08) 40%,
-        rgba(0, 0, 0, 0.12) 100%
-      );
-      pointer-events: none;
-    }
-
-    .nav {
-      position: relative;
-      z-index: 10;
-      width: 100%;
-      padding: 22px 24px;
-    }
-
-    .nav-inner {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 14px 18px;
-      border: 1px solid var(--line);
-      background: var(--glass);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-    }
-
-    .brand {
-      font-family: "Cormorant Garamond", serif;
-      font-size: 1.6rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 22px;
-      list-style: none;
-      font-size: 0.95rem;
-    }
-
-    .nav-links a {
-      color: var(--muted);
-      transition: color 0.2s ease;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: var(--text);
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      padding: 48px 24px 64px;
-      display: flex;
-      align-items: flex-end;
-      flex: 1;
-    }
-
-    .hero-copy {
-      max-width: var(--max-width);
-      width: 100%;
-      margin: 0 auto;
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-end;
-    }
-
-    .copy-block {
-      max-width: 640px;
-    }
-
-    .eyebrow {
-      display: inline-block;
-      margin-bottom: 16px;
-      padding: 8px 12px;
-      font-size: 0.78rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--glass);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    h1 {
-      font-family: "Cormorant Garamond", serif;
-      font-size: clamp(3.5rem, 10vw, 7.2rem);
-      font-weight: 600;
-      line-height: 0.95;
-      letter-spacing: 0.01em;
-      margin-bottom: 14px;
-      text-wrap: balance;
-    }
-
-    .subline {
-      font-size: clamp(1rem, 2.5vw, 1.22rem);
-      color: var(--muted);
-      margin-bottom: 12px;
-      max-width: 540px;
-      line-height: 1.6;
-    }
-
-    .headline-secondary {
-      font-size: clamp(1.15rem, 2.8vw, 1.5rem);
-      font-weight: 500;
-      line-height: 1.45;
-      margin-bottom: 28px;
-      color: var(--text);
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-bottom: 26px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      min-height: 48px;
-      padding: 0 20px;
-      border-radius: 999px;
-      font-size: 0.95rem;
-      font-weight: 500;
-      transition: transform 0.2s ease, background 0.2s ease, border 0.2s ease;
-      border: 1px solid transparent;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-primary {
-      background: rgba(255, 255, 255, 0.95);
-      color: #111;
-    }
-
-    .btn-primary:hover {
-      background: #ffffff;
-    }
-
-    .btn-secondary {
-      background: var(--glass-strong);
-      color: var(--text);
-      border-color: var(--line);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(15, 15, 15, 0.4);
-    }
-
-    .socials {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .socials a {
-      width: 42px;
-      height: 42px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--line);
-      border-radius: 50%;
-      background: var(--glass);
-      color: var(--text);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      transition: transform 0.2s ease, background 0.2s ease;
-    }
-
-    .socials a:hover {
-      transform: translateY(-1px);
-      background: rgba(15, 15, 15, 0.36);
-    }
-
-    .footer-note {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      padding: 0 24px 24px;
-    }
-
-    .footer-inner {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      color: rgba(245, 241, 235, 0.78);
-      font-size: 0.88rem;
-    }
-
-    .footer-inner span:last-child {
-      text-align: right;
-    }
-
-    @media (max-width: 900px) {
-      .nav-inner {
-        padding: 14px 16px;
-      }
-
-      .nav-links {
-        gap: 16px;
-        font-size: 0.9rem;
-      }
-
-      .copy-block {
-        max-width: 100%;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .nav {
-        padding: 16px;
-      }
-
-      .nav-inner {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-      }
-
-      .nav-links {
-        flex-wrap: wrap;
-        gap: 14px;
-      }
-
-      .hero-content {
-        padding: 28px 16px 40px;
-      }
-
-      .footer-note {
-        padding: 0 16px 16px;
-      }
-
-      .footer-inner {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .footer-inner span:last-child {
-        text-align: left;
-      }
-
-      .hero-actions {
-        width: 100%;
-        flex-direction: column;
-      }
-
-      .btn {
-        width: 100%;
-      }
-    }
-
-    @media (max-width: 480px) {
-      h1 {
-        margin-bottom: 10px;
-      }
-
-      .subline {
-        margin-bottom: 10px;
-      }
-
-      .headline-secondary {
-        margin-bottom: 22px;
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1a1513">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="Dave Korr — photographer based in Rochester, New York.">
+<title>Dave Korr — Photographer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="hero">
-    <nav class="nav">
-      <div class="nav-inner">
-        <a href="index.html" class="brand">Dave Korr</a>
 
-        <ul class="nav-links">
-          <li><a href="index.html" class="active">Home</a></li>
-          <li><a href="portfolio.html">Portfolio</a></li>
-          <li><a href="mailto:hello@davekorr.com">Contact</a></li>
-        </ul>
-      </div>
-    </nav>
+<!-- LOCK SCREEN -->
+<div id="lock" aria-label="Lock screen">
+  <img class="wall" id="lockWall" alt="">
+  <div class="lock-top">
+    <div class="lock-date" id="lockDate"></div>
+    <div class="lock-time" id="lockTime"></div>
+  </div>
+  <div class="lock-notes" id="lockNotes" aria-label="Notifications"></div>
+  <button class="lock-hint" id="unlockBtn" type="button">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
+    <span>Swipe up to unlock</span>
+  </button>
+  <div class="lock-bar" aria-hidden="true"></div>
+</div>
 
-    <main class="hero-content">
-      <div class="hero-copy">
-        <div class="copy-block">
-          <div class="eyebrow">Photography</div>
+<!-- DESKTOP / HOME -->
+<div id="shell" aria-hidden="true">
 
-          <h1>Dave</h1>
-
-          <p class="subline">Photographer based in Rochester, New York</p>
-
-          <p class="headline-secondary">Welcome to my canvas.</p>
-
-          <div class="hero-actions">
-            <a href="portfolio.html" class="btn btn-primary">View Portfolio</a>
-            <a href="mailto:hello@davekorr.com" class="btn btn-secondary">Contact</a>
-          </div>
-
-          <div class="socials">
-            <a
-              href="https://instagram.com/dave_korir"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-            >
-              <i class="fa-brands fa-instagram"></i>
-            </a>
-
-            <a href="mailto:hello@davekorr.com" aria-label="Email">
-              <i class="fa-solid fa-envelope"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <div class="footer-note">
-      <div class="footer-inner">
-        <span>Rochester, New York</span>
-        <span>Portfolio, place, and perspective.</span>
+  <!-- Mac -->
+  <div id="mac">
+    <img class="wall" id="macWall" alt="">
+    <div class="menubar">
+      <button class="mb-name" id="mbName" type="button" aria-haspopup="true"></button>
+      <span class="mb-app" id="mbApp">Finder</span>
+      <span>File</span><span>Edit</span><span>View</span><span>Window</span>
+      <div class="mb-right">
+        <svg width="17" height="13" viewBox="0 0 17 13" aria-hidden="true"><path d="M8.5 11.6l1.9-2a2.7 2.7 0 0 0-3.8 0zM4.6 7.5l1.3 1.3a3.7 3.7 0 0 1 5.2 0l1.3-1.3a5.5 5.5 0 0 0-7.8 0zM1.8 4.7l1.3 1.3a7.6 7.6 0 0 1 10.8 0l1.3-1.3a9.4 9.4 0 0 0-13.4 0z" fill="currentColor"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="16" height="8" rx="1.6" fill="currentColor"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".5"/></svg>
+        <span id="mbClock"></span>
       </div>
     </div>
-  </header>
+    <div class="mb-menu" id="mbMenu" hidden>
+      <button type="button" data-menu="about">About Dave Korr</button>
+      <hr>
+      <button type="button" data-menu="lock">Lock Screen</button>
+    </div>
+    <div id="winLayer"></div>
+    <div class="dock-wrap"><nav class="dock" id="dock" aria-label="Dock"></nav></div>
+  </div>
+
+  <!-- iPhone -->
+  <div id="phone">
+    <img class="wall" id="phoneWall" alt="">
+    <div class="status" id="status">
+      <span id="stClock"></span>
+      <span class="st-r" aria-hidden="true">
+        <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+        <svg width="17" height="12" viewBox="0 0 17 13"><path d="M8.5 11.6l1.9-2a2.7 2.7 0 0 0-3.8 0zM4.6 7.5l1.3 1.3a3.7 3.7 0 0 1 5.2 0l1.3-1.3a5.5 5.5 0 0 0-7.8 0zM1.8 4.7l1.3 1.3a7.6 7.6 0 0 1 10.8 0l1.3-1.3a9.4 9.4 0 0 0-13.4 0z" fill="currentColor"/></svg>
+        <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="17" height="9" rx="2" fill="currentColor"/><rect x="25" y="4.5" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".45"/></svg>
+      </span>
+    </div>
+    <div class="home" id="home"></div>
+    <div id="appLayer"></div>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
