@@ -38,10 +38,10 @@ img{display:block}
 .cal-ov.d{top:62%;font-size:.6em;font-weight:300;color:#2b2b2b;letter-spacing:-.02em}
 .ic-macimg .cal-ov.m{top:23%;font-size:.165em}
 .ic-macimg .cal-ov.d{top:60%;font-size:.5em}
-.app-tile .tile-ic,.pdock .tile-ic{--icsz:min(62px,17vw)}
+.app-tile .tile-ic,.pdock .tile-ic{--icsz:min(54px,14.5vw)}
 
 /* ================= LOCK SCREEN ================= */
-#lock{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;will-change:transform}
+#lock{position:fixed;inset:0;z-index:100;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;will-change:transform}
 #lock .wall{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
 #lock::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,0) 40%,rgba(0,0,0,.35))}
 .lock-top{margin-top:7vh;text-align:center;text-shadow:0 1px 12px rgba(0,0,0,.35)}
@@ -63,6 +63,10 @@ img{display:block}
 .lock-bar{width:134px;height:5px;border-radius:3px;background:rgba(255,255,255,.85);margin-bottom:8px}
 .mode-mac .lock-bar{display:none}
 .mode-mac .lock-top{margin-top:9vh}
+
+/* while dragging, drop expensive blur so the finger-tracking stays at full frame rate */
+#lock.dragging .ntf{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(40,38,36,.72)}
+#shell{will-change:transform,opacity;transform-origin:50% 50%}
 
 /* ================= SHELL (shared) ================= */
 #shell{position:fixed;inset:0}
@@ -93,8 +97,8 @@ img{display:block}
 .dk.bounce .ic{animation:dk-bounce .85s ease-out}
 @keyframes dk-bounce{0%,100%{transform:translateY(0)}30%{transform:translateY(-20px)}55%{transform:translateY(0)}75%{transform:translateY(-8px)}}
 
-.win{position:absolute;display:flex;flex-direction:column;background:var(--win-bg);border-radius:12px;overflow:hidden;box-shadow:0 22px 70px rgba(0,0,0,.5),0 0 0 .5px rgba(255,255,255,.12);animation:win-in .22s ease-out both}
-.win.zooming{transition:left .25s,top .25s,width .25s,height .25s}
+.win{position:absolute;display:flex;flex-direction:column;background:var(--win-bg);border-radius:12px;overflow:hidden;box-shadow:0 22px 70px rgba(0,0,0,.5),0 0 0 .5px rgba(255,255,255,.12);animation:win-in .32s cubic-bezier(.32,.72,0,1) both}
+.win.zooming{transition:left .32s cubic-bezier(.32,.72,0,1),top .32s cubic-bezier(.32,.72,0,1),width .32s cubic-bezier(.32,.72,0,1),height .32s cubic-bezier(.32,.72,0,1)}
 @keyframes win-in{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
 .win-bar{height:38px;flex:none;display:flex;align-items:center;position:relative;background:var(--win-bar);border-bottom:1px solid var(--line);cursor:default;touch-action:none}
 .win-title{position:absolute;left:0;right:0;text-align:center;font-size:13px;font-weight:600;color:#d9d1c9;pointer-events:none}
@@ -119,19 +123,21 @@ img{display:block}
 .status{position:absolute;left:0;right:0;top:0;height:48px;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:0 26px 0 32px;font-size:16px;font-weight:600;pointer-events:none;padding-top:env(safe-area-inset-top)}
 .status .st-r{display:flex;gap:6px;align-items:center}
 .status.dark{color:#fff}
-.home{position:absolute;inset:0;padding:64px 20px 0;transition:transform .42s cubic-bezier(.2,.9,.25,1),filter .42s,opacity .42s}
-.home.behind{transform:scale(.9);filter:blur(6px);opacity:.6}
-.home-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px 10px;justify-items:center}
+.home{position:absolute;inset:0;padding:64px 24px 0;transition:transform 420ms cubic-bezier(.32,.72,0,1),opacity 420ms cubic-bezier(.32,.72,0,1);will-change:transform}
+.home.behind{transform:scale(.94);opacity:.5}
+.home-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 14px;justify-items:center}
 .app-tile{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%}
-.app-tile .tile-ic{width:min(62px,17vw);height:min(62px,17vw)}
+.app-tile .tile-ic{width:min(54px,14.5vw);height:min(54px,14.5vw)}
 .app-tile .tile-label{font-size:11.5px;text-shadow:0 1px 4px rgba(0,0,0,.6);white-space:nowrap}
 .widget{grid-column:span 2;grid-row:span 2;width:100%;aspect-ratio:1/1;border-radius:22px;overflow:hidden;position:relative;box-shadow:0 6px 20px rgba(0,0,0,.25);text-align:left}
 .widget img{width:100%;height:100%;object-fit:cover}
 .widget .w-cap{position:absolute;left:0;right:0;bottom:0;padding:24px 12px 10px;background:linear-gradient(transparent,rgba(0,0,0,.6));font-size:12px}
 .widget .w-cap b{display:block;font-size:14px}
-.pdock{position:absolute;left:12px;right:12px;bottom:max(14px,env(safe-area-inset-bottom));display:flex;justify-content:space-around;padding:14px 12px;border-radius:32px;background:rgba(60,55,52,.32);backdrop-filter:blur(30px) saturate(1.5);-webkit-backdrop-filter:blur(30px) saturate(1.5)}
-.pdock .tile-ic{width:min(62px,17vw);height:min(62px,17vw)}
-.papp{position:absolute;inset:0;z-index:20;background:#000;display:flex;flex-direction:column;overflow:hidden;will-change:transform}
+.pdock{position:absolute;left:14px;right:14px;bottom:max(14px,env(safe-area-inset-bottom));display:flex;justify-content:space-around;padding:12px 12px;border-radius:30px;background:rgba(60,55,52,.32);backdrop-filter:blur(30px) saturate(1.5);-webkit-backdrop-filter:blur(30px) saturate(1.5)}
+.pdock .tile-ic{width:min(54px,14.5vw);height:min(54px,14.5vw)}
+.papp{position:absolute;inset:0;z-index:20;background:#000;display:flex;flex-direction:column;overflow:hidden;will-change:transform,opacity;transform-origin:50% 50%;backface-visibility:hidden}
+.papp.zooming,.papp.dragging{border-radius:40px}
+.papp.dragging *{pointer-events:none}
 .papp-body{flex:1;min-height:0;position:relative}
 .mode-phone .papp-body>.app,.mode-phone .papp-body>.cam{top:48px}
 .home-bar{position:absolute;left:0;right:0;bottom:0;height:30px;display:flex;align-items:center;justify-content:center;z-index:25;touch-action:none}
