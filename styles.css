@@ -318,3 +318,44 @@ img{display:block}
 .ml-t b{display:block;font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ml-t span{font-size:13px;color:var(--muted)}
 .ml-go{color:var(--muted)}
 #lock.dragging .np{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(40,38,36,.72)}
+
+/* Places map */
+.pl-wrap{padding:0 12px 100px}
+.mode-mac .pl-wrap{height:100%;padding:0 12px 12px;box-sizing:border-box;display:flex;justify-content:center}
+.mode-mac .pl-map{height:100%;width:auto;max-height:none}
+.pl-map{position:relative;width:100%;aspect-ratio:400/475;max-height:calc(100% - 20px);margin:0 auto;border-radius:16px;overflow:hidden;background:#161312}
+.pl-map svg{position:absolute;inset:0;width:100%;height:100%}
+.pl-pin{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;gap:3px;animation:cell-in .5s cubic-bezier(.32,.72,0,1) both}
+.pl-bub{position:relative;width:52px;height:52px;border-radius:12px;border:3px solid #fff;overflow:visible;box-shadow:0 6px 18px rgba(0,0,0,.5);transition:transform .3s cubic-bezier(.32,.72,0,1)}
+.pl-bub img{width:100%;height:100%;object-fit:cover;border-radius:9px}
+.pl-bub i{position:absolute;top:-8px;right:-8px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:#b85c2a;color:#fff;font:600 11px/20px Inter,sans-serif;font-style:normal;text-align:center}
+.pl-bub::after{content:"";position:absolute;left:50%;bottom:-9px;margin-left:-6px;border:6px solid transparent;border-top-color:#fff}
+.pl-pin:hover .pl-bub{transform:scale(1.12)}
+.pl-lbl{margin-top:8px;font-size:11px;font-weight:600;color:#fff;text-shadow:0 1px 4px #000;white-space:nowrap}
+.pl-pin[data-id="rochester-winter"]{z-index:2}
+.pl-pin[data-id="letchworth"]{margin-left:-30px;margin-top:20px}
+.mode-phone .pl-bub{width:40px;height:40px}
+.mode-phone .pl-lbl{font-size:10px}
+/* Print sheet */
+.ps{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:min(440px,100%);z-index:8;background:#1f1c1b;border-radius:20px 20px 0 0;padding:16px 18px 22px;box-shadow:0 -10px 40px rgba(0,0,0,.6);animation:ps-in .38s cubic-bezier(.32,.72,0,1) both}
+.mode-phone .ps{padding-bottom:40px}
+@keyframes ps-in{from{transform:translate(-50%,100%)}to{transform:translate(-50%,0)}}
+.ps-h{display:flex;align-items:center;gap:8px}.ps-h b{font-size:17px}
+.ps-tag,.st-tag{font-size:10px;font-weight:700;letter-spacing:.1em;color:#ffd3b8;background:#4a2a18;padding:3px 7px;border-radius:6px}
+.ps-x{margin-left:auto;width:32px;height:32px;border-radius:50%;background:#2e2a28}
+.ps-row{display:flex;gap:12px;align-items:center;margin:14px 0}.ps-row img{width:56px;height:56px;object-fit:cover;border-radius:8px}
+.ps-row span{display:block;font-size:12.5px;color:var(--muted)}
+.ps-lbl{font-size:12px;color:var(--muted);margin:10px 0 6px}
+.ps-opts{display:flex;flex-wrap:wrap;gap:8px}
+.ps-opts button{min-height:40px;padding:6px 12px;border-radius:10px;background:#2e2a28;font-size:14px;display:flex;flex-direction:column;align-items:center}
+.ps-opts button small{font-size:11px;color:var(--muted)}
+.ps-opts button.on{box-shadow:inset 0 0 0 2px #e08a55;background:#3a2a22}
+.ps-buy{width:100%;margin-top:16px;min-height:46px}
+/* Store mock */
+.st{max-width:820px;margin:0 auto;padding:22px 20px 40px;background:#f7f3ee;color:#1d1a17;min-height:100%}
+.st h3{font:700 28px Georgia,serif;margin:12px 0 6px}.st p{color:#4a443e;line-height:1.55}
+.st-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:16px}
+.st-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.08)}
+.st-card img{width:100%;height:150px;object-fit:cover}
+.st-meta{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px}.st-meta span{font-size:13px;color:#6b625a}.st-meta .pill{margin-top:6px;align-self:flex-start}
+.sf-page:has(.st){background:#f7f3ee}

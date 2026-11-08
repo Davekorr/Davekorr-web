@@ -30,6 +30,10 @@ window.SITE = {
             e.g. { app: 'photos', album: 'letchworth' }
      link:  OR a web link instead (e.g. your Instagram profile)        */
   notifications: [
+    { app: 'safari',    title: 'Buy my prints 🖼',
+      body: 'Signed prints, made to order — browse the print shop.',
+      time: 'now', open: { app: 'safari', tab: 'shop' } },
+
     { app: 'photos',    title: 'Fall photos have dropped 🍂',
       body: 'Letchworth 2026 is live — fresh frames from golden hour.',
       time: 'now', open: { app: 'photos', album: 'letchworth' } },
@@ -160,6 +164,8 @@ window.SITE = {
 
   /* ---------- Safari tabs (your projects) ---------- */
   projects: [
+    { id: 'shop', type: 'store', title: 'Print Shop', url: 'https://gallery.davekorr.com',
+      desc: '[MOCKUP — Option A] Pixieset store on gallery.davekorr.com' },
     { title: 'davekorr.com', url: 'https://davekorr.com',
       desc: 'Photography portfolio — Rochester, New York.',
       image: 'img/letchworth-3.jpg',
@@ -185,6 +191,15 @@ window.SITE = {
   testimonials: [
     // { name: 'Jane D.', text: 'Loved the Letchworth set!' }
   ],
+
+  /* ---------- Prints (MOCKUP — Option B: order from the photo viewer, fulfilled by Printique) ----------
+     price: null shows [PRICE]. checkoutUrl would be a Stripe Payment Link per size. */
+  prints: {
+    lab: 'Printique',
+    papers: ['Lustre', 'Matte', 'Metallic'],
+    sizes: [ { size: '8 × 10', price: null }, { size: '12 × 18', price: null },
+             { size: '16 × 24', price: null }, { size: '20 × 30', price: null } ]
+  },
 
   /* ---------- Music (current playlist) ----------
      nowPlaying = index of the song shown on the lock screen and home screen.

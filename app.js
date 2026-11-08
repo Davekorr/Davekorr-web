@@ -405,15 +405,51 @@
     lib: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 15l5-5 4 4 3-3 6 6"/></svg>',
     share: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>',
     heart: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+    pin: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-6-5.7-6-11a6 6 0 0 1 12 0c0 5.3-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg>',
+    print: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M7 8V3h10v5"/><rect x="3" y="8" width="18" height="9" rx="2"/><path d="M7 14h10v7H7z"/></svg>',
     info: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>'
   };
+
+  /* ---------- Places map + print sheet ---------- */
+  function placesMap() {
+    var M = window.SITE_MAP; if (!M) return '<div class="empty">Map unavailable</div>';
+    var pins = S.albums.map(function (a) {
+      var p = M.pins[a.id], ps = albumPhotos(a.id); if (!p || !ps.length) return '';
+      var x = (p[0] - M.vb[0]) / M.vb[2] * 100, y = (p[1] - M.vb[1]) / M.vb[3] * 100;
+      return '<button type="button" class="pl-pin" data-act="album" data-id="' + esc(a.id) + '" style="left:' + x + '%;top:' + y + '%" aria-label="' + esc(a.name) + ', ' + ps.length + ' photos">' +
+        '<span class="pl-bub"><img src="' + esc(ps[0].thumb) + '" alt=""><i>' + ps.length + '</i></span><span class="pl-lbl">' + esc(a.name.split(',')[0]) + '</span></button>';
+    }).join('');
+    return '<div class="pl-wrap"><div class="pl-map"><svg viewBox="' + M.vb.join(' ') + '" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="' + M.nation + '" fill="#2a2523" stroke="#4a403b" stroke-width="1"/><path d="' + M.states + '" fill="none" stroke="#3a3330" stroke-width=".6"/></svg>' + pins + '</div></div>';
+  }
+  function printSheet(p) {
+    var P = S.prints; if (!P || !p) return;
+    var host = document.querySelector('.viewer'); if (!host) return;
+    var old = host.querySelector('.ps'); if (old) { old.remove(); return; }
+    var sz = 0, pa = 0, d = document.createElement('div'); d.className = 'ps';
+    function draw() {
+      d.innerHTML = '<div class="ps-h"><b>Order a print</b><span class="ps-tag">MOCKUP · Option B</span><button type="button" class="ps-x" aria-label="Close">✕</button></div>' +
+        '<div class="ps-row"><img src="' + esc(p.thumb) + '" alt=""><div><b>' + esc(p.title || p.alt) + '</b><span>Printed by ' + esc(P.lab) + ' · ships in 5–7 days</span></div></div>' +
+        '<div class="ps-lbl">Size</div><div class="ps-opts">' + P.sizes.map(function (s, i) { return '<button type="button" data-sz="' + i + '" class="' + (i === sz ? 'on' : '') + '">' + esc(s.size) + '<small>' + (s.price ? '$' + s.price : '[PRICE]') + '</small></button>'; }).join('') + '</div>' +
+        '<div class="ps-lbl">Paper</div><div class="ps-opts">' + P.papers.map(function (s, i) { return '<button type="button" data-pa="' + i + '" class="' + (i === pa ? 'on' : '') + '">' + esc(s) + '</button>'; }).join('') + '</div>' +
+        '<button type="button" class="pill primary ps-buy">Checkout · ' + esc(P.sizes[sz].size) + ' ' + esc(P.papers[pa]) + '</button>';
+    }
+    d.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var t = e.target.closest('button'); if (!t) return;
+      if (t.classList.contains('ps-x')) return d.remove();
+      if (t.dataset.sz) { sz = +t.dataset.sz; draw(); }
+      else if (t.dataset.pa) { pa = +t.dataset.pa; draw(); }
+      else if (t.classList.contains('ps-buy')) toast('Mockup: this would open a Stripe checkout');
+    });
+    draw(); host.appendChild(d);
+  }
 
   /* ---------- Photos ---------- */
   function Photos(root, opts) {
     var tab = 'library', album = null, list = [], vi = -1, info = false;
     var liked = store.get('liked', {});
     root.innerHTML = '<div class="app"><div class="app-h"><button class="back" type="button" data-act="back" hidden>‹ Albums</button><h2></h2><span class="sub"></span></div>' +
-      '<div class="app-scroll" data-body></div><nav class="ph-tabs"><button type="button" data-tab="library">' + I.lib + 'Library</button><button type="button" data-tab="albums">' + I.grid + 'Albums</button></nav></div>';
+      '<div class="app-scroll" data-body></div><nav class="ph-tabs"><button type="button" data-tab="library">' + I.lib + 'Library</button><button type="button" data-tab="albums">' + I.grid + 'Albums</button><button type="button" data-tab="places">' + I.pin + 'Places</button></nav></div>';
     var app = root.firstChild, body = $('[data-body]', root), h2 = $('h2', root), sub = $('.sub', root), back = $('.back', root);
     function cells(ps, start) {
       start = start || 0;
@@ -430,6 +466,9 @@
         h2.textContent = a ? a.name : ''; sub.textContent = list.length ? list.length + ' photos' : '';
         var story = (a && a.story && a.story.length) ? '<div class="alb-story"><div class="eyebrow">' + esc(a.eyebrow || '') + '</div><div class="txt">' + a.story.map(function (t) { return '<p>' + esc(t) + '</p>'; }).join('') + '</div>' + (a.story.length > 1 ? '<button type="button" class="more" data-act="more">Read more</button>' : '') + '</div>' : '';
         body.innerHTML = list.length ? story + cells(list) : '<div class="empty"><b>No photos yet</b>New photos from ' + esc(a.name) + ' are coming soon.</div>';
+      } else if (tab === 'places') {
+        h2.textContent = 'Places'; sub.textContent = S.albums.length + ' locations';
+        body.innerHTML = placesMap();
       } else if (tab === 'library') {
         list = byDate; h2.textContent = 'Library'; sub.textContent = list.length + ' photos';
         var html = '', start = 0;
@@ -455,7 +494,7 @@
         v = document.createElement('div'); v.className = 'viewer'; v.tabIndex = -1; app.appendChild(v);
         v.innerHTML = '<div class="v-top"><button class="back" type="button" data-act="close">‹ Back</button><div class="v-title"><b></b><span></span></div><span style="width:60px;text-align:right;color:var(--muted);font-size:13px" data-count></span></div>' +
           '<div class="v-stage"><button type="button" class="v-nav prev" data-act="prev" aria-label="Previous photo">‹</button><button type="button" class="v-nav next" data-act="next" aria-label="Next photo">›</button></div>' +
-          '<div class="v-strip"></div><div class="v-tools"><button type="button" data-act="share" aria-label="Copy link">' + I.share + '</button><button type="button" data-act="like" aria-label="Favorite">' + I.heart + '</button><button type="button" data-act="info" aria-label="Info">' + I.info + '</button></div>';
+          '<div class="v-strip"></div><div class="v-tools"><button type="button" data-act="share" aria-label="Copy link">' + I.share + '</button><button type="button" data-act="like" aria-label="Favorite">' + I.heart + '</button><button type="button" data-act="info" aria-label="Info">' + I.info + '</button><button type="button" data-act="print" aria-label="Order a print">' + I.print + '</button></div>';
         swipeStage($('.v-stage', v));
         v.addEventListener('keydown', function (e) {
           if (e.key === 'ArrowRight') viewer(vi + 1); else if (e.key === 'ArrowLeft') viewer(vi - 1); else if (e.key === 'Escape') closeViewer();
@@ -503,6 +542,7 @@
       var act = b.dataset.act;
       if (act === 'view') viewer(+b.dataset.i);
       else if (act === 'album') { album = b.dataset.id; draw(); }
+      else if (act === 'print') printSheet(list[vi]);
       else if (act === 'back') { album = null; tab = 'albums'; draw(); }
       else if (act === 'more') { var st = b.closest('.alb-story'); st.classList.toggle('open'); b.textContent = st.classList.contains('open') ? 'Show less' : 'Read more'; }
       else if (act === 'close') closeViewer();
@@ -530,10 +570,23 @@
     function draw() {
       $('.sf-tabs', root).innerHTML = S.projects.map(function (p, i) { return '<button type="button" role="tab" aria-selected="' + (i === cur) + '" class="' + (i === cur ? 'on' : '') + '" data-i="' + i + '">' + esc(p.title) + '</button>'; }).join('');
       var p = S.projects[cur]; $('.u', root).textContent = p.url;
+      if (p.type === 'store') { $('[data-page]', root).innerHTML = storePage(); return; }
       $('[data-page]', root).innerHTML = '<div class="sf-hero"><img src="' + esc(p.image) + '" alt=""></div><div class="sf-card"><h3>' + esc(p.title) + '</h3><div style="color:#6b625a;font-size:14px">' + esc(p.desc) + '</div><p>' + esc(p.body) + '</p><a class="go" href="' + esc(p.url) + '" target="_blank" rel="noopener">Visit site ↗</a></div>';
     }
-    root.addEventListener('click', function (e) { var b = e.target.closest('.sf-tabs button'); if (b) { cur = +b.dataset.i; draw(); } });
-    draw(); return {};
+    root.addEventListener('click', function (e) {
+      var b = e.target.closest('.sf-tabs button'); if (b) { cur = +b.dataset.i; draw(); return; }
+      var sb = e.target.closest('[data-shop]'); if (sb) toast('Mockup: this would open the Pixieset store');
+    });
+    function update(o) { o = o || {}; if (o.tab) { S.projects.forEach(function (p, i) { if (p.id === o.tab) cur = i; }); draw(); } }
+    draw(); update(arguments[1]); return { update: update };
+  }
+
+  function storePage() {
+    var cards = S.albums.map(function (a) {
+      var ps = albumPhotos(a.id); if (!ps.length) return '';
+      return '<div class="st-card"><img src="' + esc(ps[0].thumb) + '" alt=""><div class="st-meta"><b>' + esc(a.name) + '</b><span>' + ps.length + ' images · prints from [PRICE]</span><button type="button" class="pill primary" data-shop="' + esc(a.id) + '">Shop prints</button></div></div>';
+    }).join('');
+    return '<div class="st"><div class="st-tag">MOCKUP · Option A — Pixieset store</div><h3>Dave Korr — Print Shop</h3><p>Signed, made-to-order prints. Choose a collection, pick a size and paper; your print is produced by a professional lab and shipped to you.</p><div class="st-grid">' + cards + '</div></div>';
   }
 
   /* ---------- Notes (Johnny Decimal notes, leave a note, testimonials) ---------- */
