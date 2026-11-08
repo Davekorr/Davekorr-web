@@ -644,18 +644,21 @@
     var today = new Date(), view = new Date(today.getFullYear(), today.getMonth(), 1), sel = new Date(today);
     root.innerHTML = '<div class="app"><div class="app-scroll"><div class="cal"></div></div></div>';
     var el = $('.cal', root);
+    var CAL = S.calendar || {}, until = CAL.blockWeekendsUntil ? new Date(CAL.blockWeekendsUntil + 'T23:59:59') : null;
+    function blocked(d) { var w = d.getDay(); return !!until && (w === 0 || w === 6) && d <= until && d >= new Date(today.getFullYear(), today.getMonth(), today.getDate()); }
     function same(a, b) { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
     function draw() {
       var y = view.getFullYear(), m = view.getMonth(), start = new Date(y, m, 1 - new Date(y, m, 1).getDay()), cells = '';
       for (var i = 0; i < 42; i++) {
         var d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
-        cells += '<button type="button" data-d="' + d.toISOString() + '" class="' + (d.getMonth() !== m ? 'out ' : '') + (same(d, today) ? 'today ' : '') + (same(d, sel) ? 'sel' : '') + '" aria-label="' + d.toDateString() + '">' + d.getDate() + '</button>';
+        var bl = blocked(d);
+        cells += '<button type="button" data-d="' + d.toISOString() + '" class="' + (d.getMonth() !== m ? 'out ' : '') + (same(d, today) ? 'today ' : '') + (same(d, sel) ? 'sel ' : '') + (bl ? 'blk' : '') + '" aria-label="' + d.toDateString() + (bl ? ', ' + esc(CAL.label) : '') + '">' + d.getDate() + '</button>';
       }
       var dow = ['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(function (x) { return '<span class="dow">' + x + '</span>'; }).join('');
       var label = sel.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
       var href = 'mailto:' + S.email + '?subject=' + encodeURIComponent('Photo shoot request — ' + label) + '&body=' + encodeURIComponent('Hi Dave,\n\nI’d like to book a shoot on ' + label + '.\n\n');
       el.innerHTML = '<div class="cal-h"><button type="button" data-m="-1" aria-label="Previous month">‹</button><b>' + view.toLocaleDateString(undefined, { month: 'long', year: 'numeric' }) + '</b><button type="button" data-m="1" aria-label="Next month">›</button></div>' +
-        '<div class="cal-g">' + dow + cells + '</div><div class="cal-foot"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><b>' + esc(label) + '</b><a class="pill primary" href="' + esc(href) + '">Book a shoot</a></div><div style="color:var(--muted);margin-top:10px;font-size:13px">Opens your email app. Or write to <span style="user-select:all">' + esc(S.email) + '</span></div></div>';
+        '<div class="cal-g">' + dow + cells + '</div><div class="cal-foot"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><b>' + esc(label) + '</b>' + (blocked(sel) ? '<span class="pill cal-off">✈︎ ' + esc(CAL.label) + '</span>' : '<a class="pill primary" href="' + esc(href) + '">Book a shoot</a>') + '</div><div style="color:var(--muted);margin-top:10px;font-size:13px">Opens your email app. Or write to <span style="user-select:all">' + esc(S.email) + '</span></div></div>';
     }
     root.addEventListener('click', function (e) {
       var b = e.target.closest('[data-m]'); if (b) { view = new Date(view.getFullYear(), view.getMonth() + (+b.dataset.m), 1); draw(); return; }

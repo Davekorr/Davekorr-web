@@ -192,6 +192,10 @@ window.SITE = {
     // { name: 'Jane D.', text: 'Loved the Letchworth set!' }
   ],
 
+  /* ---------- Calendar availability ----------
+     Weekends up to and including blockWeekendsUntil show as unavailable with this label. */
+  calendar: { blockWeekendsUntil: '2027-01-03', label: 'Out of town' },
+
   /* ---------- Print shop (Pixieset store) ----------
      shopUrl: your Pixieset store link once it exists (e.g. 'https://gallery.davekorr.com').
      While it is null, the Shop buttons say "Opening soon". Prices are open-edition, lustre/fine-art paper. */

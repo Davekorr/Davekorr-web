@@ -364,3 +364,6 @@ img{display:block}
 .st-prices div{background:#fff;border-radius:10px;padding:10px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.06)}
 .st-prices b{display:block;font-size:13px}.st-prices span{font-size:18px;font-weight:700;color:#9a4a1f}
 .st-soon{background:#e9e1d6;color:#6b625a;align-self:flex-start;margin-top:6px}
+
+.cal-g button.blk{color:#7d746c;text-decoration:line-through;background:repeating-linear-gradient(135deg,transparent 0 4px,rgba(255,255,255,.06) 4px 6px)}
+.cal-off{background:#3a2a22;color:#ffb48a}
