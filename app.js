@@ -43,7 +43,8 @@
         var d = new Date();
         ov = '<span class="cal-ov m">' + d.toLocaleDateString(undefined, { month: 'short' }).toUpperCase() + '</span><span class="cal-ov d">' + d.getDate() + '</span>';
       }
-      return '<span class="ic ic-img' + (macArt ? ' ic-macimg' : '') + '"><img src="' + esc(src) + '" alt="">' + ov + '</span>';
+      var s192 = src.replace(/\.png$/, '-192.png');
+      return '<span class="ic ic-img' + (macArt ? ' ic-macimg' : '') + '"><img src="' + esc(s192) + '" srcset="' + esc(s192) + ' 192w, ' + esc(src) + ' 512w" sizes="64px" alt="" decoding="async">' + ov + '</span>';
     }
     if (id === 'calendar') {
       var dd = new Date();
@@ -156,13 +157,13 @@
     var cur = new DOMMatrix(getComputedStyle(lock).transform).m42 || 0, left = innerHeight + cur;
     var ms = reduce ? 0 : Math.round(Math.max(240, Math.min(460, v ? left / Math.max(1.4, -v * 1.6) : 440)));
     var tr = ms ? 'transform ' + ms + 'ms ' + EASE + ', opacity ' + ms + 'ms ' + EASE : 'none';
-    lock.style.transition = tr; shell.style.transition = tr;
+    lock.style.transition = tr; shell.style.transition = tr; document.body.classList.add('animating');
     requestAnimationFrame(function () {
       lock.style.transform = 'translate3d(0,-100%,0)'; lock.style.opacity = '0';
       shell.style.transform = ''; shell.style.opacity = '';
     });
     setTimeout(function () {
-      lock.hidden = true; shell.style.transition = '';
+      lock.hidden = true; shell.style.transition = ''; document.body.classList.remove('animating');
       if (then) then();
       if (mode === 'mac') setTimeout(macBanner, 1800);
     }, ms ? ms - 40 : 0);
@@ -370,14 +371,14 @@
       if (fromEl && fromEl.isConnected) {
         var r = fromEl.getBoundingClientRect(), W = innerWidth, H = innerHeight;
         var tx = r.left + r.width / 2 - W / 2, ty = r.top + r.height / 2 - H / 2;
-        target = 'translate3d(' + tx + 'px,' + ty + 'px,0) scale(' + (r.width / W) + ',' + (r.height / H) + ')';
+        target = 'translate3d(' + tx + 'px,' + ty + 'px,0) scale(' + Math.max(r.width / W, 0.12) + ')';
       }
       var now = getComputedStyle(el).transform; if (!now || now === 'none') now = 'translate3d(0,0,0) scale(1)';
-      el.classList.add('zooming');
+      el.classList.add('zooming'); document.body.classList.add('animating');
       var kf = opening ? [{ transform: target, opacity: 0.3 }, { transform: 'translate3d(0,0,0) scale(1)', opacity: 1 }]
                        : [{ transform: now, opacity: 1 }, { transform: target, opacity: 0 }];
-      var an = el.animate(kf, { duration: opening ? 420 : 340, easing: EASE, fill: 'forwards' });
-      an.onfinish = function () { el.classList.remove('zooming'); if (opening) an.cancel(); }; // release so finger-drag can move it
+      var an = el.animate(kf, { duration: opening ? 480 : 380, easing: EASE, fill: 'forwards' });
+      an.onfinish = function () { el.classList.remove('zooming'); document.body.classList.remove('animating'); if (opening) an.cancel(); }; // release so finger-drag can move it
       return an;
     },
     close: function (instant) {
@@ -385,7 +386,7 @@
       if (c.ctl && c.ctl.destroy) c.ctl.destroy();
       $('#home').classList.remove('behind');
       if (instant || reduce) { c.el.remove(); return; }
-      var a = this.zoom(c.el, c.from, false); a.onfinish = function () { c.el.remove(); };
+      var a = this.zoom(c.el, c.from, false); a.onfinish = function () { c.el.remove(); document.body.classList.remove('animating'); };
     }
   };
 

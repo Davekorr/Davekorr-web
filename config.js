@@ -30,10 +30,6 @@ window.SITE = {
             e.g. { app: 'photos', album: 'letchworth' }
      link:  OR a web link instead (e.g. your Instagram profile)        */
   notifications: [
-    { app: 'safari',    title: 'Buy my prints 🖼',
-      body: 'Signed prints, made to order — browse the print shop.',
-      time: 'now', open: { app: 'safari', tab: 'shop' } },
-
     { app: 'photos',    title: 'Fall photos have dropped 🍂',
       body: 'Letchworth 2026 is live — fresh frames from golden hour.',
       time: 'now', open: { app: 'photos', album: 'letchworth' } },
@@ -42,9 +38,9 @@ window.SITE = {
       body: '@dave_korir shared a new post. Tap to see it.',
       time: '2h ago', link: 'https://instagram.com/dave_korir' },
 
-    { app: 'notes',     title: 'Field Notes 📓',
-      body: 'Notes from my trips — Chicago, St. Augustine, Rochester, New York.',
-      time: 'now', open: { app: 'notes', doc: '11.00' } }
+    { app: 'safari',    title: 'Buy my prints 🖼',
+      body: 'Signed prints, made to order — browse the print shop.',
+      time: 'now', open: { app: 'safari', tab: 'shop' } }
   ],
 
   /* ---------- Albums (shown in Photos → Albums) ----------
