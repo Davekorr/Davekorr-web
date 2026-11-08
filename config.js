@@ -186,6 +186,39 @@ window.SITE = {
     // { name: 'Jane D.', text: 'Loved the Letchworth set!' }
   ],
 
+  /* ---------- Music (current playlist) ----------
+     nowPlaying = index of the song shown on the lock screen and home screen.
+     Tapping play opens the song in Apple Music (the site itself plays no audio). */
+  music: {
+    playlist: 'On Rotation',
+    nowPlaying: 18,
+    songs: [
+      { title: "Stuck On You", artist: "GIVĒON" },
+      { title: "For Tonight", artist: "GIVĒON" },
+      { title: "VITINHA (Afro)", artist: "Velian Officiel" },
+      { title: "BELLE", artist: "Velian Officiel" },
+      { title: "Big Flexa", artist: "Costa Titch" },
+      { title: "AWAY", artist: "Davido" },
+      { title: "FOR THE ROAD", artist: "Davido" },
+      { title: "Anna Sun", artist: "WALK THE MOON" },
+      { title: "4 Kampé II", artist: "Joé Dwèt Filé & Burna Boy" },
+      { title: "Change Your Mind", artist: "Burna Boy" },
+      { title: "Intro", artist: "JAY-Z" },
+      { title: "Underdog (Remix)", artist: "Alicia Keys" },
+      { title: "Is That Your Chick", artist: "Memphis Bleek" },
+      { title: "Sweet Love (Re-Recorded)", artist: "Wahu" },
+      { title: "4 Alarm Blaze", artist: "M.O.P." },
+      { title: "Money Goes, Honey Stay", artist: "Fabolous" },
+      { title: "Queen Tings", artist: "Masego" },
+      { title: "CHINEKE", artist: "Tobe Nwigwe & Busta Rhymes" },
+      { title: "I'll Be Okay", artist: "Bien" },
+      { title: "One In Million", artist: "Teejay" },
+      { title: "Something I Said", artist: "Protoje" },
+      { title: "So Easy (To Fall In Love)", artist: "Olivia Dean" },
+      { title: "Bruises", artist: "Lewis Capaldi" }
+    ]
+  },
+
   /* ---------- App icon images ----------
      mac   = icon used on the Mac desktop (macOS style, with its own padding/shadow)
      phone = icon used on the iPhone layout (square; the site rounds the corners)
@@ -197,6 +230,7 @@ window.SITE = {
     calendar:  { mac: 'icons/mac/calendar.png',  phone: 'icons/ios/calendar.png' },
     mail:      { mac: 'icons/mac/mail.png',      phone: 'icons/ios/mail.png' },
     instagram: { mac: 'icons/mac/instagram.png', phone: 'icons/ios/instagram.png' },
+    music:     { mac: 'icons/mac/music.png',     phone: 'icons/ios/music.png' },
     camera:    { mac: 'icons/mac/camera.png',    phone: 'icons/ios/camera.png' }
   }
 };

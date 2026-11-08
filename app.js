@@ -60,11 +60,12 @@
     calendar: { name: 'Calendar', size: [380, 560], render: Calendar },
     camera:   { name: 'Camera',   size: [820, 560], render: Camera },
     mail:     { name: 'Mail',     size: [520, 340], render: Mail },
+    music:    { name: 'Music',    size: [460, 600], render: Music },
     instagram:{ name: 'Instagram', link: 'https://instagram.com/' + S.instagram }
   };
-  var MAC_DOCK = ['calendar', 'photos', 'safari', 'notes', 'camera', '|', 'mail', 'instagram'];
+  var MAC_DOCK = ['calendar', 'photos', 'safari', 'notes', 'music', 'camera', '|', 'mail', 'instagram'];
   var PHONE_GRID = ['calendar', 'camera', 'instagram', 'mail'];
-  var PHONE_DOCK = ['photos', 'safari', 'notes'];
+  var PHONE_DOCK = ['photos', 'safari', 'notes', 'music'];
 
   var mode = null, unlocked = false, instances = {};
   function isPhone() { return matchMedia('(max-width: 767px)').matches; }
@@ -89,7 +90,7 @@
   var lock = $('#lock');
   function buildLock() {
     $('#lockWall').src = mode === 'phone' ? S.wallpapers.lockPhone : S.wallpapers.lockDesktop;
-    $('#lockNotes').innerHTML = (S.notifications || []).map(function (n, i) {
+    $('#lockNotes').innerHTML = nowPlayingCard('np-lock') + (S.notifications || []).map(function (n, i) {
       var tag = n.link ? 'a href="' + esc(n.link) + '" target="_blank" rel="noopener"' : 'button type="button"';
       return '<' + tag + ' class="ntf" data-n="' + i + '" style="animation-delay:' + (300 + i * 140) + 'ms">' +
         '<span class="ntf-ic">' + icon(n.app) + '</span><span class="ntf-main"><span class="ntf-row"><span class="ntf-title">' + esc(n.title) +
@@ -119,7 +120,7 @@
       lockProgress(Math.min(1, Math.max(0, -d / (H * 0.6))));
     }
     lock.addEventListener('pointerdown', function (e) {
-      if (unlocked || e.target.closest('.ntf')) return;
+      if (unlocked || e.target.closest('.ntf,.np')) return;
       onHint = !!e.target.closest('.lock-hint'); y0 = e.clientY; dy = 0; samples = [[performance.now(), 0]];
       lock.setPointerCapture(e.pointerId); lock.style.transition = 'none'; $('#shell').style.transition = 'none';
       lock.classList.add('dragging');
@@ -311,7 +312,7 @@
     };
     $('#home').innerHTML = '<div class="home-grid">' +
       '<button type="button" class="widget" data-widget="1" aria-label="Open ' + esc(alb.name) + ' album"><img src="' + esc(latest.thumb) + '" alt=""><span class="w-cap"><b>' + esc(alb.name) + '</b>New album</span></button>' +
-      PHONE_GRID.map(function (id) { return tile(id, true); }).join('') + '</div>' +
+      PHONE_GRID.map(function (id) { return tile(id, true); }).join('') + '</div>' + nowPlayingCard('np-home') +
       '<div class="pdock">' + PHONE_DOCK.map(function (id) { return tile(id, false); }).join('') + '</div>';
 
   }
@@ -654,6 +655,37 @@
       };
     });
     show(); return {};
+  }
+
+
+  /* ---------- Music ---------- */
+  function amUrl(s) { return 'https://music.apple.com/us/search?term=' + encodeURIComponent(s.title + ' ' + s.artist); }
+  function artTile(s, size) {
+    var h = 0, k = s.title + s.artist; for (var i = 0; i < k.length; i++) h = (h * 31 + k.charCodeAt(i)) % 360;
+    return '<span class="art" style="width:' + size + 'px;height:' + size + 'px;background:linear-gradient(140deg,hsl(' + h + ',55%,42%),hsl(' + ((h + 50) % 360) + ',60%,22%))">' + esc(s.title.charAt(0)) + '</span>';
+  }
+  function nowPlayingCard(cls) {
+    var M = S.music; if (!M || !M.songs.length) return '';
+    var i = Math.min(M.nowPlaying || 0, M.songs.length - 1), s = M.songs[i];
+    var prev = M.songs[(i + M.songs.length - 1) % M.songs.length], next = M.songs[(i + 1) % M.songs.length];
+    return '<div class="np ' + (cls || '') + '"><div class="np-top">' + artTile(s, 54) + '<div class="np-txt"><b>' + esc(s.title) + '</b><span>' + esc(s.artist) + '</span></div></div>' +
+      '<div class="np-bar"><span>0:00</span><i></i><span>' + esc(M.playlist) + '</span></div>' +
+      '<div class="np-ctl"><a href="' + esc(amUrl(prev)) + '" target="_blank" rel="noopener" aria-label="Previous: ' + esc(prev.title) + '">' + SV.prev + '</a>' +
+      '<a class="np-play" href="' + esc(amUrl(s)) + '" target="_blank" rel="noopener" aria-label="Play ' + esc(s.title) + ' in Apple Music">' + SV.play + '</a>' +
+      '<a href="' + esc(amUrl(next)) + '" target="_blank" rel="noopener" aria-label="Next: ' + esc(next.title) + '">' + SV.next + '</a></div></div>';
+  }
+  var SV = {
+    play: '<svg width="34" height="34" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>',
+    prev: '<svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M11.5 6v12L3 12zM21 6v12l-8.5-6z" fill="currentColor"/></svg>',
+    next: '<svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.5 6v12L21 12zM3 6v12l8.5-6z" fill="currentColor"/></svg>'
+  };
+  function Music(root) {
+    var M = S.music || { songs: [] };
+    root.innerHTML = '<div class="app"><div class="app-h"><h2>' + esc(M.playlist || 'Music') + '</h2><span class="sub">' + M.songs.length + ' songs</span></div>' +
+      '<div class="app-scroll"><div style="padding:0 14px 8px">' + nowPlayingCard('np-in') + '</div><div class="ml-list">' +
+      M.songs.map(function (s) { return '<a class="ml-row" href="' + esc(amUrl(s)) + '" target="_blank" rel="noopener">' + artTile(s, 46) + '<span class="ml-t"><b>' + esc(s.title) + '</b><span>' + esc(s.artist) + '</span></span><span class="ml-go" aria-hidden="true">↗</span></a>'; }).join('') +
+      '</div><p style="color:var(--muted);font-size:12px;padding:10px 18px 100px">Songs open in Apple Music.</p></div></div>';
+    return {};
   }
 
   /* ---------- Mail (contact) ---------- */
