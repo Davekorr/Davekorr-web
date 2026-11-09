@@ -50,7 +50,7 @@ window.SITE = {
       story: [] },
     { id: "letchworth", pin: "Letchworth", name: "Letchworth 2026", eyebrow: "Portfolio · Local",
       story: [] },
-    { id: "nyc-fall-2026", name: "New York, Fall 2026", eyebrow: "Portfolio · Travel",
+    { id: "nyc-fall-2026", name: "New York City, Fall 2026", eyebrow: "Portfolio · Travel",
       story: ["One October day in New York, start to finish: a quiet morning in Brooklyn, across the bridge, down into the subway, up through Manhattan, and out into Times Square as the light goes.",
         "Brooklyn is slow — Cadman Plaza, Fulton Ferry, the park, leaves just turning. The bridge does the talking: granite, cables pulling every line to one point, runners and walkers under them. Below ground the city is all signs and waiting. Above it, old stone and new glass, a few performers, and then the noise of 46th Street, finished in black and white.",
         "It is a trip best taken with friends. No itinerary, no checklist, just walking the streets with people you like, cameras out, stopping wherever something catches the light. Give New York a chance and it will surprise you."] },
@@ -180,7 +180,7 @@ window.SITE = {
       alt: 'Long tree shadow across orange leaves at golden hour',
       taken: '2026-10-24T17:42', camera: 'FUJIFILM X-T5', lens: 'XF 16-55mm F2.8', fl: '16mm', f: 'f/2.8', ss: '1/340', iso: '500' },
 
-    // ---- New York, Fall 2026 (story order) ----
+    // ---- New York City, Fall 2026 (story order) ----
     { id: "nyc-01-cadman-plaza", album: "nyc-fall-2026", title: "Morning, Cadman Plaza", src: 'img/nyc-01-cadman-plaza.webp', thumb: 'img/thumb/nyc-01-cadman-plaza.webp', alt: "Morning, Cadman Plaza" },
     { id: "nyc-02-fulton-ferry", album: "nyc-fall-2026", title: "Toward Fulton Ferry", src: 'img/nyc-02-fulton-ferry.webp', thumb: 'img/thumb/nyc-02-fulton-ferry.webp', alt: "Toward Fulton Ferry" },
     { id: "nyc-03-flare", album: "nyc-fall-2026", title: "Old Fulton Flare", src: 'img/nyc-03-flare.webp', thumb: 'img/thumb/nyc-03-flare.webp', alt: "Old Fulton Flare" },
@@ -309,7 +309,7 @@ window.SITE = {
     { area: '10–19 Photography', id: '11.01', title: 'Rochester, Winter', album: 'rochester-winter', type: 'text' },
     { area: '10–19 Photography', id: '11.02', title: 'St. Augustine', album: 'st-augustine', type: 'text' },
     { area: '10–19 Photography', id: '11.03', title: 'Chicago, Summer 2025', album: 'chicago-summer-2025', type: 'text' },
-    { area: '10–19 Photography', id: '11.04', title: 'New York, Fall 2026', album: 'nyc-fall-2026', type: 'text' },
+    { area: '10–19 Photography', id: '11.04', title: 'New York City, Fall 2026', album: 'nyc-fall-2026', type: 'text' },
     { area: '10–19 Photography', id: '11.05', title: 'Rochester, Summer 2026', album: 'rochester-summer-2026', type: 'text' },
     { area: '10–19 Photography', id: '11.06', title: 'Hemlock Lake', album: 'hemlock-lake', type: 'text' },
     { area: '10–19 Photography', id: '11.07', title: 'Detroit', album: 'detroit', type: 'text' },
