@@ -65,8 +65,9 @@ window.SITE = {
         "The steak at Prime + Proper is everything people say it is. But the city you actually feel is somewhere else: a dark bar on a Tuesday night, rain on the window, a candle and a short menu. Or down a marble staircase into Hiroki-San on a Thursday, where the room is hushed before service, the bar glows amber, and the kitchen works like it has something to prove.",
         "Detroit does not dress itself up for you. It shows you what it has and lets you decide. Most people who look closely end up staying a little longer than they planned."] },
     { id: "southwest-summer-2026", pin: "Dallas · Tulsa", name: "Southwest Summer 2026", eyebrow: "Portfolio · Travel",
-      // [DRAFT]
-      story: ["Two stops in the south-central states: the pumpkin village at the Dallas Arboretum, and the water at Gathering Place in Tulsa, shot straight down from the bridge."] },
+      story: ["Timing is everything. The pumpkin village at the Dallas Arboretum only stands for part of the season; a week later and the stacks are gone. In Tulsa, the light on the water at Gathering Place lined up for a few minutes, just as a kayak drifted out below.",
+        "Three frames are not enough for country this big. Texas and Oklahoma are on the 2027 list: more time, more back roads, better timing.",
+        "To be continued."] },
     { id: "chicago-summer-2025", name: "Chicago, Summer 2025", eyebrow: "Portfolio · Travel",
       story: ["Sit Chicago on a map and it makes immediate sense. Planted at the southwestern tip of Lake Michigan, midway between the coasts, it became the place where everything had to pass through. The railroads came, then the stockyards, then the money, then the people. By the early twentieth century Chicago was one of the fastest growing cities on earth and it carried that energy like a fact about itself.",
         "The Great Chicago Fire of 1871 burned most of it to the ground. The city rebuilt in a decade. That tells you everything you need to know about the character of this place.",
