@@ -58,7 +58,7 @@ window.SITE = {
         "This set is one long summer day at home: the Genesee in the morning, High Falls and the Kodak tower through the afternoon, the Strong glowing after a rain, and Cobbs Hill to close it out as the sun drops behind the tower."] },
     { id: "hemlock-lake", pin: "Hemlock", name: "Hemlock Lake", eyebrow: "Portfolio · Local",
       story: ["The road is still dark when the cooler goes in the trunk. By the time the sky starts to pale, the chair is set, the line is out, and the only sound is the water moving against the stones.",
-        "The sun comes up slowly over the valley. The phone stays face down in a bag somewhere. Nothing to answer, nothing to post, nothing to check. The hat comes down a little lower and the morning stretches out.",
+        "The sun comes up slowly over the valley. The phone stays face down in a bag somewhere, and stays there. The hat comes down a little lower and the morning stretches out.",
         "By noon there is smoke from the grill and a cold Genesee sweating in the shade. The drive home is quiet, the afternoon is warm, and the nap comes easy."] },
     { id: "detroit", name: "Detroit", eyebrow: "Portfolio · Travel",
       // [DRAFT]
