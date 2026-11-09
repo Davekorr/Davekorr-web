@@ -20,6 +20,13 @@
     } catch (e) { toast('Couldn’t copy — select and copy manually'); }
   }
 
+  /* Full-size photo: phones get the 1200px copy in img/md/, big screens the 2000px original */
+  function setPhoto(img, p) {
+    if (/^img\//.test(p.src)) { img.sizes = '100vw'; img.srcset = p.src.replace(/^img\//, 'img/md/') + ' 1200w, ' + p.src + ' 2000w'; }
+    else img.removeAttribute('srcset');
+    img.src = p.src;
+  }
+
   /* ---------------- Icons ---------------- */
   var GLYPH = {
     photos: '<svg viewBox="0 0 60 60" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"><rect x="15" y="18" width="26" height="22" rx="3" transform="rotate(-10 28 29)" fill="rgba(255,255,255,.25)"/><rect x="20" y="20" width="26" height="22" rx="3" fill="rgba(255,255,255,.92)" stroke="#fff"/></g><circle cx="38" cy="27" r="2.6" fill="#e9853f"/><path d="M22 40l7-8 5 5 3-3 7 6z" fill="#b85c2a"/></svg>',
@@ -495,7 +502,7 @@
       $('.v-title span', v).textContent = p.taken ? fmtDate(p.taken, true) : (p.title ? albumOf(p).name || '' : '');
       $('[data-count]', v).textContent = (vi + 1) + ' / ' + list.length;
       var stage = $('.v-stage', v), old = $('img', stage); if (old) old.remove();
-      var img = new Image(); img.src = p.src; img.alt = p.alt; img.draggable = false; stage.insertBefore(img, stage.firstChild);
+      var img = new Image(); setPhoto(img, p); img.alt = p.alt; img.draggable = false; stage.insertBefore(img, stage.firstChild);
       $('.v-strip', v).innerHTML = list.map(function (q, j) { return '<button type="button" data-act="jump" data-i="' + j + '" class="' + (j === vi ? 'on' : '') + '" aria-label="Photo ' + (j + 1) + '"><img src="' + esc(q.thumb) + '" alt=""></button>'; }).join('');
       var on = $('.v-strip .on', v); if (on && on.scrollIntoView) on.scrollIntoView({ block: 'nearest', inline: 'center' });
       $('[data-act="like"]', v).classList.toggle('liked', !!liked[p.id]);
@@ -682,7 +689,7 @@
       '<button type="button" class="cam-flip" data-act="prev" aria-label="Previous frame"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg></button></div></div>';
     function show() {
       var p = byDate[i], img = $('.cam-frame img', root);
-      img.src = p.src; img.alt = p.alt;
+      setPhoto(img, p); img.alt = p.alt;
       $('.cam-thumb img', root).src = byDate[(i + byDate.length - 1) % byDate.length].thumb;
       $('.cam-exif', root).innerHTML = [p.fl, p.f, p.ss, p.iso && 'ISO ' + p.iso].filter(Boolean).map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('') || '<span>' + esc(albumOf(p).name || '') + '</span>';
       var af = $('.cam-af', root); af.classList.remove('lock'); void af.offsetWidth; af.classList.add('lock');
