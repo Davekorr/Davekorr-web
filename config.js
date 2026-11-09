@@ -53,9 +53,9 @@ window.SITE = {
       story: ["One October day in New York, start to finish: a quiet morning in Brooklyn, across the bridge, down into the subway, up through Manhattan, and out into Times Square as the light goes.",
         "Brooklyn is slow — Cadman Plaza, Fulton Ferry, the park, leaves just turning. The bridge does the talking: granite, cables pulling every line to one point, runners and walkers under them. Below ground the city is all signs and waiting. Above it, old stone and new glass, a few performers, and then the noise of 46th Street, finished in black and white."] },
     { id: "rochester-summer-2026", pin: "Rochester ☀︎", name: "Rochester, Summer 2026", eyebrow: "Portfolio · Local",
-      // [DRAFT] written by Claude from the photos — rewrite in your own words
-      story: ["One long summer day at home: the Genesee in the morning, High Falls and the Kodak tower through the afternoon, the Strong glowing after a rain, and Cobbs Hill to close it out as the sun drops behind the tower.",
-        "Rochester in summer is the opposite of the winter set. Everything is green and loud, the falls are full, and the evenings run late enough to wait for the light."] },
+      story: ["Since moving to the US, Rochester has shown me time and time again that it is a hidden gem. It does not announce itself. It just keeps quietly rewarding you for staying.",
+        "The winters are long and cold, and they are worth it, purely for what comes after. Spring arrives like a reward, summer turns everything green and loud, and fall sets the whole region on fire. Living through the cold is what makes the other three seasons feel earned.",
+        "This set is one long summer day at home: the Genesee in the morning, High Falls and the Kodak tower through the afternoon, the Strong glowing after a rain, and Cobbs Hill to close it out as the sun drops behind the tower."] },
     { id: "hemlock-lake", pin: "Hemlock", name: "Hemlock Lake", eyebrow: "Portfolio · Local",
       // [DRAFT]
       story: ["A slow day at Hemlock Lake, south of Rochester. No motors, no houses on the shore — just the long valley, a red chair, and a line in the water.",
