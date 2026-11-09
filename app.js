@@ -329,7 +329,10 @@
       if (this.cur) this.close(true);
       if (!fromEl) { var t = $('#home .app-tile[data-app="' + id + '"] .tile-ic'); fromEl = t || null; }
       var el = document.createElement('div'); el.className = 'papp'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', APPS[id].name);
-      el.innerHTML = '<div class="papp-body"></div><div class="home-bar" role="button" tabindex="0" aria-label="Go to Home Screen"><span></span></div>';
+      el.innerHTML = '<div class="papp-body"></div><button type="button" class="home-btn" aria-label="Back to Home Screen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>Home</button><div class="home-bar" role="button" tabindex="0" aria-label="Go to Home Screen"><span></span></div>';
+      el.querySelector('.home-btn').addEventListener('click', function () { self.close(); });
+      // phone/browser Back gesture returns to the home screen
+      try { history.pushState({ dkApp: id }, ''); this.pushed = true; } catch (e) {}
       $('#appLayer').appendChild(el);
       var self = this;
       this.cur = { id: id, el: el, from: fromEl };
@@ -381,8 +384,10 @@
       an.onfinish = function () { el.classList.remove('zooming'); document.body.classList.remove('animating'); if (opening) an.cancel(); }; // release so finger-drag can move it
       return an;
     },
-    close: function (instant) {
+    close: function (instant, fromPop) {
       var c = this.cur; if (!c) return; this.cur = null;
+      if (this.pushed && !fromPop) { this.pushed = false; this.skipPop = true; try { history.back(); } catch (e) {} }
+      if (fromPop) this.pushed = false;
       if (c.ctl && c.ctl.destroy) c.ctl.destroy();
       $('#home').classList.remove('behind');
       if (instant || reduce) { c.el.remove(); return; }
@@ -747,6 +752,10 @@
     var bn = $('.mac-banner'); if (bn) bn.remove();
     buildLock(); if (m === 'mac') buildMac(); else buildPhone();
   }
+  addEventListener('popstate', function () {
+    if (Phone.skipPop) { Phone.skipPop = false; return; }
+    if (mode === 'phone' && Phone.cur) Phone.close(false, true);
+  });
   var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(setMode, 150); });
   setMode(); tick(); setInterval(tick, 10000);
   // Deep links (used by old portfolio URLs): #albums, #album-<id>

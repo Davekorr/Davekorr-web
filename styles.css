@@ -140,7 +140,7 @@ img{display:block}
 .papp.dragging *{pointer-events:none}
 .papp-body{flex:1;min-height:0;position:relative}
 .mode-phone .papp-body>.app,.mode-phone .papp-body>.cam{top:48px}
-.home-bar{position:absolute;left:0;right:0;bottom:0;height:30px;display:flex;align-items:center;justify-content:center;z-index:25;touch-action:none}
+.home-bar{position:absolute;left:0;right:0;bottom:0;height:34px;padding-bottom:env(safe-area-inset-bottom);display:flex;align-items:center;justify-content:center;z-index:25;touch-action:none}
 .home-bar span{width:134px;height:5px;border-radius:3px;background:rgba(255,255,255,.8)}
 
 /* ================= APPS (shared) ================= */
@@ -380,3 +380,9 @@ body.animating .ntf,body.animating .np,body.animating .pdock,body.animating .doc
 body.animating .pdock{background:rgba(60,55,52,.55)}
 .papp{contain:layout paint}
 .ic img{image-rendering:auto;-webkit-backface-visibility:hidden}
+
+/* visible way back to the Home Screen */
+.home-btn{position:absolute;left:12px;top:calc(8px + env(safe-area-inset-top));z-index:26;display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 11px 0 9px;border-radius:15px;background:rgba(40,36,34,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);color:#fff;font:600 13px Inter,-apple-system,sans-serif;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.2);animation:hb-in .5s .25s cubic-bezier(.32,.72,0,1) both}
+@keyframes hb-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.mode-phone .status{padding-left:96px}
+#shell,#lock{height:100dvh}
