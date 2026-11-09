@@ -46,12 +46,27 @@ window.SITE = {
   /* ---------- Albums (shown in Photos → Albums) ----------
      eyebrow = small label above the album text; story = paragraphs shown at the top of the album. */
   albums: [
-    { id: "letchworth", name: "Letchworth 2026", eyebrow: "Portfolio · Local",
+    { id: "letchworth", pin: "Letchworth", name: "Letchworth 2026", eyebrow: "Portfolio · Local",
       story: [] },
     { id: "nyc-fall-2026", name: "New York, Fall 2026", eyebrow: "Portfolio · Travel",
       // [DRAFT] written by Claude from the photos — rewrite in your own words
       story: ["One October day in New York, start to finish: a quiet morning in Brooklyn, across the bridge, down into the subway, up through Manhattan, and out into Times Square as the light goes.",
         "Brooklyn is slow — Cadman Plaza, Fulton Ferry, the park, leaves just turning. The bridge does the talking: granite, cables pulling every line to one point, runners and walkers under them. Below ground the city is all signs and waiting. Above it, old stone and new glass, a few performers, and then the noise of 46th Street, finished in black and white."] },
+    { id: "rochester-summer-2026", pin: "Rochester ☀︎", name: "Rochester, Summer 2026", eyebrow: "Portfolio · Local",
+      // [DRAFT] written by Claude from the photos — rewrite in your own words
+      story: ["One long summer day at home: the Genesee in the morning, High Falls and the Kodak tower through the afternoon, the Strong glowing after a rain, and Cobbs Hill to close it out as the sun drops behind the tower.",
+        "Rochester in summer is the opposite of the winter set. Everything is green and loud, the falls are full, and the evenings run late enough to wait for the light."] },
+    { id: "hemlock-lake", pin: "Hemlock", name: "Hemlock Lake", eyebrow: "Portfolio · Local",
+      // [DRAFT]
+      story: ["A slow day at Hemlock Lake, south of Rochester. No motors, no houses on the shore — just the long valley, a red chair, and a line in the water.",
+        "The edit leans cool and bright on purpose. It is how the day felt: clear water, shade under the branches, and nothing to rush toward."] },
+    { id: "detroit", name: "Detroit", eyebrow: "Portfolio · Travel",
+      // [DRAFT]
+      story: ["Detroit from the river up: the Renaissance Center in hard blue sky, a café window at golden hour, and Windsor lighting up across the water at dusk.",
+        "Then down a marble staircase into Hiroki-San — the quiet before service, the bar glowing amber, the sushi counter and the line at work, a steak don and dessert for the table, and the rain on the glass on the way out."] },
+    { id: "southwest-summer-2026", pin: "Dallas · Tulsa", name: "Southwest Summer 2026", eyebrow: "Portfolio · Travel",
+      // [DRAFT]
+      story: ["Two stops in the south-central states: the pumpkin village at the Dallas Arboretum, and the water at Gathering Place in Tulsa, shot straight down from the bridge."] },
     { id: "chicago-summer-2025", name: "Chicago, Summer 2025", eyebrow: "Portfolio · Travel",
       story: ["Sit Chicago on a map and it makes immediate sense. Planted at the southwestern tip of Lake Michigan, midway between the coasts, it became the place where everything had to pass through. The railroads came, then the stockyards, then the money, then the people. By the early twentieth century Chicago was one of the fastest growing cities on earth and it carried that energy like a fact about itself.",
         "The Great Chicago Fire of 1871 burned most of it to the ground. The city rebuilt in a decade. That tells you everything you need to know about the character of this place.",
@@ -60,7 +75,7 @@ window.SITE = {
         "The food scene reflects the same restlessness. Deep dish at Lou Malnati's is the obligation and worth every calorie. But Chicago also does the Italian beef sandwich, the Chicago-style hot dog loaded with everything except ketchup, and some of the best Mexican food outside of Mexico itself. The city's Pilsen neighborhood and Little Village carry a culinary tradition that takes margaritas seriously. Not the sour mix version. The real one, lime-forward and cold, served in a salted glass with something grilled alongside it, eaten outside while the summer light holds on longer than it has any right to.",
         "I came for four days in the summer of 2025 with the Chicago City Pass in hand. The pass bundles the major attractions into one purchase and it does something useful beyond saving money. It gives you an anchor. Each morning started with a destination. The Art Institute. The 360 Chicago deck. The Shedd Aquarium. The Field Museum. One landmark per day, then let the streets take over from there.",
         "The Loop at golden hour with the El train rattling overhead. The Bean catching the skyline in its surface. The Wrigley Building white against that specific Chicago blue sky. This is architecture that earned its reputation over a century and has not stopped earning it. Of all the American cities I have visited so far, Chicago is my favorite. It is a real city — dense, loud, lived in, and completely sure of itself. No performance required."] },
-    { id: "rochester-winter", name: "Rochester, Winter", eyebrow: "Portfolio · Local",
+    { id: "rochester-winter", pin: "Rochester ❄︎", name: "Rochester, Winter", eyebrow: "Portfolio · Local",
       story: ["Rochester in winter strips things back to structure. Trees, streets, brick, water, and the hard edge of cold light become more visible when everything decorative falls away.",
         "The city rewards patience. Winter photography here is less about spectacle and more about waiting for quiet alignment — a bare branch against snow, a sidewalk carrying low afternoon light, or a frame where the weather becomes the subject.",
         "What I like about Rochester is that it does not beg to be photographed. You have to work for it. That makes the keepers feel earned."] },
@@ -75,6 +90,9 @@ window.SITE = {
      Camera settings are optional; they show in the Info panel and Camera app when present.
      Photos appear in this order everywhere (newest album first). */
   photos: [
+    { id: "letchworth-7", album: "letchworth", title: "Middle Falls in full fall color", src: 'img/letchworth-7.jpg', thumb: 'img/thumb/letchworth-7.jpg', alt: "Middle Falls in full fall color" },
+    { id: "letchworth-8", album: "letchworth", title: "The gorge from the overlook", src: 'img/letchworth-8.jpg', thumb: 'img/thumb/letchworth-8.jpg', alt: "The gorge from the overlook" },
+    { id: "letchworth-9", album: "letchworth", title: "Park road under the maples", src: 'img/letchworth-9.jpg', thumb: 'img/thumb/letchworth-9.jpg', alt: "Park road under the maples" },
     { id: 'l1', album: 'letchworth', src: 'img/letchworth-1.jpg', thumb: 'img/thumb/letchworth-1.jpg',
       alt: 'Sunburst through red maples over a leaf-covered path',
       taken: '2026-10-24T17:45', camera: 'FUJIFILM X-T5', lens: 'Viltrox AF 9mm F2.8 Air', fl: '9mm', f: 'f/5.6', ss: '1/220', iso: '500' },
@@ -100,6 +118,7 @@ window.SITE = {
     { id: "nyc-03-flare", album: "nyc-fall-2026", title: "Old Fulton Flare", src: 'img/nyc-03-flare.jpg', thumb: 'img/thumb/nyc-03-flare.jpg', alt: "Old Fulton Flare" },
     { id: "nyc-04-dumbo-signs", album: "nyc-fall-2026", title: "DUMBO Wayfinding", src: 'img/nyc-04-dumbo-signs.jpg', thumb: 'img/thumb/nyc-04-dumbo-signs.jpg', alt: "DUMBO Wayfinding" },
     { id: "nyc-05-park", album: "nyc-fall-2026", title: "Brooklyn Bridge Park", src: 'img/nyc-05-park.jpg', thumb: 'img/thumb/nyc-05-park.jpg', alt: "Brooklyn Bridge Park" },
+    { id: "nyc-26-brooklyn-bridge", album: "nyc-fall-2026", title: "Under the Brooklyn Bridge", src: 'img/nyc-26-brooklyn-bridge.jpg', thumb: 'img/thumb/nyc-26-brooklyn-bridge.jpg', alt: "Under the Brooklyn Bridge" },
     { id: "nyc-06-gold-leaves", album: "nyc-fall-2026", title: "Tower and Gold Leaves", src: 'img/nyc-06-gold-leaves.jpg', thumb: 'img/thumb/nyc-06-gold-leaves.jpg', alt: "Tower and Gold Leaves" },
     { id: "nyc-07-brooklyn-bound", album: "nyc-fall-2026", title: "Brooklyn Bound", src: 'img/nyc-07-brooklyn-bound.jpg', thumb: 'img/thumb/nyc-07-brooklyn-bound.jpg', alt: "Brooklyn Bound" },
     { id: "nyc-08-tower", album: "nyc-fall-2026", title: "The Tower", src: 'img/nyc-08-tower.jpg', thumb: 'img/thumb/nyc-08-tower.jpg', alt: "The Tower" },
@@ -110,6 +129,7 @@ window.SITE = {
     { id: "nyc-13-fdr", album: "nyc-fall-2026", title: "FDR Drive North", src: 'img/nyc-13-fdr.jpg', thumb: 'img/thumb/nyc-13-fdr.jpg', alt: "FDR Drive North" },
     { id: "nyc-14-canal-exit", album: "nyc-fall-2026", title: "Exit, Canal Street", src: 'img/nyc-14-canal-exit.jpg', thumb: 'img/thumb/nyc-14-canal-exit.jpg', alt: "Exit, Canal Street" },
     { id: "nyc-15-west-4", album: "nyc-fall-2026", title: "West 4th Street Platform", src: 'img/nyc-15-west-4.jpg', thumb: 'img/thumb/nyc-15-west-4.jpg', alt: "West 4th Street Platform" },
+    { id: "nyc-27-w4-platform", album: "nyc-fall-2026", title: "W 4th St Platform", src: 'img/nyc-27-w4-platform.jpg', thumb: 'img/thumb/nyc-27-w4-platform.jpg', alt: "W 4th St Platform" },
     { id: "nyc-16-c-train", album: "nyc-fall-2026", title: "C Train, Downtown Platform", src: 'img/nyc-16-c-train.jpg', thumb: 'img/thumb/nyc-16-c-train.jpg', alt: "C Train, Downtown Platform" },
     { id: "nyc-17-one-wtc", album: "nyc-fall-2026", title: "One World Trade", src: 'img/nyc-17-one-wtc.jpg', thumb: 'img/thumb/nyc-17-one-wtc.jpg', alt: "One World Trade" },
     { id: "nyc-18-courthouse", album: "nyc-fall-2026", title: "The Courthouse Dome", src: 'img/nyc-18-courthouse.jpg', thumb: 'img/thumb/nyc-18-courthouse.jpg', alt: "The Courthouse Dome" },
@@ -120,6 +140,51 @@ window.SITE = {
     { id: "nyc-23-canyon", album: "nyc-fall-2026", title: "Canyon of Light", src: 'img/nyc-23-canyon.jpg', thumb: 'img/thumb/nyc-23-canyon.jpg', alt: "Canyon of Light" },
     { id: "nyc-24-paramount", album: "nyc-fall-2026", title: "The Paramount Clock", src: 'img/nyc-24-paramount.jpg', thumb: 'img/thumb/nyc-24-paramount.jpg', alt: "The Paramount Clock" },
     { id: "nyc-25-w46", album: "nyc-fall-2026", title: "W 46th St, Black and White", src: 'img/nyc-25-w46.jpg', thumb: 'img/thumb/nyc-25-w46.jpg', alt: "W 46th St, Black and White" },
+    // ---- Rochester, Summer 2026 (story order) ----
+    { id: "roc-01-river", album: "rochester-summer-2026", title: "The Genesee and the Smokestack", src: 'img/roc-01-river.jpg', thumb: 'img/thumb/roc-01-river.jpg', alt: "The Genesee and the Smokestack" },
+    { id: "roc-02-high-falls", album: "rochester-summer-2026", title: "High Falls", src: 'img/roc-02-high-falls.jpg', thumb: 'img/thumb/roc-02-high-falls.jpg', alt: "High Falls" },
+    { id: "roc-03-love-lock", album: "rochester-summer-2026", title: "Love Lock, High Falls", src: 'img/roc-03-love-lock.jpg', thumb: 'img/thumb/roc-03-love-lock.jpg', alt: "Love Lock, High Falls" },
+    { id: "roc-04-welcome", album: "rochester-summer-2026", title: "Welcome to High Falls", src: 'img/roc-04-welcome.jpg', thumb: 'img/thumb/roc-04-welcome.jpg', alt: "Welcome to High Falls" },
+    { id: "roc-05-browns-race", album: "rochester-summer-2026", title: "Brown's Race", src: 'img/roc-05-browns-race.jpg', thumb: 'img/thumb/roc-05-browns-race.jpg', alt: "Brown's Race" },
+    { id: "roc-06-kodak", album: "rochester-summer-2026", title: "Kodak Tower", src: 'img/roc-06-kodak.jpg', thumb: 'img/thumb/roc-06-kodak.jpg', alt: "Kodak Tower" },
+    { id: "roc-07-kodak-spire", album: "rochester-summer-2026", title: "The Spire", src: 'img/roc-07-kodak-spire.jpg', thumb: 'img/thumb/roc-07-kodak-spire.jpg', alt: "The Spire" },
+    { id: "roc-08-mcc", album: "rochester-summer-2026", title: "Downtown Crossing", src: 'img/roc-08-mcc.jpg', thumb: 'img/thumb/roc-08-mcc.jpg', alt: "Downtown Crossing" },
+    { id: "roc-09-round-tower", album: "rochester-summer-2026", title: "The Round Top", src: 'img/roc-09-round-tower.jpg', thumb: 'img/thumb/roc-09-round-tower.jpg', alt: "The Round Top" },
+    { id: "roc-10-the-strong", album: "rochester-summer-2026", title: "The Strong After Rain", src: 'img/roc-10-the-strong.jpg', thumb: 'img/thumb/roc-10-the-strong.jpg', alt: "The Strong After Rain" },
+    { id: "roc-11-cobbs-sun-tower", album: "rochester-summer-2026", title: "Sun on the Tower, Cobbs Hill", src: 'img/roc-11-cobbs-sun-tower.jpg', thumb: 'img/thumb/roc-11-cobbs-sun-tower.jpg', alt: "Sun on the Tower, Cobbs Hill" },
+    { id: "roc-12-cobbs-sunset", album: "rochester-summer-2026", title: "Last Light, Cobbs Hill", src: 'img/roc-12-cobbs-sunset.jpg', thumb: 'img/thumb/roc-12-cobbs-sunset.jpg', alt: "Last Light, Cobbs Hill" },
+    { id: "roc-13-cobbs-reservoir", album: "rochester-summer-2026", title: "Reservoir Afterglow", src: 'img/roc-13-cobbs-reservoir.jpg', thumb: 'img/thumb/roc-13-cobbs-reservoir.jpg', alt: "Reservoir Afterglow" },
+    { id: "roc-14-cobbs-blue-hour", album: "rochester-summer-2026", title: "Blue Hour, Cobbs Hill", src: 'img/roc-14-cobbs-blue-hour.jpg', thumb: 'img/thumb/roc-14-cobbs-blue-hour.jpg', alt: "Blue Hour, Cobbs Hill" },
+
+    // ---- Hemlock Lake (story order) ----
+    { id: "hemlock-01-valley", album: "hemlock-lake", title: "The Long View South", src: 'img/hemlock-01-valley.jpg', thumb: 'img/thumb/hemlock-01-valley.jpg', alt: "The Long View South" },
+    { id: "hemlock-02-branches", album: "hemlock-lake", title: "Under the Branches", src: 'img/hemlock-02-branches.jpg', thumb: 'img/thumb/hemlock-02-branches.jpg', alt: "Under the Branches" },
+    { id: "hemlock-03-hillside", album: "hemlock-lake", title: "Far Shore", src: 'img/hemlock-03-hillside.jpg', thumb: 'img/thumb/hemlock-03-hillside.jpg', alt: "Far Shore" },
+    { id: "hemlock-04-chair", album: "hemlock-lake", title: "The Red Chair", src: 'img/hemlock-04-chair.jpg', thumb: 'img/thumb/hemlock-04-chair.jpg', alt: "The Red Chair" },
+    { id: "hemlock-05-rod", album: "hemlock-lake", title: "Line in the Water", src: 'img/hemlock-05-rod.jpg', thumb: 'img/thumb/hemlock-05-rod.jpg', alt: "Line in the Water" },
+    { id: "hemlock-06-shade", album: "hemlock-lake", title: "Shade at the Shoreline", src: 'img/hemlock-06-shade.jpg', thumb: 'img/thumb/hemlock-06-shade.jpg', alt: "Shade at the Shoreline" },
+
+    // ---- Detroit (story order) ----
+    { id: "det-01-rencen", album: "detroit", title: "Renaissance Center", src: 'img/det-01-rencen.jpg', thumb: 'img/thumb/det-01-rencen.jpg', alt: "Renaissance Center" },
+    { id: "det-02-cafe", album: "detroit", title: "Café Window", src: 'img/det-02-cafe.jpg', thumb: 'img/thumb/det-02-cafe.jpg', alt: "Café Window" },
+    { id: "det-03-windsor", album: "detroit", title: "Windsor from the Riverwalk", src: 'img/det-03-windsor.jpg', thumb: 'img/thumb/det-03-windsor.jpg', alt: "Windsor from the Riverwalk" },
+    { id: "det-04-stairs", album: "detroit", title: "Down the Stairs", src: 'img/det-04-stairs.jpg', thumb: 'img/thumb/det-04-stairs.jpg', alt: "Down the Stairs" },
+    { id: "det-05-dining-room", album: "detroit", title: "Hiroki-San, Before Service", src: 'img/det-05-dining-room.jpg', thumb: 'img/thumb/det-05-dining-room.jpg', alt: "Hiroki-San, Before Service" },
+    { id: "det-06-bar", album: "detroit", title: "The Bar", src: 'img/det-06-bar.jpg', thumb: 'img/thumb/det-06-bar.jpg', alt: "The Bar" },
+    { id: "det-07-sushi", album: "detroit", title: "Sushi Counter", src: 'img/det-07-sushi.jpg', thumb: 'img/thumb/det-07-sushi.jpg', alt: "Sushi Counter" },
+    { id: "det-08-kitchen", album: "detroit", title: "The Line", src: 'img/det-08-kitchen.jpg', thumb: 'img/thumb/det-08-kitchen.jpg', alt: "The Line" },
+    { id: "det-09-wok", album: "detroit", title: "At the Wok Station", src: 'img/det-09-wok.jpg', thumb: 'img/thumb/det-09-wok.jpg', alt: "At the Wok Station" },
+    { id: "det-10-red-window", album: "detroit", title: "The Red Window", src: 'img/det-10-red-window.jpg', thumb: 'img/thumb/det-10-red-window.jpg', alt: "The Red Window" },
+    { id: "det-13-dinner", album: "detroit", title: "Steak Don and a Cocktail", src: 'img/det-13-dinner.jpg', thumb: 'img/thumb/det-13-dinner.jpg', alt: "Steak Don and a Cocktail" },
+    { id: "det-14-dessert", album: "detroit", title: "Dessert for the Table", src: 'img/det-14-dessert.jpg', thumb: 'img/thumb/det-14-dessert.jpg', alt: "Dessert for the Table" },
+    { id: "det-11-floor", album: "detroit", title: "Setting the Floor", src: 'img/det-11-floor.jpg', thumb: 'img/thumb/det-11-floor.jpg', alt: "Setting the Floor" },
+    { id: "det-12-rain", album: "detroit", title: "Rain on the Glass", src: 'img/det-12-rain.jpg', thumb: 'img/thumb/det-12-rain.jpg', alt: "Rain on the Glass" },
+
+    // ---- Southwest Summer 2026 (story order) ----
+    { id: "sw-01-pumpkin-village", album: "southwest-summer-2026", title: "Pumpkin Village, Dallas", src: 'img/sw-01-pumpkin-village.jpg', thumb: 'img/thumb/sw-01-pumpkin-village.jpg', alt: "Pumpkin Village, Dallas" },
+    { id: "sw-02-pumpkins", album: "southwest-summer-2026", title: "Pumpkin Stacks", src: 'img/sw-02-pumpkins.jpg', thumb: 'img/thumb/sw-02-pumpkins.jpg', alt: "Pumpkin Stacks" },
+    { id: "sw-03-kayak", album: "southwest-summer-2026", title: "Kayak, Gathering Place", src: 'img/sw-03-kayak.jpg', thumb: 'img/thumb/sw-03-kayak.jpg', alt: "Kayak, Gathering Place" },
+
 
     // ---- from the original davekorr.com portfolios ----
     { id: "chi-flag-skyline", album: "chicago-summer-2025", title: "Chicago Flag and Skyline", src: 'img/chi-flag-skyline.jpg', thumb: 'img/thumb/chi-flag-skyline.jpg', alt: "Chicago Flag and Skyline" },
@@ -177,6 +242,10 @@ window.SITE = {
     { area: '10–19 Photography', id: '11.02', title: 'St. Augustine', album: 'st-augustine', type: 'text' },
     { area: '10–19 Photography', id: '11.03', title: 'Chicago, Summer 2025', album: 'chicago-summer-2025', type: 'text' },
     { area: '10–19 Photography', id: '11.04', title: 'New York, Fall 2026', album: 'nyc-fall-2026', type: 'text' },
+    { area: '10–19 Photography', id: '11.05', title: 'Rochester, Summer 2026', album: 'rochester-summer-2026', type: 'text' },
+    { area: '10–19 Photography', id: '11.06', title: 'Hemlock Lake', album: 'hemlock-lake', type: 'text' },
+    { area: '10–19 Photography', id: '11.07', title: 'Detroit', album: 'detroit', type: 'text' },
+    { area: '10–19 Photography', id: '11.08', title: 'Southwest Summer 2026', album: 'southwest-summer-2026', type: 'text' },
     { area: '10–19 Photography', id: '12.01', title: 'Gear', type: 'text',
       body: 'Body\n• FUJIFILM X-T5\n\nLenses\n• Fujinon XF 16-55mm f/2.8 R LM WR II — everyday carry\n• Viltrox AF 9mm f/2.8 Air — ultra-wide\n• Viltrox 33mm f/1.4\n• Sigma 100-400mm — wildlife\n• Fujinon XF 18-135mm\n• TTArtisan 25mm f/2 and 50mm f/1.2 (manual)\n\nBag\n• PGYTECH OneGo Lite\n\nLook\n• Fuji film simulations, shot in JPEG — Classic Neg, Velvia, Acros+R\n• DR400 with a cool white-balance shift\n\nEditing\n• Photomator, Darktable' },
     { area: '20–29 About', id: '21.01', title: 'About Dave', type: 'text',

@@ -423,14 +423,14 @@
       var p = M.pins[a.id], ps = albumPhotos(a.id); if (!p || !ps.length) return '';
       var x = (p[0] - M.vb[0]) / M.vb[2] * 100, y = (p[1] - M.vb[1]) / M.vb[3] * 100;
       return '<button type="button" class="pl-pin" data-act="album" data-id="' + esc(a.id) + '" style="left:' + x + '%;top:' + y + '%" aria-label="' + esc(a.name) + ', ' + ps.length + ' photos">' +
-        '<span class="pl-bub"><img src="' + esc(ps[0].thumb) + '" alt=""><i>' + ps.length + '</i></span><span class="pl-lbl">' + esc(a.name.split(',')[0]) + '</span></button>';
+        '<span class="pl-bub"><img src="' + esc(ps[0].thumb) + '" alt=""><i>' + ps.length + '</i></span><span class="pl-lbl">' + esc(a.pin || a.name.split(',')[0]) + '</span></button>';
     }).join('');
     return '<div class="pl-wrap"><div class="pl-map"><svg viewBox="' + M.vb.join(' ') + '" preserveAspectRatio="xMidYMid meet" aria-hidden="true">' +
       '<defs><linearGradient id="oc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1633"/><stop offset="1" stop-color="#16285a"/></linearGradient></defs>' +
       '<rect x="' + M.vb[0] + '" y="' + M.vb[1] + '" width="' + M.vb[2] + '" height="' + M.vb[3] + '" fill="url(#oc)"/>' +
       '<path d="' + M.nation + '" fill="#3f8a75" stroke="#2f6e5e" stroke-width=".8"/><path d="' + M.states + '" fill="none" stroke="rgba(255,255,255,.14)" stroke-width=".5"/>' +
       [190, 330, 470].map(function (y) { return '<line x1="' + M.vb[0] + '" x2="' + (M.vb[0] + M.vb[2]) + '" y1="' + y + '" y2="' + y + '" stroke="rgba(255,255,255,.28)" stroke-width=".8" stroke-dasharray="3 3"/>'; }).join('') +
-      '<text x="905" y="360" text-anchor="middle" class="pl-ocean">North<tspan x="905" dy="13">Atlantic</tspan><tspan x="905" dy="13">Ocean</tspan></text>' +
+      '<text x="960" y="380" text-anchor="middle" class="pl-ocean">North<tspan x="960" dy="13">Atlantic</tspan><tspan x="960" dy="13">Ocean</tspan></text>' +
       '<text x="690" y="455" text-anchor="middle" class="pl-ocean">Gulf of<tspan x="690" dy="13">Mexico</tspan></text>' +
       '</svg>' + pins + '</div></div>';
   }
