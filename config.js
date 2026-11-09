@@ -49,9 +49,9 @@ window.SITE = {
     { id: "letchworth", pin: "Letchworth", name: "Letchworth 2026", eyebrow: "Portfolio · Local",
       story: [] },
     { id: "nyc-fall-2026", name: "New York, Fall 2026", eyebrow: "Portfolio · Travel",
-      // [DRAFT] written by Claude from the photos — rewrite in your own words
       story: ["One October day in New York, start to finish: a quiet morning in Brooklyn, across the bridge, down into the subway, up through Manhattan, and out into Times Square as the light goes.",
-        "Brooklyn is slow — Cadman Plaza, Fulton Ferry, the park, leaves just turning. The bridge does the talking: granite, cables pulling every line to one point, runners and walkers under them. Below ground the city is all signs and waiting. Above it, old stone and new glass, a few performers, and then the noise of 46th Street, finished in black and white."] },
+        "Brooklyn is slow — Cadman Plaza, Fulton Ferry, the park, leaves just turning. The bridge does the talking: granite, cables pulling every line to one point, runners and walkers under them. Below ground the city is all signs and waiting. Above it, old stone and new glass, a few performers, and then the noise of 46th Street, finished in black and white.",
+        "It is a trip best taken with friends. No itinerary, no checklist, just walking the streets with people you like, cameras out, stopping wherever something catches the light. Give New York a chance and it will surprise you."] },
     { id: "rochester-summer-2026", pin: "Rochester ☀︎", name: "Rochester, Summer 2026", eyebrow: "Portfolio · Local",
       story: ["Since moving to the US, Rochester has shown me time and time again that it is a hidden gem. It does not announce itself. It just keeps quietly rewarding you for staying.",
         "The winters are long and cold, and they are worth it, purely for what comes after. Spring arrives like a reward, summer turns everything green and loud, and fall sets the whole region on fire. Living through the cold is what makes the other three seasons feel earned.",
