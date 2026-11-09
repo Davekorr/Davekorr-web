@@ -46,6 +46,8 @@ window.SITE = {
   /* ---------- Albums (shown in Photos → Albums) ----------
      eyebrow = small label above the album text; story = paragraphs shown at the top of the album. */
   albums: [
+    { id: "seneca-lake-2026", pin: "Seneca", name: "Seneca Lake Park, Fall 2026", eyebrow: "Portfolio · Local",
+      story: [] },
     { id: "letchworth", pin: "Letchworth", name: "Letchworth 2026", eyebrow: "Portfolio · Local",
       story: [] },
     { id: "nyc-fall-2026", name: "New York, Fall 2026", eyebrow: "Portfolio · Travel",
@@ -85,6 +87,71 @@ window.SITE = {
         "What stands out here is not scale but surface — worn stone, painted facades, bicycles, shadows, and the kind of coastal brightness that turns ordinary corners into photographs.",
         "This set is less about chasing action and more about observing atmosphere. The place reveals itself slowly, which is exactly why it works on camera."] }
   ],
+
+  /* ---------- Photos from Titan (via Cloudflare R2) ----------
+     Albums whose folder in Titan's "15 Web" has photos are published by tools/publish/publish-site.
+     albums: 'replace' = Titan photos replace the ones listed below (default)
+             'append'  = Titan photos are added after the ones listed below
+     text:   title + alt text (description for screen readers) per camera file name. */
+  r2: {
+    albums: { 'rochester-summer-2026': 'append' },
+    text: {
+      // Letchworth 2026
+      DSCF6663: { title: 'Riders under the maples', alt: 'Two motorcyclists ride a leaf-covered park road under orange and yellow maples' },
+      DSCF6674: { title: 'The road bends into color', alt: 'A winding park road with a double yellow line curves into red and orange trees under a clear sky' },
+      DSCF6689: { title: 'Golden hour at the overlook', alt: 'Low sun flares through autumn trees, casting long shadows across the road by the gorge overlook' },
+      DSCF6698: { title: 'Sunburst over the gorge', alt: 'The sun bursts through fall trees above the gorge, the ground carpeted in orange leaves' },
+      DSCF6703: { title: 'Leaves on fire', alt: 'Backlit red and orange leaves glow as the sun sets behind a stand of trees' },
+      DSCF6707: { title: 'Last light in the grove', alt: 'The setting sun shines through a grove of red trees onto a leaf-covered path' },
+      DSCF6709: { title: 'Tripod, sunburst', alt: 'A tripod stands in red leaves facing a sunburst between tall trees' },
+      DSCF6716: { title: 'The Genesee below', alt: 'The Genesee River bends through the Letchworth gorge, cliffs and fall foliage on both sides' },
+      DSCF6719: { title: 'The overlook', alt: 'A stone wall and viewing binoculars at an overlook above the hazy gorge at sunset' },
+      DSCF6722: { title: 'Canyon in full color', alt: 'The Letchworth canyon in peak fall color, the river winding past a pale cliff face' },
+      // Seneca Lake Park, Fall 2026
+      DSCF6849: { title: 'Mallard', alt: 'A male mallard duck swims across rippled water reflecting autumn trees' },
+      DSCF6850: { title: 'Mallard, turning', alt: 'A male mallard turns on the pond, gold and green reflections around him' },
+      DSCF6853: { title: 'Mallard, at ease', alt: 'A male mallard floats calmly on the pond with other ducks soft in the background' },
+      DSCF6860: { title: 'The far shore', alt: 'A mallard drifts on the pond below the park lawn and turning trees' },
+      DSCF6895: { title: 'Hen in soft light', alt: 'A female mallard rests on pale, still water beside her reflection' },
+      DSCF6985: { title: 'Gold water', alt: 'A lone duck crosses water glowing gold with reflected trees' },
+      DSCF6996: { title: 'Under the red maple', alt: 'A duck swims on blue water beneath overhanging red maple branches' },
+      DSCF7005: { title: 'Evening on the pond', alt: 'Ducks float on dark blue water at dusk under red autumn leaves' },
+      DSCF7037: { title: 'Squirrel in the oak', alt: 'A gray squirrel sits in the fork of a tree among dry autumn leaves' },
+      DSCF7125: { title: 'Kit and leaves', alt: 'A camera lens rests on dark grass scattered with red and pink fallen leaves' },
+      // Hemlock Lake
+      DSCF9234: { title: 'Morning on Hemlock', alt: 'Hemlock Lake stretches between green hills under a blue sky, a path along the shore' },
+      DSCF9238: { title: 'The valley opens', alt: 'The lake and distant hills seen from a grassy shore framed by trees' },
+      DSCF9240: { title: 'Through the branches', alt: 'Bright lake water seen through dark overhanging branches' },
+      DSCF9262: { title: 'Still water', alt: 'A wooded shoreline mirrored in calm, clear water' },
+      DSCF9274: { title: 'Clouds on the water', alt: 'Clouds reflected in the still lake, a driftwood log in the foreground' },
+      DSCF9277: { title: 'Line out', alt: 'A fishing rod rests on the rocky shore with the lake and hills beyond' },
+      DSCF9292: { title: 'The bobber', alt: 'A red and white fishing bobber floats alone on blue water' },
+      DSCF9296: { title: 'Framed by green', alt: 'The lake framed by leafy trees on both sides under a bright sky' },
+      DSCF9305: { title: 'Shade by the shore', alt: 'Calm water and distant hills seen from under shoreline trees' },
+      DSCF9359: { title: 'Noon, Genesee in hand', alt: 'A can of Genesee beer on a wooden table in dappled shade' },
+      // Rochester, Summer 2026 — Durand Beach and around town
+      DSCF8778: { title: 'Durand at sundown', alt: 'People walk the shore at Durand Beach in a haze of golden evening light' },
+      DSCF8779: { title: 'Walking the shoreline', alt: 'Silhouettes stroll the Lake Ontario shore at Durand Beach in golden light' },
+      DSCF8994: { title: 'The sun goes under', alt: 'A large orange sun sinks behind a silhouetted treeline under a red sky' },
+      DSCF8995: { title: 'Sun through the bands', alt: 'Thin clouds cross a glowing sun setting over dark trees' },
+      DSCF8996: { title: 'Red sky', alt: 'A red sunset sky with the sun sitting just above the treeline' },
+      DSCF8998: { title: 'Sinking', alt: 'The sun half hidden in cloud bands as it sets over the trees' },
+      DSCF9003: { title: 'Sun on the water', alt: 'The setting sun over a treeline, its reflection a red streak on the water' },
+      DSCF9004: { title: 'Last streak', alt: 'A vertical frame of the sun dropping behind trees, red light on the lake' },
+      DSCF9005: { title: 'Just above the trees', alt: 'A glowing sun rests on the treeline under a deep red sky' },
+      DSCF9010: { title: 'Swimmers at dusk', alt: 'Swimmers in an orange lake beneath the setting sun and a wooded point' },
+      DSCF9052: { title: 'Downtown, deep blue', alt: 'A red brick church and office building in silhouette against a deep blue sky' },
+      DSCF9096: { title: 'Sun through the canopy', alt: 'Afternoon sun shines through a large tree in a riverside park' },
+      DSCF9103: { title: 'The skyline across the water', alt: 'The Rochester skyline seen across calm blue water' },
+      DSCF9112: { title: 'Skyline through the leaves', alt: 'The Rochester skyline across the water, framed by green leaves' },
+      DSCF9539: { title: 'Gull overhead', alt: 'A gull glides against a soft blue sky' },
+      DSCF9540: { title: 'Wings out', alt: 'A gull soars with wings spread across a deep blue sky' },
+      DSCF9570: { title: 'The beach path', alt: 'Silhouetted trees above a sandy beach with people at the water at sunset' },
+      DSCF9601: { title: 'Ontario sunset', alt: 'The sun sets over Lake Ontario, waves washing a dark shoreline' },
+      DSCF9602: { title: 'Ontario sunset, waves', alt: 'Golden sunset over Lake Ontario with small waves on the beach' },
+      DSCF0612_SnapseedCopy: { title: 'The Strong after dark', alt: 'The Strong National Museum of Play lit up at night, its glass facade glowing' }
+    }
+  },
 
   /* ---------- Photos ----------
      src = full image, thumb = small grid version, album = album id above.

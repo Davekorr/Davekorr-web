@@ -1,0 +1,12 @@
+#!/bin/bash
+# davekorr.com photo publisher — run on Vega. See publish.py for what it does.
+set -euo pipefail
+HERE="$(cd "$(dirname "$0")" && pwd)"
+VENV="$HERE/.venv"
+if [ ! -x "$VENV/bin/python" ]; then
+  echo "First run: setting up Python environment in $VENV"
+  python3 -m venv "$VENV"
+  "$VENV/bin/pip" install --quiet "Pillow>=11,<13"
+fi
+command -v npx >/dev/null || { echo "✖ npx (Node.js) not found"; exit 1; }
+exec "$VENV/bin/python" "$HERE/publish.py" "$@"

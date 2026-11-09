@@ -22,7 +22,8 @@
 
   /* Full-size photo: phones get the 1200px copy in img/md/, big screens the 2000px original */
   function setPhoto(img, p) {
-    if (/^img\//.test(p.src)) { img.sizes = '100vw'; img.srcset = p.src.replace(/^img\//, 'img/md/') + ' 1200w, ' + p.src + ' 2000w'; }
+    if (p.md) { img.sizes = '100vw'; img.srcset = p.md + ' 1200w, ' + p.src + ' 2000w'; }           // R2: Cloudflare-resized copies
+    else if (/^img\//.test(p.src)) { img.sizes = '100vw'; img.srcset = p.src.replace(/^img\//, 'img/md/') + ' 1200w, ' + p.src + ' 2000w'; }
     else img.removeAttribute('srcset');
     img.src = p.src;
   }
@@ -502,6 +503,7 @@
       $('.v-title span', v).textContent = p.taken ? fmtDate(p.taken, true) : (p.title ? albumOf(p).name || '' : '');
       $('[data-count]', v).textContent = (vi + 1) + ' / ' + list.length;
       var stage = $('.v-stage', v), old = $('img', stage); if (old) old.remove();
+      if (stage.resetZoom) stage.resetZoom();
       var img = new Image(); setPhoto(img, p); img.alt = p.alt; img.draggable = false; stage.insertBefore(img, stage.firstChild);
       $('.v-strip', v).innerHTML = list.map(function (q, j) { return '<button type="button" data-act="jump" data-i="' + j + '" class="' + (j === vi ? 'on' : '') + '" aria-label="Photo ' + (j + 1) + '"><img src="' + esc(q.thumb) + '" alt=""></button>'; }).join('');
       var on = $('.v-strip .on', v); if (on && on.scrollIntoView) on.scrollIntoView({ block: 'nearest', inline: 'center' });
@@ -517,19 +519,74 @@
       }
     }
     function closeViewer() { var v = $('.viewer', root); if (v) v.remove(); vi = -1; info = false; }
+    /* Viewer gestures: swipe left/right = next/prev, swipe down = close,
+       double-tap / double-click / pinch / scroll wheel = zoom (loads the full-size master), drag = pan while zoomed. */
     function swipeStage(stage) {
-      var x0 = null, y0 = 0, dx = 0, dy = 0;
-      stage.addEventListener('pointerdown', function (e) { if (e.target.closest('button,.v-info')) return; x0 = e.clientX; y0 = e.clientY; dx = dy = 0; stage.setPointerCapture(e.pointerId); });
-      stage.addEventListener('pointermove', function (e) {
-        if (x0 == null) return; dx = e.clientX - x0; dy = e.clientY - y0; var img = $('img', stage); if (!img) return;
-        img.style.transition = 'none'; img.style.animation = 'none';
-        img.style.transform = Math.abs(dy) > Math.abs(dx) && dy > 0 ? 'translateY(' + dy + 'px) scale(' + Math.max(.7, 1 - dy / 1200) + ')' : 'translateX(' + dx + 'px)';
+      var x0 = null, y0 = 0, dx = 0, dy = 0, pts = {}, pinch = null, z = 1, px = 0, py = 0, lastTap = 0, moved = false;
+      var img = function () { return $('img', stage); };
+      function clamp() {
+        var i = img(); if (!i) return;
+        var mx = Math.max(0, (i.clientWidth * z - stage.clientWidth) / 2), my = Math.max(0, (i.clientHeight * z - stage.clientHeight) / 2);
+        px = Math.max(-mx, Math.min(mx, px)); py = Math.max(-my, Math.min(my, py));
+      }
+      function apply(anim) {
+        var i = img(); if (!i) return; clamp();
+        i.style.animation = 'none'; i.style.transition = anim ? 'transform .28s cubic-bezier(.2,.9,.25,1)' : 'none';
+        i.style.transform = z === 1 ? '' : 'translate(' + px + 'px,' + py + 'px) scale(' + z + ')';
+        stage.classList.toggle('zoomed', z > 1);
+        if (z > 1.2) hires();
+      }
+      function hires() {                      // swap in the full-size master once, when zooming
+        var i = img(), p = list[vi]; if (!i || !p || !p.zoom || i.dataset.hi) return;
+        i.dataset.hi = '1'; var pre = new Image();
+        pre.onload = function () { if (img() === i) { i.removeAttribute('srcset'); i.src = p.zoom; } };
+        pre.src = p.zoom;
+      }
+      function zoomAt(nz, cx, cy, anim) {
+        var r = stage.getBoundingClientRect(), ox = cx - r.left - r.width / 2, oy = cy - r.top - r.height / 2;
+        nz = Math.max(1, Math.min(5, nz));
+        px = ox - (ox - px) * nz / z; py = oy - (oy - py) * nz / z; z = nz;
+        if (z === 1) px = py = 0; apply(anim);
+      }
+      stage.resetZoom = function () { z = 1; px = py = 0; stage.classList.remove('zoomed'); };
+      stage.addEventListener('wheel', function (e) { if (!img()) return; e.preventDefault(); zoomAt(z * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX, e.clientY, false); }, { passive: false });
+      stage.addEventListener('pointerdown', function (e) {
+        if (e.target.closest('button,.v-info')) return;
+        stage.setPointerCapture(e.pointerId); pts[e.pointerId] = [e.clientX, e.clientY];
+        var ids = Object.keys(pts);
+        if (ids.length === 2) { var a = pts[ids[0]], b = pts[ids[1]]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), z: z }; x0 = null; return; }
+        x0 = e.clientX; y0 = e.clientY; dx = dy = 0; moved = false;
       });
-      var end = function () {
-        if (x0 == null) return; x0 = null; var img = $('img', stage);
+      stage.addEventListener('pointermove', function (e) {
+        if (!pts[e.pointerId]) return;
+        var prev = pts[e.pointerId]; pts[e.pointerId] = [e.clientX, e.clientY];
+        var ids = Object.keys(pts);
+        if (pinch && ids.length === 2) {
+          var a = pts[ids[0]], b = pts[ids[1]];
+          zoomAt(pinch.z * Math.hypot(a[0] - b[0], a[1] - b[1]) / pinch.d, (a[0] + b[0]) / 2, (a[1] + b[1]) / 2, false); return;
+        }
+        if (x0 == null) return;
+        dx = e.clientX - x0; dy = e.clientY - y0; if (Math.abs(dx) > 6 || Math.abs(dy) > 6) moved = true;
+        if (z > 1) { px += e.clientX - prev[0]; py += e.clientY - prev[1]; apply(false); return; }   // pan
+        var i = img(); if (!i) return;
+        i.style.transition = 'none'; i.style.animation = 'none';
+        i.style.transform = Math.abs(dy) > Math.abs(dx) && dy > 0 ? 'translateY(' + dy + 'px) scale(' + Math.max(.7, 1 - dy / 1200) + ')' : 'translateX(' + dx + 'px)';
+      });
+      var end = function (e) {
+        delete pts[e.pointerId];
+        if (pinch) { if (!Object.keys(pts).length) pinch = null; x0 = null; return; }
+        if (x0 == null) return; x0 = null;
+        if (!moved) {                                  // a tap: two quick taps toggle zoom
+          var now = Date.now();
+          if (now - lastTap < 320) { lastTap = 0; zoomAt(z > 1 ? 1 : 2.5, e.clientX, e.clientY, true); }
+          else lastTap = now;
+          return;
+        }
+        if (z > 1) return;
+        var i = img();
         if (dy > 120 && Math.abs(dy) > Math.abs(dx)) return closeViewer();
         if (dx < -60) return viewer(vi + 1); if (dx > 60) return viewer(vi - 1);
-        if (img) { img.style.transition = 'transform .3s cubic-bezier(.2,.9,.25,1.2)'; img.style.transform = ''; }
+        if (i) { i.style.transition = 'transform .3s cubic-bezier(.2,.9,.25,1.2)'; i.style.transform = ''; }
       };
       stage.addEventListener('pointerup', end); stage.addEventListener('pointercancel', end);
     }
