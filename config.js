@@ -61,9 +61,9 @@ window.SITE = {
         "The sun comes up slowly over the valley, and the color comes with it: water so blue it looks lit from underneath, and hills in that deep early-summer green that cannot really be explained, only experienced. The phone stays face down in a bag somewhere, and stays there. The hat comes down a little lower and the morning stretches out.",
         "By noon there is smoke from the grill and a cold Genesee sweating in the shade. The drive home is quiet, the afternoon is warm, and the nap comes easy."] },
     { id: "detroit", name: "Detroit", eyebrow: "Portfolio · Travel",
-      // [DRAFT]
-      story: ["Detroit from the river up: the Renaissance Center in hard blue sky, a café window at golden hour, and Windsor lighting up across the water at dusk.",
-        "Then down a marble staircase into Hiroki-San — the quiet before service, the bar glowing amber, the sushi counter and the line at work, a steak don and dessert for the table, and the rain on the glass on the way out."] },
+      story: ["Detroit has grit and finesse, sometimes on the same block. Start under the RenCen, glass towers throwing the sky back at you, then walk the Riverwalk as the sun goes down and Windsor lights up across the water.",
+        "The steak at Prime + Proper is everything people say it is. But the city you actually feel is somewhere else: a dark bar on a Tuesday night, rain on the window, a candle and a short menu. Or down a marble staircase into Hiroki-San on a Thursday, where the room is hushed before service, the bar glows amber, and the kitchen works like it has something to prove.",
+        "Detroit does not dress itself up for you. It shows you what it has and lets you decide. Most people who look closely end up staying a little longer than they planned."] },
     { id: "southwest-summer-2026", pin: "Dallas · Tulsa", name: "Southwest Summer 2026", eyebrow: "Portfolio · Travel",
       // [DRAFT]
       story: ["Two stops in the south-central states: the pumpkin village at the Dallas Arboretum, and the water at Gathering Place in Tulsa, shot straight down from the bridge."] },
