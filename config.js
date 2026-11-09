@@ -57,9 +57,9 @@ window.SITE = {
         "The winters are long and cold, and they are worth it, purely for what comes after. Spring arrives like a reward, summer turns everything green and loud, and fall sets the whole region on fire. Living through the cold is what makes the other three seasons feel earned.",
         "This set is one long summer day at home: the Genesee in the morning, High Falls and the Kodak tower through the afternoon, the Strong glowing after a rain, and Cobbs Hill to close it out as the sun drops behind the tower."] },
     { id: "hemlock-lake", pin: "Hemlock", name: "Hemlock Lake", eyebrow: "Portfolio · Local",
-      // [DRAFT]
-      story: ["A slow day at Hemlock Lake, south of Rochester. No motors, no houses on the shore — just the long valley, a red chair, and a line in the water.",
-        "The edit leans cool and bright on purpose. It is how the day felt: clear water, shade under the branches, and nothing to rush toward."] },
+      story: ["Hemlock Lake is serenity. It is a small trip, best taken before the sun is out. Aim for the free fishing weekend, and pack light: a cooler with beer, headphones, a good hat, and comfortable clothes.",
+        "Get there in the dark, have your gear out, and let the sun rise while your line is already in the water. No social media, no schedule, little to no stress. Just the long valley, the red chair, and the quiet.",
+        "By noon you should be grilling and cracking a Genesee. Drive back in the afternoon and take a nap. That is the whole plan, and it is a good one."] },
     { id: "detroit", name: "Detroit", eyebrow: "Portfolio · Travel",
       // [DRAFT]
       story: ["Detroit from the river up: the Renaissance Center in hard blue sky, a café window at golden hour, and Windsor lighting up across the water at dusk.",
