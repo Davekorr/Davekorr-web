@@ -445,3 +445,9 @@ body.animating .pdock{background:rgba(60,55,52,.55)}
 }
 .ntf-ic img.cover{width:38px;height:38px;border-radius:9px;object-fit:cover;display:block}
 .np img.cover{border-radius:8px;object-fit:cover}
+/* First-visit nudge: the lock screen peeks up to show it moves */
+#lock.nudge{animation:lock-peek 4s cubic-bezier(.32,.72,0,1) .2s infinite}
+#lock.nudge .lock-hint{animation:hint-glow 4s ease-in-out .2s infinite}
+@keyframes lock-peek{0%,62%,100%{translate:0 0}70%{translate:0 -46px}80%{translate:0 0}86%{translate:0 -12px}92%{translate:0 0}}
+@keyframes hint-glow{0%,60%,100%{opacity:.92}72%{opacity:1;text-shadow:0 0 14px rgba(255,255,255,.7)}}
+@media (prefers-reduced-motion:reduce){#lock.nudge{animation:none}}

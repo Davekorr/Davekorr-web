@@ -130,6 +130,7 @@
       lockProgress(Math.min(1, Math.max(0, -d / (H * 0.6))));
     }
     lock.addEventListener('pointerdown', function (e) {
+      stopNudge();
       if (unlocked || e.target.closest('.ntf,.np')) return;
       onHint = !!e.target.closest('.lock-hint'); y0 = e.clientY; dy = 0; samples = [[performance.now(), 0]];
       lock.setPointerCapture(e.pointerId); lock.style.transition = 'none'; $('#shell').style.transition = 'none';
@@ -145,7 +146,7 @@
       if (raf) { cancelAnimationFrame(raf); raf = 0; paint(); }
       var a = samples[0], b = samples[samples.length - 1], v = (b[1] - a[1]) / Math.max(1, b[0] - a[0]); // px per ms
       if (dy < -innerHeight * 0.18 || (v < -0.45 && dy < -10)) return unlock(null, v);
-      if (Math.abs(dy) < 6) { reset(0); if (onHint) unlock(); return; }
+      if (Math.abs(dy) < 6) { reset(0); if (onHint || lock.classList.contains('nudged')) unlock(); return; }
       reset(380);
     }
     function reset(ms) {
@@ -154,6 +155,18 @@
       lock.style.transform = ''; lock.style.opacity = ''; lockProgress(0);
     }
     lock.addEventListener('pointerup', end); lock.addEventListener('pointercancel', end);
+    /* First-visit help: after 3 s with no swipe, the lock screen "peeks" up and tapping anywhere enters */
+    var nudgeT = null, hintTxt = $('#unlockBtn span');
+    function stopNudge() { clearTimeout(nudgeT); lock.classList.remove('nudge'); }
+    window.startNudge = function () {
+      stopNudge(); lock.classList.remove('nudged'); hintTxt.textContent = 'Swipe up to unlock';
+      nudgeT = setTimeout(function () {
+        if (unlocked) return;
+        lock.classList.add('nudge', 'nudged');
+        hintTxt.textContent = mode === 'phone' ? 'Swipe up or tap to enter' : 'Click anywhere to enter';
+      }, 3000);
+    };
+    startNudge();
     document.addEventListener('keydown', function (e) {
       if (!unlocked && (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowUp') && !e.target.closest('.ntf')) { e.preventDefault(); unlock(); }
     });
@@ -178,7 +191,7 @@
     }, ms ? ms - 40 : 0);
   }
   function relock() {
-    WM.closeAll(); Phone.close(true); unlocked = false; lock.hidden = false;
+    WM.closeAll(); Phone.close(true); unlocked = false; lock.hidden = false; if (window.startNudge) startNudge();
     lock.style.transition = 'none'; lock.style.transform = 'translate3d(0,-100%,0)'; lock.style.opacity = '0';
     $('#shell').setAttribute('aria-hidden', 'true'); buildLock();
     requestAnimationFrame(function () { requestAnimationFrame(function () {
