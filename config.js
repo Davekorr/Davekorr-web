@@ -343,6 +343,10 @@ window.SITE = {
      Tapping play opens the song in Apple Music (the site itself plays no audio). */
   music: {
     playlist: 'On Rotation',
+    /* Since 2026-11: the list below is only a fallback. Every Sunday Forager-01 (Vega) publishes
+       images.davekorr.com/music.js with your hand-picked "On Rotation" songs + your most played of the last 30 days. */
+    pin: { title: "Monster (feat. Avelino)", artist: "Jacob Banks" },   // the song on the lock screen card
+    suggest: { turnstileSiteKey: "" },   // paste the Turnstile site key (public, not secret) to switch on "Suggest a song"
     nowPlaying: 18,
     songs: [
       { title: "Stuck On You", artist: "GIVĒON" },

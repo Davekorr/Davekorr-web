@@ -791,12 +791,54 @@
     next: '<svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.5 6v12L21 12zM3 6v12l8.5-6z" fill="currentColor"/></svg>'
   };
   function Music(root) {
-    var M = S.music || { songs: [] };
-    root.innerHTML = '<div class="app"><div class="app-h"><h2>' + esc(M.playlist || 'Music') + '</h2><span class="sub">' + M.songs.length + ' songs</span></div>' +
-      '<div class="app-scroll"><div style="padding:0 14px 8px">' + nowPlayingCard('np-in') + '</div><div class="ml-list">' +
-      M.songs.map(function (s) { return '<a class="ml-row" href="' + esc(amUrl(s)) + '" target="_blank" rel="noopener">' + artTile(s, 46) + '<span class="ml-t"><b>' + esc(s.title) + '</b><span>' + esc(s.artist) + '</span></span><span class="ml-go" aria-hidden="true">↗</span></a>'; }).join('') +
-      '</div><p style="color:var(--muted);font-size:12px;padding:10px 18px 100px">Songs open in Apple Music.</p></div></div>';
+    var M = S.music || { songs: [] }, sk = (M.suggest || {}).turnstileSiteKey;
+    var upd = M.updated ? new Date(M.updated).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+    var tag = function (s) { return s.src === 'picked' ? 'Picked' : s.src === 'repeat' ? 'On repeat' : s.src === 'suggested' ? 'Suggested by ' + (s.by || 'a visitor') : ''; };
+    root.innerHTML = '<div class="app"><div class="app-h"><h2>' + esc(M.playlist || 'Music') + '</h2><span class="sub">' + M.songs.length + ' songs' + (upd ? ' · updated ' + esc(upd) : '') + '</span></div>' +
+      '<div class="app-scroll"><div style="padding:0 14px 8px">' + nowPlayingCard('np-in') + '</div>' +
+      (sk ? '<div class="sg-wrap"><button type="button" class="pill primary" data-act="suggest">Suggest a song</button></div>' +
+        '<form class="sg" hidden novalidate><h3>Suggest a song</h3><p>Know something Dave should hear? It goes straight to him, never shown publicly.</p>' +
+        '<label>Song<input name="title" maxlength="120" required autocomplete="off" placeholder="Essence"></label>' +
+        '<label>Artist<input name="artist" maxlength="120" required autocomplete="off" placeholder="Wizkid"></label>' +
+        '<label>Your name <i>optional</i><input name="by" maxlength="60" autocomplete="name"></label>' +
+        '<label>Why he\'d like it <i>optional</i><textarea name="why" maxlength="280" rows="2"></textarea></label>' +
+        '<div class="sg-ts"></div><p class="sg-err" role="alert"></p><div class="sg-btns"><button type="button" class="pill" data-act="sg-cancel">Cancel</button><button type="submit" class="pill primary">Send</button></div></form>' : '') +
+      '<div class="ml-list">' +
+      M.songs.map(function (s) { var t = tag(s); return '<a class="ml-row" href="' + esc(amUrl(s)) + '" target="_blank" rel="noopener">' + artTile(s, 46) + '<span class="ml-t"><b>' + esc(s.title) + '</b><span>' + esc(s.artist) + (t ? ' · <em>' + esc(t) + '</em>' : '') + '</span></span><span class="ml-go" aria-hidden="true">›</span></a>'; }).join('') +
+      '</div><p style="color:var(--muted);font-size:12px;padding:10px 18px 100px">Picked by Dave, plus what he\'s had on repeat lately. Refreshed every Sunday. Songs open in Apple Music.</p></div></div>';
+    if (sk) suggestForm(root, sk);
     return {};
+  }
+
+  /* "Suggest a song": Cloudflare Turnstile (spam check) + /api/suggest (Pages Function, stored privately in KV) */
+  function suggestForm(root, siteKey) {
+    var form = $('.sg', root), btn = $('[data-act="suggest"]', root), err = $('.sg-err', form), widget = null;
+    function loadTS(cb) {
+      if (window.turnstile) return cb();
+      var s = document.createElement('script'); s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'; s.async = true;
+      s.onload = cb; s.onerror = function () { err.textContent = "Couldn't load the spam check. Try again later."; }; document.head.appendChild(s);
+    }
+    btn.onclick = function () {
+      form.hidden = false; btn.hidden = true; $('input', form).focus();
+      loadTS(function () { if (widget === null) widget = window.turnstile.render($('.sg-ts', form), { sitekey: siteKey, theme: 'dark', size: 'flexible' }); });
+    };
+    $('[data-act="sg-cancel"]', form).onclick = function () { form.hidden = true; btn.hidden = false; err.textContent = ''; };
+    form.addEventListener('input', function () { err.textContent = ''; });
+    form.onsubmit = function (e) {
+      e.preventDefault();
+      var d = { title: form.title.value.trim(), artist: form.artist.value.trim(), by: form.by.value.trim(), why: form.why.value.trim(),
+                token: widget !== null && window.turnstile ? window.turnstile.getResponse(widget) : '' };
+      if (!d.title || !d.artist) { err.textContent = 'Add the song and the artist.'; return; }
+      if (!d.token) { err.textContent = 'Finish the quick check above first.'; return; }
+      var send = $('[type=submit]', form); send.disabled = true; send.textContent = 'Sending…';
+      fetch('/api/suggest', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (r) {
+          if (!r.ok) throw new Error(r.j.error || 'Something went wrong');
+          form.innerHTML = '<h3>Thanks!</h3><p>Dave will give "' + esc(d.title) + '" a listen.</p>';
+        })
+        .catch(function (x) { err.textContent = x.message + '. Try again.'; send.disabled = false; send.textContent = 'Send'; if (window.turnstile && widget !== null) window.turnstile.reset(widget); });
+    };
   }
 
   /* ---------- Mail (contact) ---------- */

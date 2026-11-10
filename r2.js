@@ -5,6 +5,7 @@
 (function () {
   'use strict';
   var S = window.SITE, M = window.R2_MANIFEST;
+  musicFromR2(S, window.R2_MUSIC);
   if (!S || !M || !M.photos || !M.photos.length) return;
   var R = S.r2 || {}, base = M.base || 'https://images.davekorr.com';
   // Cloudflare resizes on the fly: one master per photo, any width we ask for, WebP/AVIF when the browser supports it
@@ -42,3 +43,17 @@
     .sort(function (x, y) { return ((rank[x[0].album] ?? 999) - (rank[y[0].album] ?? 999)) || (x[1] - y[1]); })
     .map(function (x) { return x[0]; });
 })();
+
+/* Playlist from Forager-01 (published weekly from the Music app on Vega). Falls back to config.js songs. */
+function musicFromR2(S, X) {
+  if (!S || !S.music) return;
+  var M = S.music;
+  if (X && X.songs && X.songs.length) { M.songs = X.songs; M.updated = X.updated; }
+  var pin = M.pin, key = function (s) { return (s.title + '|' + s.artist).toLowerCase(); };
+  if (pin && pin.title) {
+    var i = -1;
+    M.songs.forEach(function (s, j) { if (i < 0 && key(s) === key(pin)) i = j; });
+    if (i < 0) { M.songs = [pin].concat(M.songs); i = 0; }
+    M.nowPlaying = i;
+  }
+}
