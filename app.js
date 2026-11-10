@@ -63,7 +63,7 @@
 
   /* ---------------- Apps registry ---------------- */
   var APPS = {
-    photos:   { name: 'Photos',   size: [940, 620], render: Photos },
+    photos:   { name: 'Photos',   size: [940, 620], render: Photos, full: true },
     safari:   { name: 'Safari',   size: [1000, 650], render: Safari },
     notes:    { name: 'Notes',    size: [780, 540], render: Notes },
     calendar: { name: 'Calendar', size: [380, 560], render: Calendar },
@@ -256,6 +256,7 @@
       el.className = 'win'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', app.name);
       el.style.cssText = 'left:' + x + 'px;top:' + Math.max(32, y) + 'px;width:' + W + 'px;height:' + H + 'px';
       el.innerHTML = '<div class="win-bar"><div class="lights"><button class="l-close" type="button" aria-label="Close ' + app.name + '"></button><button class="l-min" type="button" aria-label="Minimize"></button><button class="l-zoom" type="button" aria-label="Zoom"></button></div><div class="win-title">' + app.name + '</div></div><div class="win-body"></div>';
+      if (app.full) el.classList.add('full');           // opens full screen (Photos); the green button toggles a normal window
       $('#winLayer').appendChild(el);
       w = this.wins[id] = { el: el, min: false };
       var self = this;
@@ -274,6 +275,7 @@
       var w = this.wins[id]; if (!w) return;
       Object.keys(this.wins).forEach(function (k) { WM.wins[k].el.classList.toggle('focused', k === id); });
       w.el.style.zIndex = ++this.z; $('#mbApp').textContent = APPS[id].name;
+      dockAuto();
     },
     close: function (id) {
       var w = this.wins[id]; if (!w) return; delete this.wins[id];
@@ -284,6 +286,7 @@
       var rest = Object.keys(this.wins).filter(function (k) { return !WM.wins[k].min; });
       if (rest.length) this.focus(rest.sort(function (a, b) { return WM.wins[b].el.style.zIndex - WM.wins[a].el.style.zIndex; })[0]);
       else $('#mbApp').textContent = 'Finder';
+      dockAuto();
     },
     closeAll: function () { Object.keys(this.wins).forEach(function (k) { WM.wins[k].el.remove(); var dk = $('.dk[data-app="' + k + '"]'); if (dk) dk.classList.remove('open'); }); this.wins = {}; $('#mbApp').textContent = 'Finder'; },
     genie: function (w, id, out) {
@@ -296,18 +299,32 @@
       var w = this.wins[id]; if (!w || w.min) return; w.min = true;
       this.genie(w, id, true).onfinish = function () { w.el.style.visibility = 'hidden'; };
       $('#mbApp').textContent = 'Finder';
+      setTimeout(dockAuto, 400);
     },
     restore: function (id) {
       var w = this.wins[id]; if (!w) return; w.min = false; w.el.style.visibility = '';
       this.genie(w, id, false); this.focus(id);
     },
     zoom: function (id) {
-      var w = this.wins[id], el = w.el; el.classList.add('zooming');
+      var w = this.wins[id], el = w.el;
+      if (APPS[id].full && !w.prev) { el.classList.toggle('full'); dockAuto(); return; }
+      el.classList.add('zooming');
       if (w.prev) { el.style.left = w.prev[0]; el.style.top = w.prev[1]; el.style.width = w.prev[2]; el.style.height = w.prev[3]; w.prev = null; }
       else { w.prev = [el.style.left, el.style.top, el.style.width, el.style.height]; el.style.left = '6px'; el.style.top = '34px'; el.style.width = (innerWidth - 12) + 'px'; el.style.height = (innerHeight - 34 - 96) + 'px'; }
       setTimeout(function () { el.classList.remove('zooming'); }, 280);
     }
   };
+  /* While a full-screen window is in front, the dock slides away; it comes back when the pointer reaches the bottom edge */
+  function dockAuto() {
+    var top = null, z = -1;
+    Object.keys(WM.wins).forEach(function (k) { var w = WM.wins[k]; if (!w.min && +w.el.style.zIndex > z) { z = +w.el.style.zIndex; top = w; } });
+    document.body.classList.toggle('dock-auto', !!(top && top.el.classList.contains('full')));
+  }
+  document.addEventListener('pointermove', function (e) {
+    if (!document.body.classList.contains('dock-auto')) return;
+    if (e.clientY > innerHeight - 8) document.body.classList.add('dock-peek');
+    else if (e.clientY < innerHeight - 110) document.body.classList.remove('dock-peek');
+  });
   function drag(el, handle) {
     var s = null;
     handle.addEventListener('pointerdown', function (e) {
@@ -460,7 +477,9 @@
   function Photos(root, opts) {
     var tab = 'library', album = null, list = [], vi = -1, info = false;
     var liked = store.get('liked', {});
-    root.innerHTML = '<div class="app"><div class="app-h"><button class="back" type="button" data-act="back" hidden>‹ Albums</button><h2></h2><span class="sub"></span></div>' +
+    var side = '<aside class="ph-side" aria-label="Photos sidebar"><button type="button" data-tab="library">' + I.lib + 'Library</button><button type="button" data-tab="albums">' + I.grid + 'Albums</button><button type="button" data-tab="places">' + I.pin + 'Places</button>' +
+      '<div class="ph-side-h">My Albums</div>' + S.albums.map(function (a) { var n = albumPhotos(a.id).length; return '<button type="button" class="ph-side-a" data-act="album" data-id="' + esc(a.id) + '"><span>' + esc(a.name) + '</span><i>' + (n || '') + '</i></button>'; }).join('') + '</aside>';
+    root.innerHTML = '<div class="app photos">' + side + '<div class="app-h"><button class="back" type="button" data-act="back" hidden>‹ Albums</button><h2></h2><span class="sub"></span></div>' +
       '<div class="app-scroll" data-body></div><nav class="ph-tabs"><button type="button" data-tab="library">' + I.lib + 'Library</button><button type="button" data-tab="albums">' + I.grid + 'Albums</button><button type="button" data-tab="places">' + I.pin + 'Places</button></nav></div>';
     var app = root.firstChild, body = $('[data-body]', root), h2 = $('h2', root), sub = $('.sub', root), back = $('.back', root);
     function cells(ps, start) {
@@ -471,7 +490,8 @@
       }).join('') + '</div>';
     }
     function draw() {
-      Array.prototype.forEach.call(root.querySelectorAll('.ph-tabs button'), function (b) { b.classList.toggle('on', b.dataset.tab === tab); });
+      Array.prototype.forEach.call(root.querySelectorAll('.ph-tabs button, .ph-side [data-tab]'), function (b) { b.classList.toggle('on', !album && b.dataset.tab === tab); });
+      Array.prototype.forEach.call(root.querySelectorAll('.ph-side-a'), function (b) { b.classList.toggle('on', b.dataset.id === album); });
       back.hidden = !album;
       if (album) {
         var a = S.albums.filter(function (x) { return x.id === album; })[0]; list = albumPhotos(album);
@@ -504,10 +524,15 @@
       var v = $('.viewer', root);
       if (!v) {
         v = document.createElement('div'); v.className = 'viewer'; v.tabIndex = -1; app.appendChild(v);
-        v.innerHTML = '<div class="v-top"><button class="back" type="button" data-act="close">‹ Back</button><div class="v-title"><b></b><span></span></div><span style="width:60px;text-align:right;color:var(--muted);font-size:13px" data-count></span></div>' +
+        v.innerHTML = '<div class="v-top"><button class="back" type="button" data-act="close">‹ Back</button><div class="v-title"><b></b><span></span><em class="v-exif"></em></div><span style="width:60px;text-align:right;color:var(--muted);font-size:13px" data-count></span></div>' +
           '<div class="v-stage"><button type="button" class="v-nav prev" data-act="prev" aria-label="Previous photo">‹</button><button type="button" class="v-nav next" data-act="next" aria-label="Next photo">›</button></div>' +
           '<div class="v-strip"></div><div class="v-tools"><button type="button" data-act="share" aria-label="Copy link">' + I.share + '</button><button type="button" data-act="like" aria-label="Favorite">' + I.heart + '</button><button type="button" data-act="info" aria-label="Info">' + I.info + '</button></div>';
         swipeStage($('.v-stage', v));
+        var win = root.closest('.win'); if (win) win.classList.add('viewing');
+        if (mode === 'mac') {                 // controls fade after 2 s without the mouse moving
+          var idleT = null, wake = function () { v.classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(function () { if (!v.querySelector('.v-info')) v.classList.add('idle'); }, 2000); };
+          v.addEventListener('pointermove', wake); v.addEventListener('keydown', wake); wake();
+        }
         v.addEventListener('keydown', function (e) {
           if (e.key === 'ArrowRight') viewer(vi + 1); else if (e.key === 'ArrowLeft') viewer(vi - 1); else if (e.key === 'Escape') closeViewer();
         });
@@ -516,6 +541,7 @@
       $('.v-title b', v).textContent = p.title || albumOf(p).name || '';
       $('.v-title span', v).textContent = p.taken ? fmtDate(p.taken, true) : (p.title ? albumOf(p).name || '' : '');
       $('[data-count]', v).textContent = (vi + 1) + ' / ' + list.length;
+      $('.v-exif', v).textContent = [p.camera, p.fl, p.f, p.ss && p.ss + 's', p.iso && 'ISO ' + p.iso].filter(Boolean).join(' · ');
       var stage = $('.v-stage', v), old = $('img', stage); if (old) old.remove();
       if (stage.resetZoom) stage.resetZoom();
       var img = new Image(); setPhoto(img, p); img.alt = p.alt; img.draggable = false; stage.insertBefore(img, stage.firstChild);
@@ -532,7 +558,7 @@
         stage.appendChild(box);
       }
     }
-    function closeViewer() { var v = $('.viewer', root); if (v) v.remove(); vi = -1; info = false; }
+    function closeViewer() { var v = $('.viewer', root); if (v) v.remove(); vi = -1; info = false; var win = root.closest('.win'); if (win) win.classList.remove('viewing'); }
     /* Viewer gestures: swipe left/right = next/prev, swipe down = close,
        double-tap / double-click / pinch / scroll wheel = zoom (loads the full-size master), drag = pan while zoomed. */
     function swipeStage(stage) {
