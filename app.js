@@ -99,7 +99,7 @@
   var lock = $('#lock');
   function buildLock() {
     $('#lockWall').src = mode === 'phone' ? S.wallpapers.lockPhone : S.wallpapers.lockDesktop;
-    $('#lockNotes').innerHTML = nowPlayingCard('np-lock') + (S.notifications || []).map(function (n, i) {
+    $('#lockNotes').innerHTML = nowPlayingMini() + (S.notifications || []).map(function (n, i) {
       var tag = n.link ? 'a href="' + esc(n.link) + '" target="_blank" rel="noopener"' : 'button type="button"';
       return '<' + tag + ' class="ntf" data-n="' + i + '" style="animation-delay:' + (300 + i * 140) + 'ms">' +
         '<span class="ntf-ic">' + icon(n.app) + '</span><span class="ntf-main"><span class="ntf-row"><span class="ntf-title">' + esc(n.title) +
@@ -108,6 +108,7 @@
   }
   $('#lockNotes').addEventListener('click', function (e) {
     var el = e.target.closest('.ntf'); if (!el) return;
+    if (el.classList.contains('npc')) { if (!e.target.closest('.npc-play')) unlock(function () { openApp('music'); }); return; }
     var n = S.notifications[+el.dataset.n];
     if (n.link) return; // opens in new tab
     unlock(function () { if (n.open) openApp(n.open.app, n.open); });
@@ -775,6 +776,26 @@
     var h = 0, k = s.title + s.artist; for (var i = 0; i < k.length; i++) h = (h * 31 + k.charCodeAt(i)) % 360;
     return '<span class="art" style="width:' + size + 'px;height:' + size + 'px;background:linear-gradient(140deg,hsl(' + h + ',55%,42%),hsl(' + ((h + 50) % 360) + ',60%,22%))">' + esc(s.title.charAt(0)) + '</span>';
   }
+  /* Lock screen "Now Playing": notification-sized, starts 1:23 in and keeps ticking while the lock screen is up */
+  var npTimer = null;
+  function nowPlayingMini() {
+    var M = S.music; if (!M || !M.songs.length) return '';
+    var s = M.songs[Math.min(M.nowPlaying || 0, M.songs.length - 1)], total = +s.dur || 210, t0 = Date.now(), START = 83;
+    var mmss = function (x) { x = Math.max(0, Math.round(x)); return Math.floor(x / 60) + ':' + ('0' + x % 60).slice(-2); };
+    clearInterval(npTimer);
+    npTimer = setInterval(function () {
+      var el = $('#lockNotes .npc'); if (!el) return clearInterval(npTimer);
+      if (unlocked) return;
+      var t = (START + (Date.now() - t0) / 1000) % total;
+      $('.npc-el', el).textContent = mmss(t); $('.npc-rem', el).textContent = '-' + mmss(total - t);
+      $('.npc-bar b', el).style.width = (t / total * 100).toFixed(2) + '%';
+    }, 1000);
+    return '<div class="ntf npc" role="button" tabindex="0" aria-label="Now playing: ' + esc(s.title) + ' by ' + esc(s.artist) + '. Open Music">' +
+      '<span class="ntf-ic">' + artTile(s, 38) + '</span><span class="ntf-main"><span class="ntf-row"><span class="ntf-title">' + esc(s.title) +
+      '</span><span class="ntf-time">Now Playing</span></span><span class="ntf-body">' + esc(s.artist) + '</span>' +
+      '<span class="npc-bar"><span class="npc-el">' + mmss(START) + '</span><i><b style="width:' + (START / total * 100).toFixed(2) + '%"></b></i><span class="npc-rem">-' + mmss(total - START) + '</span></span></span>' +
+      '<a class="npc-play" href="' + esc(amUrl(s)) + '" target="_blank" rel="noopener" aria-label="Play ' + esc(s.title) + ' in Apple Music">' + SV.play + '</a></div>';
+  }
   function nowPlayingCard(cls) {
     var M = S.music; if (!M || !M.songs.length) return '';
     var i = Math.min(M.nowPlaying || 0, M.songs.length - 1), s = M.songs[i];
@@ -793,7 +814,7 @@
   function Music(root) {
     var M = S.music || { songs: [] }, sk = (M.suggest || {}).turnstileSiteKey;
     var upd = M.updated ? new Date(M.updated).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
-    var tag = function (s) { return s.src === 'picked' ? 'Picked' : s.src === 'repeat' ? 'On repeat' : s.src === 'suggested' ? 'Suggested by ' + (s.by || 'a visitor') : ''; };
+    var tag = function (s) { return s.src === 'suggested' ? 'Suggested by ' + (s.by || 'a visitor') : ''; };
     root.innerHTML = '<div class="app"><div class="app-h"><h2>' + esc(M.playlist || 'Music') + '</h2><span class="sub">' + M.songs.length + ' songs' + (upd ? ' · updated ' + esc(upd) : '') + '</span></div>' +
       '<div class="app-scroll"><div style="padding:0 14px 8px">' + nowPlayingCard('np-in') + '</div>' +
       (sk ? '<div class="sg-wrap"><button type="button" class="pill primary" data-act="suggest">Suggest a song</button></div>' +
@@ -805,7 +826,7 @@
         '<div class="sg-ts"></div><p class="sg-err" role="alert"></p><div class="sg-btns"><button type="button" class="pill" data-act="sg-cancel">Cancel</button><button type="submit" class="pill primary">Send</button></div></form>' : '') +
       '<div class="ml-list">' +
       M.songs.map(function (s) { var t = tag(s); return '<a class="ml-row" href="' + esc(amUrl(s)) + '" target="_blank" rel="noopener">' + artTile(s, 46) + '<span class="ml-t"><b>' + esc(s.title) + '</b><span>' + esc(s.artist) + (t ? ' · <em>' + esc(t) + '</em>' : '') + '</span></span><span class="ml-go" aria-hidden="true">›</span></a>'; }).join('') +
-      '</div><p style="color:var(--muted);font-size:12px;padding:10px 18px 100px">Picked by Dave, plus what he\'s had on repeat lately. Refreshed every Sunday. Songs open in Apple Music.</p></div></div>';
+      '</div><p style="color:var(--muted);font-size:12px;padding:10px 18px 100px">Dave\'s favourites and what he\'s had on lately. Refreshed every Sunday. Songs open in Apple Music.</p></div></div>';
     if (sk) suggestForm(root, sk);
     return {};
   }
