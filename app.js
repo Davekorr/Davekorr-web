@@ -73,9 +73,9 @@
     music:    { name: 'Music',    size: [640, 640], render: Music },
     instagram:{ name: 'Instagram', link: 'https://instagram.com/' + S.instagram }
   };
-  var MAC_DOCK = ['calendar', 'photos', 'safari', 'notes', 'music', 'camera', '|', 'contacts', 'mail', 'instagram'];
-  var PHONE_GRID = ['calendar', 'camera', 'instagram', 'mail', 'contacts'];
-  var PHONE_DOCK = ['photos', 'safari', 'notes', 'music'];
+  var MAC_DOCK = ['calendar', 'photos', 'safari', 'notes', 'contacts', 'music', 'camera', '|', 'mail', 'instagram'];
+  var PHONE_GRID = ['calendar', 'notes', 'instagram', 'mail'];   // camera is hidden on phones (still in the code: add 'camera' back here to show it)
+  var PHONE_DOCK = ['photos', 'safari', 'music', 'contacts'];
 
   var mode = null, unlocked = false, instances = {};
   function isPhone() { return matchMedia('(max-width: 767px)').matches; }
@@ -132,10 +132,11 @@
     var n = (window.R2_NEWS || []).filter(function (x) { return x.kind === 'photos' && x.at && days(x.at) <= 14; })[0];
     if (n) {
       var a = S.albums.filter(function (x) { return x.id === n.album; })[0];
-      return { app: 'photos', title: '📸 New photos', body: n.count + ' new photo' + (n.count === 1 ? '' : 's') + ' in ' + (a ? a.name : n.album) + '.', time: ago(n.at), open: { app: 'photos', album: n.album } };
+      var mo = new Date(n.at).getMonth(), sea = mo < 2 || mo === 11 ? ['Winter', '❄️'] : mo < 5 ? ['Spring', '🌱'] : mo < 8 ? ['Summer', '☀️'] : ['Fall', '🍂'];
+      return { app: 'photos', title: sea[0] + ' photos have dropped ' + sea[1], body: (a ? a.name : n.album) + ' is live — fresh frames.', time: ago(n.at), open: { app: 'photos', album: n.album } };
     }
     var M = S.music || {};
-    if (M.updated && days(M.updated) <= 7) return { app: 'music', title: '🎵 Playlist refreshed', body: M.songs.length + ' songs: Dave\'s favourites and what he\'s had on lately.', time: ago(M.updated), open: { app: 'music' } };
+    if (M.updated && days(M.updated) <= 7) return { app: 'music', title: 'Playlist refreshed 🎵', body: 'Dave\'s favourites and what he\'s had on lately.', time: ago(M.updated), open: { app: 'music' } };
     return null;
   }
   var lockList = [];
