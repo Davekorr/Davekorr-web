@@ -847,19 +847,22 @@
         '<button type="button" class="am-ic" data-act="m-next" aria-label="Next">' + SV.next + '</button>' +
         '<span class="am-ic am-x" aria-hidden="true">' + IC.repeat + '</span>' +
         '<a class="am-now" target="_blank" rel="noopener"></a><span class="am-ic am-x" aria-hidden="true">' + IC.more + '</span></div>' : '') + '</div>';
+    // Mini player = what's "playing": starts on the lock-screen song, then ◀◀ / ▶▶ step through the playlist
+    var pin = pinSong(), key = function (s) { return (s.title + '|' + s.artist).toLowerCase(); };
+    var Q = pin && !L.some(function (s) { return key(s) === key(pin); }) ? [pin].concat(L) : L.slice();
     function show(i) {
-      cur = (i + L.length) % L.length; var s = L[cur], u = amUrl(s);
+      cur = (i + Q.length) % Q.length; var s = Q[cur], u = amUrl(s);
       $('.am-play', root).href = u; var n = $('.am-now', root); n.href = u;
       n.innerHTML = cover(s, 40, 'am-art') + '<span><b>' + esc(s.title) + '</b><span>' + esc(s.artist) + '</span></span>';
     }
-    if (L.length) show(0);
+    if (Q.length) show(pin ? Q.indexOf(pin) < 0 ? 0 : Q.indexOf(pin) : 0);
     root.addEventListener('click', function (e) {
       var a = e.target.closest('[data-act]'); if (!a) return;
       var act = a.dataset.act;
       if (act === 'shuffle') { e.preventDefault(); window.open(amUrl(L[Math.floor(Math.random() * L.length)]), '_blank', 'noopener'); }
       else if (act === 'm-next') show(cur + 1);
       else if (act === 'm-prev') show(cur - 1);
-      else if (act === 'm-shuffle') show(Math.floor(Math.random() * L.length));
+      else if (act === 'm-shuffle') show(Math.floor(Math.random() * Q.length));
     });
     if (sk) suggestForm(root, sk);
     return {};
