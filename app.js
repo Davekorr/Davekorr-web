@@ -991,14 +991,15 @@
           '<div class="ps-qr"><img src="img/contact-qr.svg" alt="QR code that saves Dave\'s contact" width="96" height="96"><div><b>Scan to save my contact</b><span>Point any phone camera here. Works on iPhone and Android.</span></div></div>' +
         '</section>' +
       '</div></div>' +
-      '<div class="ct-btns"><button type="button" class="ct-btn" data-act="flip">' + ic.flip + 'Flip card</button>' +
+      '<div class="ct-btns">' +
         '<a class="ct-btn primary" href="/dave-korr.vcf" download="Dave Korr.vcf">' + ic.save + '<span>' + saveLbl + '<small>' + saveSub + '</small></span></a></div>' +
-      '<p class="ct-other">On another device? Flip the card and scan the code.</p>' +
+      '<p class="ct-other">Tap the card to flip it. On another device? Scan the code on the back.</p>' +
       '</div></div></div>';
-    var card = $('.ct-card', root), auto = null, flipped = false;
+    var card = $('.ct-card', root), timers = [], flipped = false;
     function flip(v) { flipped = typeof v === 'boolean' ? v : !flipped; card.classList.toggle('flipped', flipped); }
-    function stopAuto() { clearInterval(auto); auto = null; }
-    if (!reduce) auto = setInterval(function () { if (!document.hidden) flip(); }, 5000);   // turns by itself until someone interacts
+    function stopAuto() { timers.forEach(clearTimeout); timers = []; }
+    // Shows the back once (after 3 s), turns to the front again 3 s later, then stays on the front
+    if (!reduce) timers = [setTimeout(function () { flip(true); }, 3000), setTimeout(function () { flip(false); }, 6000)];
     card.addEventListener('click', function (e) { if (e.target.closest('a,button')) return; stopAuto(); flip(); });
     root.addEventListener('click', function (e) {
       var b = e.target.closest('[data-act]'); if (!b) return; stopAuto();

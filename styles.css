@@ -513,7 +513,8 @@ body.dock-auto.dock-peek .dock-wrap{transform:none}
 .ps-qr{margin:2px 16px 16px;background:#fff;border-radius:10px;padding:10px;display:flex;align-items:center;gap:12px;color:#1a1a1a}
 .ps-qr img{width:96px;height:96px;flex:none;image-rendering:pixelated}
 .ps-qr b{display:block;font-size:14px}.ps-qr span{font-size:12px;color:#555}
-.ct-btns{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px}
+.ct-btns{display:flex;justify-content:center}
+.ct-btns .ct-btn{min-width:min(100%,320px)}
 .ct-btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 16px;border-radius:14px;background:#2c2c2e;color:#fff;font-size:15px;font-weight:600;text-decoration:none}
 .ct-btn.primary{background:var(--clay)}
 .ct-btn span{display:flex;flex-direction:column;align-items:flex-start;line-height:1.2}
