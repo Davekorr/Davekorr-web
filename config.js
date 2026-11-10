@@ -363,6 +363,7 @@ window.SITE = {
       { title: "Money Goes, Honey Stay", artist: "Fabolous" },
       { title: "Queen Tings", artist: "Masego" },
       { title: "CHINEKE", artist: "Tobe Nwigwe & Busta Rhymes" },
+      { title: "Monster (feat. Avelino)", artist: "Jacob Banks" },
       { title: "I'll Be Okay", artist: "Bien" },
       { title: "One In Million", artist: "Teejay" },
       { title: "Something I Said", artist: "Protoje" },
