@@ -69,11 +69,12 @@
     calendar: { name: 'Calendar', size: [380, 560], render: Calendar },
     camera:   { name: 'Camera',   size: [820, 560], render: Camera },
     mail:     { name: 'Mail',     size: [520, 340], render: Mail },
+    contacts: { name: 'Contacts', size: [560, 720], render: Contacts },
     music:    { name: 'Music',    size: [640, 640], render: Music },
     instagram:{ name: 'Instagram', link: 'https://instagram.com/' + S.instagram }
   };
-  var MAC_DOCK = ['calendar', 'photos', 'safari', 'notes', 'music', 'camera', '|', 'mail', 'instagram'];
-  var PHONE_GRID = ['calendar', 'camera', 'instagram', 'mail'];
+  var MAC_DOCK = ['calendar', 'photos', 'safari', 'notes', 'music', 'camera', '|', 'contacts', 'mail', 'instagram'];
+  var PHONE_GRID = ['calendar', 'camera', 'instagram', 'mail', 'contacts'];
   var PHONE_DOCK = ['photos', 'safari', 'notes', 'music'];
 
   var mode = null, unlocked = false, instances = {};
@@ -97,19 +98,62 @@
 
   /* ---------------- Lock screen ---------------- */
   var lock = $('#lock');
+  /* Rochester's sun (NOAA formula): sunrise / sunset as Date objects for the given day */
+  var ROC = { lat: 43.1566, lon: -77.6088 };
+  function sunTimes(day) {
+    var rad = Math.PI / 180, d0 = Date.UTC(day.getFullYear(), day.getMonth(), day.getDate());
+    var n = Math.round((d0 - Date.UTC(day.getFullYear(), 0, 0)) / 864e5);
+    var g = 2 * Math.PI / 365 * (n - 1);
+    var eq = 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g) - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
+    var dec = 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g) + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
+    var ha = Math.acos(Math.cos(90.833 * rad) / (Math.cos(ROC.lat * rad) * Math.cos(dec)) - Math.tan(ROC.lat * rad) * Math.tan(dec)) / rad;
+    var noon = 720 - 4 * ROC.lon - eq;                       // minutes after UTC midnight
+    return { rise: new Date(d0 + (noon - 4 * ha) * 6e4), set: new Date(d0 + (noon + 4 * ha) * 6e4) };
+  }
+  function rocTime(d) { return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }); }
+  function liveNote() {
+    var now = new Date(), t = sunTimes(now), min = function (a) { return Math.round((a - now) / 6e4); };
+    var toSet = min(t.set), toRise = min(t.rise), open = { app: 'photos', tab: 'library' };
+    var dur = function (m) { return m >= 60 ? Math.floor(m / 60) + ' h ' + (m % 60) + ' min' : m + ' min'; };
+    if (toSet > 60 && toSet <= 180) return { app: 'photos', title: '🌅 Golden hour in Rochester in ' + dur(toSet - 60), body: 'Sunset at ' + rocTime(t.set) + ' today. The best light of the day.', time: 'live', open: open };
+    if (toSet > 0 && toSet <= 60) return { app: 'photos', title: '🌅 Golden hour in Rochester, right now', body: toSet + ' min of warm light left before sunset.', time: 'live', open: open };
+    if (toSet <= 0 && toSet > -35) return { app: 'photos', title: '🌙 Blue hour in Rochester', body: 'The sun set at ' + rocTime(t.set) + '. The sky is turning blue.', time: 'live', open: open };
+    if (toRise > -60 && toRise <= 30) return { app: 'photos', title: toRise > 0 ? '🌄 Sunrise in Rochester in ' + toRise + ' min' : '🌄 Morning light in Rochester', body: 'Sunrise ' + (toRise > 0 ? 'at ' : 'was at ') + rocTime(t.rise) + '. Golden hour, round one.', time: 'live', open: open };
+    if (toRise <= -60 && toSet > 180) return { app: 'photos', title: '☀️ Daytime in Rochester', body: 'Golden hour starts at ' + rocTime(new Date(t.set - 36e5)) + ' today.', time: 'live', open: open };
+    var nextRise = toRise > 0 ? t.rise : sunTimes(new Date(now.getTime() + 864e5)).rise;
+    return { app: 'photos', title: '🌙 ' + rocTime(now) + ' in Rochester', body: 'Next sunrise at ' + rocTime(nextRise) + '.', time: 'live', open: open };
+  }
+  function ago(iso) {
+    var m = Math.round((Date.now() - new Date(iso)) / 6e4);
+    return m < 60 ? Math.max(1, m) + 'm ago' : m < 1440 ? Math.round(m / 60) + 'h ago' : Math.round(m / 1440) + 'd ago';
+  }
+  function newsNote() {
+    var days = function (iso) { return (Date.now() - new Date(iso)) / 864e5; };
+    var n = (window.R2_NEWS || []).filter(function (x) { return x.kind === 'photos' && x.at && days(x.at) <= 14; })[0];
+    if (n) {
+      var a = S.albums.filter(function (x) { return x.id === n.album; })[0];
+      return { app: 'photos', title: '📸 New photos', body: n.count + ' new photo' + (n.count === 1 ? '' : 's') + ' in ' + (a ? a.name : n.album) + '.', time: ago(n.at), open: { app: 'photos', album: n.album } };
+    }
+    var M = S.music || {};
+    if (M.updated && days(M.updated) <= 7) return { app: 'music', title: '🎵 Playlist refreshed', body: M.songs.length + ' songs: Dave\'s favourites and what he\'s had on lately.', time: ago(M.updated), open: { app: 'music' } };
+    return null;
+  }
+  var lockList = [];
   function buildLock() {
     $('#lockWall').src = mode === 'phone' ? S.wallpapers.lockPhone : S.wallpapers.lockDesktop;
-    $('#lockNotes').innerHTML = nowPlayingMini() + (S.notifications || []).map(function (n, i) {
+    var ev = S.notifications || [], day = Math.floor((Date.now() - new Date().getTimezoneOffset() * 6e4) / 864e5);
+    lockList = [liveNote(), newsNote(), ev.length ? ev[day % ev.length] : null].filter(Boolean);
+    $('#lockNotes').innerHTML = nowPlayingMini() + lockList.map(function (n, i) {
       var tag = n.link ? 'a href="' + esc(n.link) + '" target="_blank" rel="noopener"' : 'button type="button"';
       return '<' + tag + ' class="ntf" data-n="' + i + '" style="animation-delay:' + (300 + i * 140) + 'ms">' +
         '<span class="ntf-ic">' + icon(n.app) + '</span><span class="ntf-main"><span class="ntf-row"><span class="ntf-title">' + esc(n.title) +
-        '</span><span class="ntf-time">' + esc(n.time) + '</span></span><span class="ntf-body">' + esc(n.body) + '</span></span></' + (n.link ? 'a' : 'button') + '>';
+        '</span><span class="ntf-time">' + esc(n.time || '') + '</span></span><span class="ntf-body">' + esc(n.body) + '</span></span></' + (n.link ? 'a' : 'button') + '>';
     }).join('');
   }
   $('#lockNotes').addEventListener('click', function (e) {
     var el = e.target.closest('.ntf'); if (!el) return;
     if (el.classList.contains('npc')) { if (!e.target.closest('.npc-play')) unlock(function () { openApp('music'); }); return; }
-    var n = S.notifications[+el.dataset.n];
+    var n = lockList[+el.dataset.n];
     if (n.link) return; // opens in new tab
     unlock(function () { if (n.open) openApp(n.open.app, n.open); });
   });
@@ -905,6 +949,63 @@
     });
     if (sk) suggestForm(root, sk);
     return {};
+  }
+
+
+  /* ---------- Contacts: Dave's card. Front = details, back = pass with a QR that saves the contact. Flips on its own until touched. ---------- */
+  function Contacts(root) {
+    var A = S.about || {}, ua = navigator.userAgent || '';
+    var dev = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && 'ontouchend' in document) ? 'ios' : /Android/.test(ua) ? 'android' : 'pc';
+    var saveLbl = { ios: 'Add to Contacts', android: 'Save contact', pc: 'Download contact card' }[dev];
+    var saveSub = { ios: 'Opens in your iPhone Contacts', android: 'Opens in your Android contacts', pc: 'A .vcf file for Outlook, Windows People or Mac Contacts' }[dev];
+    var m = new Date().getMonth(), season = m < 2 || m === 11 ? 'WINTER' : m < 5 ? 'SPRING' : m < 8 ? 'SUMMER' : 'FALL';
+    var albums = S.albums.filter(function (a) { return albumPhotos(a.id).length; }), cover = albums.length ? albumPhotos(albums[0].id)[0] : null;
+    var ic = {
+      mail: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
+      ig: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg>',
+      prints: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
+      save: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>',
+      flip: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3M18 3v4h-4M6 21v-4h4"/></svg>'
+    };
+    var row = function (k, v) { return v ? '<span class="ct-k">' + k + '</span><span class="ct-v">' + v + '</span>' : ''; };
+    root.innerHTML = '<div class="app ct"><div class="app-scroll"><div class="ct-wrap">' +
+      '<div class="ct-card" role="group" aria-label="Dave\'s contact card. Tap to flip."><div class="ct-inner">' +
+        '<section class="ct-face ct-front" aria-label="Front">' +
+          '<div class="ct-head"><span class="ct-av">DK</span><div><b>' + esc(A.name || S.name) + '</b><span>' + esc((A.role || 'Photographer') + ' · Rochester, NY') + '</span></div></div>' +
+          '<div class="ct-acts">' +
+            '<a href="mailto:' + esc(S.email) + '">' + ic.mail + 'mail</a>' +
+            '<a href="https://instagram.com/' + esc(S.instagram) + '" target="_blank" rel="noopener">' + ic.ig + 'instagram</a>' +
+            '<button type="button" data-act="prints">' + ic.prints + 'prints</button>' +
+            '<a href="/dave-korr.vcf" download="Dave Korr.vcf">' + ic.save + 'save</a></div>' +
+          '<div class="ct-rows">' + row('email', '<a href="mailto:' + esc(S.email) + '">' + esc(S.email) + '</a>') +
+            row('instagram', '<a href="https://instagram.com/' + esc(S.instagram) + '" target="_blank" rel="noopener">@' + esc(S.instagram) + '</a>') +
+            row('home', esc(A.home || '')) + row('available for', esc(A.availableFor || '')) + row('note', esc(A.bio || '')) + '</div>' +
+        '</section>' +
+        '<section class="ct-face ct-back" aria-label="Back: photographer pass">' +
+          '<div class="ps-top"><span class="ps-logo">DK</span><b>davekorr.com</b><span class="ps-season"><i>SEASON</i>' + season + ' ' + new Date().getFullYear() + '</span></div>' +
+          (cover ? '<img class="ps-img" src="' + esc(cover.md || cover.thumb) + '" alt="">' : '') +
+          '<div class="ps-body"><div class="ps-f"><i>PHOTOGRAPHER</i><b class="ps-name">' + esc(A.name || S.name) + '</b></div>' +
+          '<div class="ps-grid"><div class="ps-f"><i>BASE</i><b>Rochester, NY</b></div><div class="ps-f"><i>ROOTS</i><b>Kenya</b></div><div class="ps-f"><i>CAMERA</i><b>' + esc((A.camera || '').replace('Fujifilm ', 'Fuji ')) + '</b></div>' +
+          '<div class="ps-f"><i>ALBUMS</i><b>' + albums.length + '</b></div><div class="ps-f"><i>PHOTOS</i><b>' + S.photos.length + '</b></div><div class="ps-f"><i>BEST LIGHT</i><b>Golden hour</b></div></div></div>' +
+          '<div class="ps-qr"><img src="img/contact-qr.svg" alt="QR code that saves Dave\'s contact" width="96" height="96"><div><b>Scan to save my contact</b><span>Point any phone camera here. Works on iPhone and Android.</span></div></div>' +
+        '</section>' +
+      '</div></div>' +
+      '<div class="ct-btns"><button type="button" class="ct-btn" data-act="flip">' + ic.flip + 'Flip card</button>' +
+        '<a class="ct-btn primary" href="/dave-korr.vcf" download="Dave Korr.vcf">' + ic.save + '<span>' + saveLbl + '<small>' + saveSub + '</small></span></a></div>' +
+      '<p class="ct-other">On another device? Flip the card and scan the code.</p>' +
+      '</div></div></div>';
+    var card = $('.ct-card', root), auto = null, flipped = false;
+    function flip(v) { flipped = typeof v === 'boolean' ? v : !flipped; card.classList.toggle('flipped', flipped); }
+    function stopAuto() { clearInterval(auto); auto = null; }
+    if (!reduce) auto = setInterval(function () { if (!document.hidden) flip(); }, 5000);   // turns by itself until someone interacts
+    card.addEventListener('click', function (e) { if (e.target.closest('a,button')) return; stopAuto(); flip(); });
+    root.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-act]'); if (!b) return; stopAuto();
+      if (b.dataset.act === 'flip') flip();
+      else if (b.dataset.act === 'prints') openApp('safari', { tab: 'shop' });
+    });
+    root.addEventListener('pointerdown', stopAuto);
+    return { destroy: stopAuto };
   }
 
   /* "Suggest a song": Cloudflare Turnstile (spam check) + /api/suggest (Pages Function, stored privately in KV) */

@@ -482,3 +482,42 @@ body.dock-auto.dock-peek .dock-wrap{transform:none}
 .viewer.idle .v-top,.viewer.idle .v-strip,.viewer.idle .v-tools,.viewer.idle .v-nav{opacity:0}
 .v-exif{display:block;font-style:normal;font-size:11.5px;color:#c7c7cc;letter-spacing:.02em;margin-top:2px}
 .v-exif:empty{display:none}
+/* ---------- Contacts (Dave's card, flips) ---------- */
+.ct{background:#1c1c1e;color:#f5f5f7}
+.ct-wrap{max-width:440px;margin:0 auto;padding:22px 18px 40px;display:flex;flex-direction:column;gap:16px}
+.ct-card{perspective:1400px;cursor:pointer}
+.ct-inner{display:grid;transition:transform .9s cubic-bezier(.3,.7,.2,1);transform-style:preserve-3d}
+.ct-card.flipped .ct-inner{transform:rotateY(180deg)}
+.ct-face{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:20px;overflow:hidden}
+.ct-front{background:#262628;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);padding:22px;display:flex;flex-direction:column;gap:18px}
+.ct-back{transform:rotateY(180deg);background:linear-gradient(180deg,#8c3f17,#3d1a09);color:#fff;box-shadow:0 20px 50px rgba(194,101,47,.25)}
+.ct-head{display:flex;align-items:center;gap:16px}
+.ct-head b{display:block;font-size:26px;font-weight:700}.ct-head div span{font-size:14px;color:#a1a1a6}
+.ct-av{width:76px;height:76px;flex:none;border-radius:50%;background:linear-gradient(140deg,#c2652f,#5a2a12);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff}
+.ct-acts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.ct-acts a,.ct-acts button{height:58px;border-radius:12px;background:#323234;color:#ff9f63;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px;text-decoration:none}
+.ct-acts svg,.ct-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ct-acts a:hover,.ct-acts button:hover{background:#3a3a3c}
+.ct-rows{display:grid;grid-template-columns:auto minmax(0,1fr);gap:9px 14px;font-size:14px;border-top:1px solid #38383a;padding-top:14px}
+.ct-k{color:#a1a1a6;text-align:right}.ct-v{line-height:1.45}.ct-v a{color:#ff9f63;text-decoration:none}
+.ps-top{display:flex;align-items:center;gap:10px;padding:14px 16px}
+.ps-logo{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.ps-top b{font-size:15px}
+.ps-season{margin-left:auto;text-align:right;font-weight:700;font-size:15px}
+.ps-back i,.ps-f i,.ps-season i{display:block;font-style:normal;font-size:10px;letter-spacing:.08em;color:#ffd9c2;font-weight:500}
+.ps-img{display:block;width:100%;height:150px;object-fit:cover}
+.ps-body{padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.ps-name{font-size:24px}
+.ps-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ps-f b{font-size:14px}
+.ps-qr{margin:2px 16px 16px;background:#fff;border-radius:10px;padding:10px;display:flex;align-items:center;gap:12px;color:#1a1a1a}
+.ps-qr img{width:96px;height:96px;flex:none;image-rendering:pixelated}
+.ps-qr b{display:block;font-size:14px}.ps-qr span{font-size:12px;color:#555}
+.ct-btns{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px}
+.ct-btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 16px;border-radius:14px;background:#2c2c2e;color:#fff;font-size:15px;font-weight:600;text-decoration:none}
+.ct-btn.primary{background:var(--clay)}
+.ct-btn span{display:flex;flex-direction:column;align-items:flex-start;line-height:1.2}
+.ct-btn small{font-size:11px;font-weight:400;opacity:.85}
+.ct-other{margin:0;text-align:center;font-size:12px;color:#8e8e93}
+.mode-phone .ct-wrap{padding-top:56px;padding-bottom:110px}
+@media (prefers-reduced-motion:reduce){.ct-inner{transition:none}}

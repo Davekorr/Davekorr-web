@@ -22,26 +22,35 @@ window.SITE = {
   },
 
   /* ---------- Lock-screen notifications ----------
-     app:   which icon to show (photos, instagram, notes, safari, calendar, camera, mail)
-     title: bold first line
-     body:  second line
-     time:  small grey text on the right ('now', '2h ago', 'Tue'...)
-     open:  what happens on tap — opens an app inside the site
-            e.g. { app: 'photos', album: 'letchworth' }
-     link:  OR a web link instead (e.g. your Instagram profile)        */
+     The lock screen shows up to 3, each with its own job:
+       1. Live: Rochester's light right now (golden hour countdown, blue hour, sunrise...). Worked out
+          in the visitor's browser from the date and Rochester's sunset; nothing to update.
+       2. News: newest of "N new photos in <album>" (written by publish-site --live, shown 14 days)
+          or "Playlist refreshed" (from the Sunday playlist update, shown 7 days).
+       3. Always on: one of the notifications below, a different one each day.
+     For these: app = icon, title / body = the two lines,
+     open = what a tap opens inside the site, e.g. { app: 'safari', tab: 'shop' }; link = a web link instead. */
   notifications: [
-    { app: 'photos',    title: 'Fall photos have dropped 🍂',
-      body: 'Letchworth 2026 is live — fresh frames from golden hour.',
-      time: 'now', open: { app: 'photos', album: 'letchworth' } },
-
-    { app: 'instagram', title: 'New Instagram post',
-      body: '@dave_korir shared a new post. Tap to see it.',
-      time: '2h ago', link: 'https://instagram.com/dave_korir' },
-
     { app: 'safari',    title: 'Buy my prints 🖼',
       body: 'Signed prints, made to order — browse the print shop.',
-      time: 'now', open: { app: 'safari', tab: 'shop' } }
+      open: { app: 'safari', tab: 'shop' } },
+
+    { app: 'instagram', title: 'Follow along on Instagram',
+      body: '@dave_korir: new shots and behind the scenes.',
+      link: 'https://instagram.com/dave_korir' }
   ],
+
+  /* ---------- Contacts app (About Dave) ----------
+     Front of the card = contact details; back = the pass with a QR code that saves the contact.
+     availableFor: leave "" to hide that row. bio: the one-line note on the card. */
+  about: {
+    name: "Dave Korr",
+    role: "Photographer",
+    home: "Rochester, NY · roots in Kenya",
+    camera: "Fujifilm X-T5",
+    bio: "I shoot the lakes and gorges of upstate New York and the cities I travel through, mostly at golden hour.",
+    availableFor: ""
+  },
 
   /* ---------- Albums (shown in Photos → Albums) ----------
      eyebrow = small label above the album text; story = paragraphs shown at the top of the album. */
@@ -388,6 +397,7 @@ window.SITE = {
     mail:      { mac: 'icons/mac/mail.png',      phone: 'icons/ios/mail.png' },
     instagram: { mac: 'icons/mac/instagram.png', phone: 'icons/ios/instagram.png' },
     music:     { mac: 'icons/mac/music.png',     phone: 'icons/ios/music.png' },
-    camera:    { mac: 'icons/mac/camera.png',    phone: 'icons/ios/camera.png' }
+    camera:    { mac: 'icons/mac/camera.png',    phone: 'icons/ios/camera.png' },
+    contacts:  { mac: 'icons/mac/contacts.png',  phone: 'icons/ios/contacts.png' }
   }
 };

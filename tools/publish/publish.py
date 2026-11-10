@@ -9,10 +9,11 @@ Cloudflare R2 bucket behind images.davekorr.com, then writes the photo list
   publish-site               -> upload + write manifest-preview.js (preview site only)
   publish-site --dry-run     -> build masters locally, upload nothing
   publish-site --live        -> copy the current preview manifest to manifest.js (live site)
+                                and post "N new photos in <album>" to news.js (the lock-screen notification)
 
 Fails loud: any error stops the run with a non-zero exit, nothing half-published.
 """
-import argparse, hashlib, json, os, subprocess, sys, tempfile, time
+import argparse, hashlib, json, os, subprocess, sys, tempfile, time, urllib.request
 from datetime import datetime, timezone
 
 WEB = os.environ.get('DK_WEB_DIR', '/Volumes/photos/15 Web')
@@ -102,6 +103,39 @@ def manifest_js(photos):
     data = {'base': BASE, 'generated': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%MZ'), 'photos': photos}
     return 'window.R2_MANIFEST=' + json.dumps(data, separators=(',', ':')) + ';\n'
 
+def fetch_js(name, var):
+    """Read one of the site's data files (e.g. manifest.js) back from images.davekorr.com. None if missing."""
+    try:
+        raw = urllib.request.urlopen(urllib.request.Request(f'{BASE}/{name}?t={int(time.time())}',
+                                     headers={'User-Agent': 'davekorr-publish/1.0'}), timeout=20).read().decode()
+    except Exception:
+        return None
+    raw = raw.strip()
+    if not raw.startswith(f'window.{var}='): return None
+    return json.loads(raw[len(f'window.{var}='):].rstrip(';'))
+
+def live_keys():
+    m = fetch_js('manifest.js', 'R2_MANIFEST')
+    return None if m is None else {p['key'] for p in m.get('photos', [])}
+
+def post_news(before, prev_path):
+    """Lock-screen news: one line per album that gained photos in this go-live. Keeps the newest 10."""
+    if before is None:
+        print('  (news: could not read the old live list, so no "new photos" notification this time)'); return
+    prev = json.loads(open(prev_path).read().strip()[len('window.R2_MANIFEST='):].rstrip(';'))
+    added = {}
+    for p in prev['photos']:
+        if p['key'] not in before: added[p['album']] = added.get(p['album'], 0) + 1
+    if not added:
+        print('  (news: no new photos, nothing to announce)'); return
+    now = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%MZ')
+    news = fetch_js('news.js', 'R2_NEWS') or []
+    news = [{'at': now, 'kind': 'photos', 'album': a, 'count': n} for a, n in added.items()] + news
+    path = os.path.join(tempfile.mkdtemp(prefix='dknews-'), 'news.js')
+    open(path, 'w').write('window.R2_NEWS=' + json.dumps(news[:10], separators=(',', ':')) + ';\n')
+    put('news.js', path, 'application/javascript', 'no-cache')
+    print('  Lock-screen news: ' + ', '.join(f'{n} new in {a}' for a, n in added.items()))
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--dry-run', action='store_true')
@@ -112,9 +146,11 @@ def main():
     if a.live:
         prev = os.path.join(HERE, 'manifest-preview.js')
         if not os.path.exists(prev): die('No preview manifest yet. Run publish-site first and check the preview.')
+        before = live_keys()                       # what visitors saw until now
         put('manifest.js', prev, 'application/javascript', 'no-cache')
         if not head_ok('manifest.js', os.path.getsize(prev)): die('Live manifest upload could not be verified.')
-        print('✔ Live: davekorr.com now shows the photos from your last preview.'); return
+        print('✔ Live: davekorr.com now shows the photos from your last preview.')
+        post_news(before, prev); return
 
     state = json.load(open(STATE)) if os.path.exists(STATE) else {}
     alb = albums(); photos = []; up = skip = 0; n = 0

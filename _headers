@@ -12,3 +12,8 @@
   Cache-Control: public, max-age=604800
 /icons/*
   Cache-Control: public, max-age=604800
+
+# Contact card: open/import as a contact on iPhone, Android and PC
+/dave-korr.vcf
+  Content-Type: text/vcard; charset=utf-8
+  Content-Disposition: inline; filename="Dave Korr.vcf"

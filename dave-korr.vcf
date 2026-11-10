@@ -1,0 +1,11 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Korr;Dave;;;
+FN:Dave Korr
+TITLE:Photographer
+EMAIL;TYPE=INTERNET:hello@davekorr.com
+URL:https://davekorr.com
+X-SOCIALPROFILE;TYPE=instagram:https://instagram.com/dave_korir
+ADR;TYPE=HOME:;;;Rochester;NY;;USA
+NOTE:Photographer in Rochester, NY. davekorr.com
+END:VCARD
