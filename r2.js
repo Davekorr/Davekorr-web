@@ -49,11 +49,7 @@ function musicFromR2(S, X) {
   if (!S || !S.music) return;
   var M = S.music;
   if (X && X.songs && X.songs.length) { M.songs = X.songs; M.updated = X.updated; }
+  // The pinned song lives on the lock screen only (not in the Music list). Forager-01 adds its artwork/length/link.
   var pin = M.pin, key = function (s) { return (s.title + '|' + s.artist).toLowerCase(); };
-  if (pin && pin.title) {
-    var i = -1;
-    M.songs.forEach(function (s, j) { if (i < 0 && key(s) === key(pin)) i = j; });
-    if (i < 0) { M.songs = [pin].concat(M.songs); i = 0; }
-    M.nowPlaying = i;
-  }
+  if (pin && X && X.pin && key(X.pin) === key(pin)) ['art', 'dur', 'url'].forEach(function (k) { if (X.pin[k]) pin[k] = X.pin[k]; });
 }

@@ -69,7 +69,7 @@
     calendar: { name: 'Calendar', size: [380, 560], render: Calendar },
     camera:   { name: 'Camera',   size: [820, 560], render: Camera },
     mail:     { name: 'Mail',     size: [520, 340], render: Mail },
-    music:    { name: 'Music',    size: [460, 600], render: Music },
+    music:    { name: 'Music',    size: [640, 640], render: Music },
     instagram:{ name: 'Instagram', link: 'https://instagram.com/' + S.instagram }
   };
   var MAC_DOCK = ['calendar', 'photos', 'safari', 'notes', 'music', 'camera', '|', 'mail', 'instagram'];
@@ -771,7 +771,10 @@
 
 
   /* ---------- Music ---------- */
-  function amUrl(s) { return 'https://music.apple.com/us/search?term=' + encodeURIComponent(s.title + ' ' + s.artist); }
+  function amUrl(s) { return s.url || 'https://music.apple.com/us/search?term=' + encodeURIComponent(s.title + ' ' + s.artist); }
+  function pinSong() { var M = S.music || {}; return M.pin && M.pin.title ? M.pin : (M.songs || [])[0]; }
+  function cover(s, size, cls) { return s.art ? '<img class="' + (cls || 'cover') + '" src="' + esc(s.art) + '" width="' + size + '" height="' + size + '" alt="" loading="lazy">' : artTile(s, size); }
+  function mmss(x) { x = Math.max(0, Math.round(x)); return Math.floor(x / 60) + ':' + ('0' + x % 60).slice(-2); }
   function artTile(s, size) {
     var h = 0, k = s.title + s.artist; for (var i = 0; i < k.length; i++) h = (h * 31 + k.charCodeAt(i)) % 360;
     return '<span class="art" style="width:' + size + 'px;height:' + size + 'px;background:linear-gradient(140deg,hsl(' + h + ',55%,42%),hsl(' + ((h + 50) % 360) + ',60%,22%))">' + esc(s.title.charAt(0)) + '</span>';
@@ -779,9 +782,8 @@
   /* Lock screen "Now Playing": notification-sized, starts 1:23 in and keeps ticking while the lock screen is up */
   var npTimer = null;
   function nowPlayingMini() {
-    var M = S.music; if (!M || !M.songs.length) return '';
-    var s = M.songs[Math.min(M.nowPlaying || 0, M.songs.length - 1)], total = +s.dur || 210, t0 = Date.now(), START = 83;
-    var mmss = function (x) { x = Math.max(0, Math.round(x)); return Math.floor(x / 60) + ':' + ('0' + x % 60).slice(-2); };
+    var s = pinSong(); if (!s) return '';
+    var total = +s.dur || 210, t0 = Date.now(), START = 83;
     clearInterval(npTimer);
     npTimer = setInterval(function () {
       var el = $('#lockNotes .npc'); if (!el) return clearInterval(npTimer);
@@ -791,16 +793,16 @@
       $('.npc-bar b', el).style.width = (t / total * 100).toFixed(2) + '%';
     }, 1000);
     return '<div class="ntf npc" role="button" tabindex="0" aria-label="Now playing: ' + esc(s.title) + ' by ' + esc(s.artist) + '. Open Music">' +
-      '<span class="ntf-ic">' + artTile(s, 38) + '</span><span class="ntf-main"><span class="ntf-row"><span class="ntf-title">' + esc(s.title) +
+      '<span class="ntf-ic">' + cover(s, 38) + '</span><span class="ntf-main"><span class="ntf-row"><span class="ntf-title">' + esc(s.title) +
       '</span><span class="ntf-time">Now Playing</span></span><span class="ntf-body">' + esc(s.artist) + '</span>' +
       '<span class="npc-bar"><span class="npc-el">' + mmss(START) + '</span><i><b style="width:' + (START / total * 100).toFixed(2) + '%"></b></i><span class="npc-rem">-' + mmss(total - START) + '</span></span></span>' +
       '<a class="npc-play" href="' + esc(amUrl(s)) + '" target="_blank" rel="noopener" aria-label="Play ' + esc(s.title) + ' in Apple Music">' + SV.play + '</a></div>';
   }
   function nowPlayingCard(cls) {
     var M = S.music; if (!M || !M.songs.length) return '';
-    var i = Math.min(M.nowPlaying || 0, M.songs.length - 1), s = M.songs[i];
-    var prev = M.songs[(i + M.songs.length - 1) % M.songs.length], next = M.songs[(i + 1) % M.songs.length];
-    return '<div class="np ' + (cls || '') + '"><div class="np-top">' + artTile(s, 54) + '<div class="np-txt"><b>' + esc(s.title) + '</b><span>' + esc(s.artist) + '</span></div></div>' +
+    var s = pinSong(), i = 0;
+    var prev = M.songs[M.songs.length - 1], next = M.songs[0];
+    return '<div class="np ' + (cls || '') + '"><div class="np-top">' + cover(s, 54) + '<div class="np-txt"><b>' + esc(s.title) + '</b><span>' + esc(s.artist) + '</span></div></div>' +
       '<div class="np-bar"><span>0:00</span><i></i><span>' + esc(M.playlist) + '</span></div>' +
       '<div class="np-ctl"><a href="' + esc(amUrl(prev)) + '" target="_blank" rel="noopener" aria-label="Previous: ' + esc(prev.title) + '">' + SV.prev + '</a>' +
       '<a class="np-play" href="' + esc(amUrl(s)) + '" target="_blank" rel="noopener" aria-label="Play ' + esc(s.title) + ' in Apple Music">' + SV.play + '</a>' +
@@ -811,22 +813,54 @@
     prev: '<svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M11.5 6v12L3 12zM21 6v12l-8.5-6z" fill="currentColor"/></svg>',
     next: '<svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.5 6v12L21 12zM3 6v12l8.5-6z" fill="currentColor"/></svg>'
   };
+  var IC = {
+    shuffle: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 4h4v4M4 20 20 4M20 16v4h-4M15 15l5 5M4 4l5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    repeat: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 2l3 3-3 3M4 11V9a4 4 0 0 1 4-4h12M7 22l-3-3 3-3M20 13v2a4 4 0 0 1-4 4H4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    more: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg>'
+  };
+  /* Music: styled after the Apple Music playlist view (black, red accents, Play / Shuffle, song rows, mini player) */
   function Music(root) {
-    var M = S.music || { songs: [] }, sk = (M.suggest || {}).turnstileSiteKey;
+    var M = S.music || { songs: [] }, L = M.songs, sk = (M.suggest || {}).turnstileSiteKey, cur = 0;
     var upd = M.updated ? new Date(M.updated).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
-    var tag = function (s) { return s.src === 'suggested' ? 'Suggested by ' + (s.by || 'a visitor') : ''; };
-    root.innerHTML = '<div class="app"><div class="app-h"><h2>' + esc(M.playlist || 'Music') + '</h2><span class="sub">' + M.songs.length + ' songs' + (upd ? ' · updated ' + esc(upd) : '') + '</span></div>' +
-      '<div class="app-scroll"><div style="padding:0 14px 8px">' + nowPlayingCard('np-in') + '</div>' +
-      (sk ? '<div class="sg-wrap"><button type="button" class="pill primary" data-act="suggest">Suggest a song</button></div>' +
+    var row = function (s) {
+      var by = s.src === 'suggested' ? '<em> · Suggested by ' + esc(s.by || 'a visitor') + '</em>' : '';
+      return '<a class="am-row" href="' + esc(amUrl(s)) + '" target="_blank" rel="noopener"><span class="am-star" aria-hidden="true">' + (s.fav ? '★' : '') + '</span>' +
+        cover(s, 46, 'am-art') + '<span class="am-t"><b>' + esc(s.title) + '</b><span class="am-ar1">' + esc(s.artist) + by + '</span></span>' +
+        '<span class="am-ar2">' + esc(s.artist) + '</span><span class="am-d">' + (s.dur ? mmss(s.dur) : '') + '</span><span class="am-more">' + IC.more + '</span></a>';
+    };
+    root.innerHTML = '<div class="app am"><div class="app-scroll">' +
+      '<div class="am-h"><h2>' + esc(M.playlist || 'Music') + '</h2><span class="sub">' + L.length + ' songs' + (upd ? ' · updated ' + esc(upd) : '') + '</span></div>' +
+      (L.length ? '<div class="am-btns"><a class="am-btn" href="' + esc(amUrl(L[0])) + '" target="_blank" rel="noopener">' + SV.play + 'Play</a>' +
+        '<a class="am-btn" data-act="shuffle" href="' + esc(amUrl(L[0])) + '" target="_blank" rel="noopener">' + IC.shuffle + 'Shuffle</a></div>' : '') +
+      (sk ? '<div class="sg-wrap"><button type="button" class="am-sg" data-act="suggest">+ Suggest a song</button></div>' +
         '<form class="sg" hidden novalidate><h3>Suggest a song</h3><p>Know something Dave should hear? It goes straight to him, never shown publicly.</p>' +
         '<label>Song<input name="title" maxlength="120" required autocomplete="off" placeholder="Essence"></label>' +
         '<label>Artist<input name="artist" maxlength="120" required autocomplete="off" placeholder="Wizkid"></label>' +
         '<label>Your name <i>optional</i><input name="by" maxlength="60" autocomplete="name"></label>' +
         '<label>Why he\'d like it <i>optional</i><textarea name="why" maxlength="280" rows="2"></textarea></label>' +
         '<div class="sg-ts"></div><p class="sg-err" role="alert"></p><div class="sg-btns"><button type="button" class="pill" data-act="sg-cancel">Cancel</button><button type="submit" class="pill primary">Send</button></div></form>' : '') +
-      '<div class="ml-list">' +
-      M.songs.map(function (s) { var t = tag(s); return '<a class="ml-row" href="' + esc(amUrl(s)) + '" target="_blank" rel="noopener">' + artTile(s, 46) + '<span class="ml-t"><b>' + esc(s.title) + '</b><span>' + esc(s.artist) + (t ? ' · <em>' + esc(t) + '</em>' : '') + '</span></span><span class="ml-go" aria-hidden="true">›</span></a>'; }).join('') +
-      '</div><p style="color:var(--muted);font-size:12px;padding:10px 18px 100px">Dave\'s favourites and what he\'s had on lately. Refreshed every Sunday. Songs open in Apple Music.</p></div></div>';
+      '<div class="am-list">' + L.map(row).join('') + '</div>' +
+      '<p class="am-foot">Dave\'s favourites and what he\'s had on lately. Refreshed every Sunday. Songs open in Apple Music.</p></div>' +
+      (L.length ? '<div class="am-mini"><button type="button" class="am-ic am-x" data-act="m-shuffle" aria-label="Shuffle">' + IC.shuffle + '</button>' +
+        '<button type="button" class="am-ic" data-act="m-prev" aria-label="Previous">' + SV.prev + '</button>' +
+        '<a class="am-ic am-play" target="_blank" rel="noopener" aria-label="Play in Apple Music">' + SV.play + '</a>' +
+        '<button type="button" class="am-ic" data-act="m-next" aria-label="Next">' + SV.next + '</button>' +
+        '<span class="am-ic am-x" aria-hidden="true">' + IC.repeat + '</span>' +
+        '<a class="am-now" target="_blank" rel="noopener"></a><span class="am-ic am-x" aria-hidden="true">' + IC.more + '</span></div>' : '') + '</div>';
+    function show(i) {
+      cur = (i + L.length) % L.length; var s = L[cur], u = amUrl(s);
+      $('.am-play', root).href = u; var n = $('.am-now', root); n.href = u;
+      n.innerHTML = cover(s, 40, 'am-art') + '<span><b>' + esc(s.title) + '</b><span>' + esc(s.artist) + '</span></span>';
+    }
+    if (L.length) show(0);
+    root.addEventListener('click', function (e) {
+      var a = e.target.closest('[data-act]'); if (!a) return;
+      var act = a.dataset.act;
+      if (act === 'shuffle') { e.preventDefault(); window.open(amUrl(L[Math.floor(Math.random() * L.length)]), '_blank', 'noopener'); }
+      else if (act === 'm-next') show(cur + 1);
+      else if (act === 'm-prev') show(cur - 1);
+      else if (act === 'm-shuffle') show(Math.floor(Math.random() * L.length));
+    });
     if (sk) suggestForm(root, sk);
     return {};
   }
