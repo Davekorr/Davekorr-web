@@ -547,3 +547,16 @@ body.dock-auto.dock-peek .dock-wrap{transform:none}
 .sp-none{margin:0;padding:18px;color:#a1a1a6;font-size:14px}
 .mode-phone .mb-search{display:none}
 .sp-in input::-webkit-search-cancel-button{display:none}
+/* Safari → Reading */
+.rd{max-width:760px;margin:0 auto;padding:26px 24px 40px;color:#f5f5f7}
+.rd h3{margin:0 0 6px;font-size:26px}
+.rd>p{margin:0 0 18px;color:#a1a1a6;font-size:14.5px}
+.rd h4{margin:22px 0 10px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff9f63}
+.rd-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,160px));gap:18px}
+.rd-book{display:flex;flex-direction:column;gap:4px;font-size:13px}
+.rd-book b{font-size:14px;line-height:1.25}.rd-book>span:last-child{color:#a1a1a6}
+.rd-cover{position:relative;display:block;aspect-ratio:5/7;border-radius:4px 8px 8px 4px;overflow:hidden;background:linear-gradient(140deg,#c2652f,#5a2a12);box-shadow:0 10px 24px rgba(0,0,0,.45),inset 3px 0 0 rgba(255,255,255,.15);margin-bottom:6px}
+.rd-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.rd-cover i{position:absolute;inset:auto 10px 12px;font-style:normal;color:#fff;font-weight:700;font-size:13px;line-height:1.2}
+.mode-phone .rd-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mode-phone .rd{padding-bottom:90px}

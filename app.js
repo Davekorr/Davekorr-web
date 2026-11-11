@@ -83,7 +83,7 @@
   /* Permanent addresses: davekorr.com/photos/letchworth, /music, /contact ... The address bar follows what's open,
      and opening one of those links opens that app straight away (tools/pages/build.js makes the matching pages). */
   var APP_PATH = { photos: 'photos', music: 'music', contacts: 'contact', notes: 'notes' };
-  var PATH_APP = { photos: 'photos', music: 'music', contact: 'contacts', about: 'contacts', notes: 'notes', prints: 'safari' };
+  var PATH_APP = { photos: 'photos', music: 'music', contact: 'contacts', about: 'contacts', notes: 'notes', prints: 'safari', reading: 'safari' };
   function setPath(p, title) {
     try { if (location.pathname.replace(/\/$/, '') !== '/' + p && !(p === '' && location.pathname === '/')) history.replaceState(history.state, '', '/' + p); } catch (e) {}
     document.title = title || 'Dave Korr — Photographer';
@@ -93,6 +93,7 @@
     if (!id) return null;
     var o = {};
     if (parts[0] === 'prints') o.tab = 'shop';
+    if (parts[0] === 'reading') o.tab = 'reading';
     if (id === 'photos' && parts[1] && S.albums.some(function (a) { return a.id === parts[1]; })) o.album = parts[1];
     return { id: id, opts: o };
   }
@@ -100,11 +101,11 @@
     var app = APPS[id]; if (!app) return;
     if (app.link) { window.open(app.link, '_blank', 'noopener'); return; }
     if (mode === 'mac') WM.open(id, opts || {}); else Phone.open(id, opts || {}, fromEl);
-    if (id === 'safari' && opts && opts.tab === 'shop') setPath('prints', 'Prints — Dave Korr');
   }
-  var photosPath = ['photos', 'Photos — Dave Korr'];
+  var photosPath = ['photos', 'Photos — Dave Korr'], safariPath = ['prints', 'Prints — Dave Korr'];
   function pathFor(id) {
     if (id === 'photos') setPath(photosPath[0], photosPath[1]);
+    else if (id === 'safari') setPath(safariPath[0], safariPath[1]);
     else setPath(APP_PATH[id] || '', APPS[id] ? APPS[id].name + ' — Dave Korr' : '');
   }
 
@@ -734,7 +735,10 @@
     function draw() {
       $('.sf-tabs', root).innerHTML = S.projects.map(function (p, i) { return '<button type="button" role="tab" aria-selected="' + (i === cur) + '" class="' + (i === cur ? 'on' : '') + '" data-i="' + i + '">' + esc(p.title) + '</button>'; }).join('');
       var p = S.projects[cur]; $('.u', root).textContent = p.url;
+      safariPath = [p.type === 'reading' ? 'reading' : p.type === 'store' ? 'prints' : '', (p.type === 'reading' ? 'Reading' : p.type === 'store' ? 'Prints' : 'Safari') + ' — Dave Korr'];
+      setPath(safariPath[0], safariPath[1]);
       if (p.type === 'store') { $('[data-page]', root).innerHTML = storePage(); return; }
+      if (p.type === 'reading') { $('[data-page]', root).innerHTML = readingPage(); return; }
       $('[data-page]', root).innerHTML = '<div class="sf-hero"><img src="' + esc(p.image) + '" alt=""></div><div class="sf-card"><h3>' + esc(p.title) + '</h3><div style="color:#6b625a;font-size:14px">' + esc(p.desc) + '</div><p>' + esc(p.body) + '</p><a class="go" href="' + esc(p.url) + '" target="_blank" rel="noopener">Visit site ↗</a></div>';
     }
     root.addEventListener('click', function (e) {
@@ -742,6 +746,19 @@
     });
     function update(o) { o = o || {}; if (o.tab) { S.projects.forEach(function (p, i) { if (p.id === o.tab) cur = i; }); draw(); } }
     draw(); update(arguments[1]); return { update: update };
+  }
+
+  function readingPage() {
+    var R = S.reading || [], groups = [['reading', 'Reading now'], ['next', 'Up next'], ['finished', 'Finished']];
+    var card = function (b) {
+      return '<div class="rd-book"><span class="rd-cover"><i aria-hidden="true">' + esc(b.title) + '</i>' + (b.cover ? '<img src="' + esc(b.cover) + '" alt="Cover of ' + esc(b.title) + '" loading="lazy" onerror="this.remove()">' : '') +
+        '</span><b>' + esc(b.title) + '</b><span>' + esc(b.author) + '</span></div>';
+    };
+    return '<div class="rd"><h3>Reading</h3><p>What\'s on my nightstand: the book I\'m in, the one waiting, and the ones I\'ve finished.</p>' +
+      groups.map(function (g) {
+        var list = R.filter(function (b) { return b.status === g[0]; });
+        return list.length ? '<h4>' + g[1] + '</h4><div class="rd-row">' + list.map(card).join('') + '</div>' : '';
+      }).join('') + '</div>';
   }
 
   function storePage() {
@@ -1105,6 +1122,7 @@
       S.albums.forEach(function (a) { if (albumPhotos(a.id).length) items.push({ kind: 'Album', title: a.name, keys: (a.pin || '') + ' photos ' + (a.eyebrow || ''), icon: 'photos', run: go('photos', { album: a.id }) }); });
       items.push({ kind: 'Action', title: 'Email Dave', keys: 'contact mail hello', icon: 'mail', run: link('mailto:' + S.email) });
       items.push({ kind: 'Action', title: 'Save Dave\'s contact card', keys: 'vcard download contact about', icon: 'contacts', run: function () { location.href = '/dave-korr.vcf'; } });
+      items.push({ kind: 'Action', title: 'Reading list', keys: 'books reading what dave reads ' + (S.reading || []).map(function (b) { return b.title + ' ' + b.author; }).join(' '), icon: 'safari', run: go('safari', { tab: 'reading' }) });
       items.push({ kind: 'Action', title: 'Buy a print', keys: 'prints shop store', icon: 'safari', run: go('safari', { tab: 'shop' }) });
       items.push({ kind: 'Action', title: 'Suggest a song', keys: 'music recommend playlist', icon: 'music', run: function () { unlock(function () { openApp('music'); setTimeout(function () { var b = document.querySelector('.am [data-act="suggest"]'); if (b) b.click(); }, 400); }); } });
       items.push({ kind: 'Action', title: 'Instagram @' + S.instagram, keys: 'instagram social follow', icon: 'instagram', run: link('https://instagram.com/' + S.instagram) });

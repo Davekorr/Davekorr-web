@@ -304,10 +304,24 @@ window.SITE = {
   projects: [
     { id: 'shop', type: 'store', title: 'Print Shop', url: 'https://gallery.davekorr.com',
       desc: 'Signed, made-to-order prints' },
+    { id: 'reading', type: 'reading', title: 'Reading', url: 'https://davekorr.com/reading',
+      desc: 'What Dave is reading' },
     { title: 'davekorr.com', url: 'https://davekorr.com',
       desc: 'Photography portfolio — Rochester, New York.',
       image: 'img/letchworth-3.webp',
       body: 'Photographer based in Rochester, New York. Welcome to my canvas — portfolio, place, and perspective.' }
+  ],
+
+  /* ---------- Reading list (Safari → Reading tab, davekorr.com/reading) ----------
+     status: 'reading' (reading now), 'next' (up next) or 'finished'. cover: a picture of the cover
+     (in img/books/, or a link). Order inside each group = order here. */
+  reading: [
+    { title: 'How to Take Smart Notes', author: 'Sönke Ahrens', status: 'reading',
+      cover: 'img/books/how-to-take-smart-notes.jpg' },
+    { title: 'And Then There Were None', author: 'Agatha Christie', status: 'next',
+      cover: 'https://covers.openlibrary.org/b/isbn/9780062073488-L.jpg' },
+    { title: 'Four Thousand Weeks', author: 'Oliver Burkeman', status: 'finished',
+      cover: 'https://covers.openlibrary.org/b/isbn/9780374159122-L.jpg' }
   ],
 
   /* ---------- Notes (Johnny Decimal: area 10-19 → category 11 → note 11.01) ----------

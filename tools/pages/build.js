@@ -39,6 +39,8 @@ const pages = [
     body: `<h1>Contact Dave Korr</h1><p>${esc(INTRO)}</p><p>Email: <a href="mailto:${esc(S.email)}">${esc(S.email)}</a> · Instagram: <a href="https://instagram.com/${esc(S.instagram)}">@${esc(S.instagram)}</a> · <a href="/dave-korr.vcf">Save contact card</a></p>${nav}` },
   { p: 'about', alias: 'contact' },
   { p: 'prints', title: 'Prints — Dave Korr', desc: 'Signed prints by Dave Korr, made to order.', body: `<h1>Prints</h1><p>Signed prints, made to order.</p>${nav}` },
+  { p: 'reading', title: 'Reading — Dave Korr', desc: "What Dave Korr is reading: " + (S.reading || []).map(b => b.title + ' by ' + b.author).join('; ') + '.',
+    body: `<h1>Reading</h1>${nav}<ul>` + (S.reading || []).map(b => `<li>${esc(b.title)} by ${esc(b.author)} (${b.status === 'reading' ? 'reading now' : b.status === 'next' ? 'up next' : 'finished'})</li>`).join('') + '</ul>' },
   { p: 'notes', title: 'Notes — Dave Korr', desc: 'Field notes from Dave Korr.', body: `<h1>Notes</h1>${nav}` }
 ];
 const tpl = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
