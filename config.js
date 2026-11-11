@@ -304,6 +304,8 @@ window.SITE = {
   projects: [
     { id: 'shop', type: 'store', title: 'Print Shop', url: 'https://gallery.davekorr.com',
       desc: 'Signed, made-to-order prints' },
+    { id: 'now', type: 'now', title: 'Now', url: 'https://davekorr.com/now',
+      desc: 'What Dave is up to' },
     { id: 'reading', type: 'reading', title: 'Reading', url: 'https://davekorr.com/reading',
       desc: 'What Dave is reading' },
     { title: 'davekorr.com', url: 'https://davekorr.com',
@@ -311,6 +313,16 @@ window.SITE = {
       image: 'img/letchworth-3.webp',
       body: 'Photographer based in Rochester, New York. Welcome to my canvas — portfolio, place, and perspective.' }
   ],
+
+  /* ---------- Now (Safari → Now tab, davekorr.com/now) ----------
+     A few lines about what you're up to. "Reading" and "Listening" fill in by themselves from the
+     reading list and the pinned song, so only update `items` and `updated` (YYYY-MM-DD). */
+  now: {
+    updated: '2026-11-10',
+    items: [
+      { label: 'Shooting', text: 'A client car photoshoot. Watch out for these photos.' }
+    ]
+  },
 
   /* ---------- Reading list (Safari → Reading tab, davekorr.com/reading) ----------
      status: 'reading' (reading now), 'next' (up next) or 'finished'. cover: a picture of the cover

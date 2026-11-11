@@ -83,7 +83,7 @@
   /* Permanent addresses: davekorr.com/photos/letchworth, /music, /contact ... The address bar follows what's open,
      and opening one of those links opens that app straight away (tools/pages/build.js makes the matching pages). */
   var APP_PATH = { photos: 'photos', music: 'music', contacts: 'contact', notes: 'notes' };
-  var PATH_APP = { photos: 'photos', music: 'music', contact: 'contacts', about: 'contacts', notes: 'notes', prints: 'safari', reading: 'safari' };
+  var PATH_APP = { photos: 'photos', music: 'music', contact: 'contacts', about: 'contacts', notes: 'notes', prints: 'safari', reading: 'safari', now: 'safari' };
   function setPath(p, title) {
     try { if (location.pathname.replace(/\/$/, '') !== '/' + p && !(p === '' && location.pathname === '/')) history.replaceState(history.state, '', '/' + p); } catch (e) {}
     document.title = title || 'Dave Korr — Photographer';
@@ -93,7 +93,7 @@
     if (!id) return null;
     var o = {};
     if (parts[0] === 'prints') o.tab = 'shop';
-    if (parts[0] === 'reading') o.tab = 'reading';
+    if (parts[0] === 'reading' || parts[0] === 'now') o.tab = parts[0];
     if (id === 'photos' && parts[1] && S.albums.some(function (a) { return a.id === parts[1]; })) o.album = parts[1];
     return { id: id, opts: o };
   }
@@ -735,17 +735,34 @@
     function draw() {
       $('.sf-tabs', root).innerHTML = S.projects.map(function (p, i) { return '<button type="button" role="tab" aria-selected="' + (i === cur) + '" class="' + (i === cur ? 'on' : '') + '" data-i="' + i + '">' + esc(p.title) + '</button>'; }).join('');
       var p = S.projects[cur]; $('.u', root).textContent = p.url;
-      safariPath = [p.type === 'reading' ? 'reading' : p.type === 'store' ? 'prints' : '', (p.type === 'reading' ? 'Reading' : p.type === 'store' ? 'Prints' : 'Safari') + ' — Dave Korr'];
+      var sp = { reading: ['reading', 'Reading'], store: ['prints', 'Prints'], now: ['now', 'Now'] }[p.type] || ['', 'Safari'];
+      safariPath = [sp[0], sp[1] + ' — Dave Korr'];
       setPath(safariPath[0], safariPath[1]);
       if (p.type === 'store') { $('[data-page]', root).innerHTML = storePage(); return; }
       if (p.type === 'reading') { $('[data-page]', root).innerHTML = readingPage(); return; }
+      if (p.type === 'now') { $('[data-page]', root).innerHTML = nowPage(); return; }
       $('[data-page]', root).innerHTML = '<div class="sf-hero"><img src="' + esc(p.image) + '" alt=""></div><div class="sf-card"><h3>' + esc(p.title) + '</h3><div style="color:#6b625a;font-size:14px">' + esc(p.desc) + '</div><p>' + esc(p.body) + '</p><a class="go" href="' + esc(p.url) + '" target="_blank" rel="noopener">Visit site ↗</a></div>';
     }
     root.addEventListener('click', function (e) {
       var b = e.target.closest('.sf-tabs button'); if (b) { cur = +b.dataset.i; draw(); return; }
+      var nt = e.target.closest('[data-now-tab]'); if (nt) { update({ tab: nt.dataset.nowTab }); return; }
+      var na = e.target.closest('[data-now-app]'); if (na) { openApp(na.dataset.nowApp); return; }
     });
     function update(o) { o = o || {}; if (o.tab) { S.projects.forEach(function (p, i) { if (p.id === o.tab) cur = i; }); draw(); } }
     draw(); update(arguments[1]); return { update: update };
+  }
+
+  function nowPage() {
+    var N = S.now || { items: [] }, rows = (N.items || []).slice();
+    var book = (S.reading || []).filter(function (b) { return b.status === 'reading'; })[0], song = pinSong();
+    if (book) rows.push({ label: 'Reading', text: book.title + ' by ' + book.author + '.', tab: 'reading' });
+    if (song) rows.push({ label: 'Listening', text: song.title + ' by ' + song.artist + ' on repeat.', app: 'music' });
+    var when = N.updated ? new Date(N.updated + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
+    return '<div class="rd nw"><h3>Now</h3><p>What I\'m up to at the moment.' + (when ? ' Updated ' + esc(when) + '.' : '') + '</p><dl>' +
+      rows.map(function (r) {
+        var more = r.tab ? ' <button type="button" class="nw-go" data-now-tab="' + r.tab + '">See list →</button>' : r.app ? ' <button type="button" class="nw-go" data-now-app="' + r.app + '">Open →</button>' : '';
+        return '<dt>' + esc(r.label) + '</dt><dd>' + esc(r.text) + more + '</dd>';
+      }).join('') + '</dl></div>';
   }
 
   function readingPage() {
@@ -1122,6 +1139,7 @@
       S.albums.forEach(function (a) { if (albumPhotos(a.id).length) items.push({ kind: 'Album', title: a.name, keys: (a.pin || '') + ' photos ' + (a.eyebrow || ''), icon: 'photos', run: go('photos', { album: a.id }) }); });
       items.push({ kind: 'Action', title: 'Email Dave', keys: 'contact mail hello', icon: 'mail', run: link('mailto:' + S.email) });
       items.push({ kind: 'Action', title: 'Save Dave\'s contact card', keys: 'vcard download contact about', icon: 'contacts', run: function () { location.href = '/dave-korr.vcf'; } });
+      items.push({ kind: 'Action', title: 'Now: what Dave is up to', keys: 'now currently update shooting', icon: 'safari', run: go('safari', { tab: 'now' }) });
       items.push({ kind: 'Action', title: 'Reading list', keys: 'books reading what dave reads ' + (S.reading || []).map(function (b) { return b.title + ' ' + b.author; }).join(' '), icon: 'safari', run: go('safari', { tab: 'reading' }) });
       items.push({ kind: 'Action', title: 'Buy a print', keys: 'prints shop store', icon: 'safari', run: go('safari', { tab: 'shop' }) });
       items.push({ kind: 'Action', title: 'Suggest a song', keys: 'music recommend playlist', icon: 'music', run: function () { unlock(function () { openApp('music'); setTimeout(function () { var b = document.querySelector('.am [data-act="suggest"]'); if (b) b.click(); }, 400); }); } });
