@@ -565,3 +565,10 @@ body.dock-auto.dock-peek .dock-wrap{transform:none}
 .nw dd{margin:0;color:#f5f5f7}
 .nw-go{background:none;border:0;padding:0;color:#ff9f63;font:inherit;font-size:14px;cursor:pointer}
 .mode-phone .nw dl{grid-template-columns:1fr;gap:4px}.mode-phone .nw dd{margin-bottom:12px}
+/* Lock screen: what Dave's listening to, top right on computers (first thing you see), top of the stack on phones */
+.lock-music{position:absolute;top:22px;right:22px;width:360px;z-index:3}
+.lock-music:empty{display:none}
+.lock-music .ntf{animation:banner-in .6s cubic-bezier(.22,1,.36,1) .25s both}
+.mode-phone .lock-music{display:none}
+.npc{flex-wrap:wrap}
+.npc-kicker{flex:0 0 100%;font-size:12px;font-weight:600;letter-spacing:.01em;color:rgba(255,255,255,.85);margin:-2px 0 6px}

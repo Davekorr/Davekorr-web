@@ -142,7 +142,10 @@
     if (toSet > 0 && toSet <= 60) return { app: 'photos', title: '🌅 Golden hour in Rochester, right now', body: toSet + ' min of warm light left before sunset.', time: 'live', open: open };
     if (toSet <= 0 && toSet > -35) return { app: 'photos', title: '🌙 Blue hour in Rochester', body: 'The sun set at ' + rocTime(t.set) + '. The sky is turning blue.', time: 'live', open: open };
     if (toRise > -60 && toRise <= 30) return { app: 'photos', title: toRise > 0 ? '🌄 Sunrise in Rochester in ' + toRise + ' min' : '🌄 Morning light in Rochester', body: 'Sunrise ' + (toRise > 0 ? 'at ' : 'was at ') + rocTime(t.rise) + '. Golden hour, round one.', time: 'live', open: open };
-    if (toRise <= -60 && toSet > 180) return { app: 'photos', title: '☀️ Daytime in Rochester', body: 'Golden hour starts at ' + rocTime(new Date(t.set - 36e5)) + ' today.', time: 'live', open: open };
+    if (toRise <= -60 && toSet > 180) {           // daytime: show the newest album instead
+      var na = S.albums.filter(function (a) { return albumPhotos(a.id).length; })[0];
+      if (na) return { app: 'photos', title: 'New drop 🍂', body: na.name + ' is live — fresh frames.', time: 'new', open: { app: 'photos', album: na.id }, album: na.id };
+    }
     var nextRise = toRise > 0 ? t.rise : sunTimes(new Date(now.getTime() + 864e5)).rise;
     return { app: 'photos', title: '🌙 ' + rocTime(now) + ' in Rochester', body: 'Next sunrise at ' + rocTime(nextRise) + '.', time: 'live', open: open };
   }
@@ -166,21 +169,27 @@
   function buildLock() {
     $('#lockWall').src = mode === 'phone' ? S.wallpapers.lockPhone : S.wallpapers.lockDesktop;
     var ev = S.notifications || [], day = Math.floor((Date.now() - new Date().getTimezoneOffset() * 6e4) / 864e5);
-    lockList = [liveNote(), newsNote(), ev.length ? ev[day % ev.length] : null].filter(Boolean);
-    $('#lockNotes').innerHTML = nowPlayingMini() + lockList.map(function (n, i) {
+    var live = liveNote(), news = newsNote();
+    if (news && live && news.open && live.album && news.open.album === live.album) news = null;
+    lockList = [live, news, ev.length ? ev[day % ev.length] : null].filter(Boolean);
+    var music = nowPlayingMini();
+    $('#lockMusic').innerHTML = mode === 'mac' ? music : '';
+    $('#lockNotes').innerHTML = (mode === 'mac' ? '' : music) + lockList.map(function (n, i) {
       var tag = n.link ? 'a href="' + esc(n.link) + '" target="_blank" rel="noopener"' : 'button type="button"';
       return '<' + tag + ' class="ntf" data-n="' + i + '" style="animation-delay:' + (300 + i * 140) + 'ms">' +
         '<span class="ntf-ic">' + icon(n.app) + '</span><span class="ntf-main"><span class="ntf-row"><span class="ntf-title">' + esc(n.title) +
         '</span><span class="ntf-time">' + esc(n.time || '') + '</span></span><span class="ntf-body">' + esc(n.body) + '</span></span></' + (n.link ? 'a' : 'button') + '>';
     }).join('');
   }
-  $('#lockNotes').addEventListener('click', function (e) {
+  function lockTap(e) {
     var el = e.target.closest('.ntf'); if (!el) return;
     if (el.classList.contains('npc')) { if (!e.target.closest('.npc-play')) unlock(function () { openApp('music'); }); return; }
     var n = lockList[+el.dataset.n];
     if (n.link) return; // opens in new tab
     unlock(function () { if (n.open) openApp(n.open.app, n.open); });
-  });
+  }
+  $('#lockNotes').addEventListener('click', lockTap);
+  $('#lockMusic').addEventListener('click', lockTap);
   $('#unlockBtn').addEventListener('click', function () { unlock(); });
   var EASE = 'cubic-bezier(.32,.72,0,1)'; // iOS-style deceleration curve
   function lockProgress(p) { // p: 0 = locked, 1 = fully unlocked (drives the home screen behind the lock)
@@ -303,8 +312,9 @@
   function macBanner() {
     if (mode !== 'mac' || !unlocked || $('.mac-banner')) return;
     var b = document.createElement('button'); b.type = 'button'; b.className = 'mac-banner';
-    b.innerHTML = '<span class="ntf-ic">' + icon('notes') + '</span><span class="ntf-main"><span class="ntf-row"><span class="ntf-title">Field Notes 📓</span><span class="ntf-time">now</span></span><span class="ntf-body">Notes from my trips.</span></span>';
-    b.addEventListener('click', function () { b.remove(); openApp('notes', { doc: '11.00' }); });
+    var s = pinSong(); if (!s) return;
+    b.innerHTML = '<span class="ntf-ic">' + cover(s, 36) + '</span><span class="ntf-main"><span class="ntf-row"><span class="ntf-title">Check out what Dave\'s listening to 🎵</span></span><span class="ntf-body">' + esc(s.title) + ' · ' + esc(s.artist) + '</span></span>';
+    b.addEventListener('click', function () { b.remove(); openApp('music'); });
     $('#mac').appendChild(b);
     setTimeout(function () { if (b.isConnected) { b.style.transition = 'opacity .4s, transform .4s'; b.style.opacity = 0; b.style.transform = 'translateX(30px)'; setTimeout(function () { b.remove(); }, 400); } }, 9000);
   }
@@ -930,15 +940,16 @@
     var total = +s.dur || 210, t0 = Date.now(), START = 83;
     clearInterval(npTimer);
     npTimer = setInterval(function () {
-      var el = $('#lockNotes .npc'); if (!el) return clearInterval(npTimer);
+      var el = $('#lock .npc'); if (!el) return clearInterval(npTimer);
       if (unlocked) return;
       var t = (START + (Date.now() - t0) / 1000) % total;
       $('.npc-el', el).textContent = mmss(t); $('.npc-rem', el).textContent = '-' + mmss(total - t);
       $('.npc-bar b', el).style.width = (t / total * 100).toFixed(2) + '%';
     }, 1000);
     return '<div class="ntf npc">' +
+      '<span class="npc-kicker">🎵 Check out what Dave\'s listening to</span>' +
       '<span class="ntf-ic">' + cover(s, 38) + '</span><span class="ntf-main"><span class="ntf-row"><button type="button" class="ntf-title npc-open">' + esc(s.title) + '</button>' +
-      '<span class="ntf-time">Now Playing</span></span><span class="ntf-body">' + esc(s.artist) + '</span>' +
+      '<span class="ntf-time"></span></span><span class="ntf-body">' + esc(s.artist) + '</span>' +
       '<span class="npc-bar"><span class="npc-el">' + mmss(START) + '</span><i><b style="width:' + (START / total * 100).toFixed(2) + '%"></b></i><span class="npc-rem">-' + mmss(total - START) + '</span></span></span>' +
       '<a class="npc-play" href="' + esc(amUrl(s)) + '" target="_blank" rel="noopener" aria-label="Play ' + esc(s.title) + ' in Apple Music">' + SV.play + '</a></div>';
   }
