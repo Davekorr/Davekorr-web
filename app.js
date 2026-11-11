@@ -1091,6 +1091,72 @@
   });
   var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(setMode, 150); });
   setMode(); tick(); setInterval(tick, 10000);
+  /* Spotlight (computers only): ⌘K / Ctrl+K or the magnifier in the menu bar. Searches apps, albums,
+     songs and quick actions; arrow keys + Enter, Esc closes. */
+  var Spot = (function () {
+    var el = null, items = [], hits = [], sel = 0;
+    function build() {
+      var go = function (id, o) { return function () { unlock(function () { openApp(id, o); }); }; };
+      var link = function (u) { return function () { window.open(u, u.indexOf('mailto:') === 0 ? '_self' : '_blank', 'noopener'); }; };
+      items = [];
+      ['photos', 'music', 'contacts', 'notes', 'calendar', 'safari', 'camera', 'mail'].forEach(function (id) {
+        if (APPS[id]) items.push({ kind: 'App', title: APPS[id].name, keys: id === 'contacts' ? 'about contact dave card' : id === 'safari' ? 'projects prints shop' : '', icon: id, run: go(id) });
+      });
+      S.albums.forEach(function (a) { if (albumPhotos(a.id).length) items.push({ kind: 'Album', title: a.name, keys: (a.pin || '') + ' photos ' + (a.eyebrow || ''), icon: 'photos', run: go('photos', { album: a.id }) }); });
+      items.push({ kind: 'Action', title: 'Email Dave', keys: 'contact mail hello', icon: 'mail', run: link('mailto:' + S.email) });
+      items.push({ kind: 'Action', title: 'Save Dave\'s contact card', keys: 'vcard download contact about', icon: 'contacts', run: function () { location.href = '/dave-korr.vcf'; } });
+      items.push({ kind: 'Action', title: 'Buy a print', keys: 'prints shop store', icon: 'safari', run: go('safari', { tab: 'shop' }) });
+      items.push({ kind: 'Action', title: 'Suggest a song', keys: 'music recommend playlist', icon: 'music', run: function () { unlock(function () { openApp('music'); setTimeout(function () { var b = document.querySelector('.am [data-act="suggest"]'); if (b) b.click(); }, 400); }); } });
+      items.push({ kind: 'Action', title: 'Instagram @' + S.instagram, keys: 'instagram social follow', icon: 'instagram', run: link('https://instagram.com/' + S.instagram) });
+      ((S.music || {}).songs || []).forEach(function (t) { items.push({ kind: 'Song', title: t.title, sub: t.artist, keys: t.artist, icon: 'music', run: link(amUrl(t)) }); });
+    }
+    function search(q) {
+      q = q.trim().toLowerCase();
+      if (!q) return items.filter(function (i) { return i.kind === 'App' || i.kind === 'Action'; }).slice(0, 8);
+      return items.map(function (i) {
+        var t = i.title.toLowerCase(), k = ((i.sub || '') + ' ' + (i.keys || '')).toLowerCase();
+        var sc = t.indexOf(q) === 0 ? 3 : t.indexOf(' ' + q) > -1 ? 2 : t.indexOf(q) > -1 ? 1.5 : k.indexOf(q) > -1 ? 1 : 0;
+        return { i: i, sc: sc && sc + (i.kind === 'App' ? .3 : i.kind === 'Album' ? .2 : 0) };
+      }).filter(function (x) { return x.sc > 0; }).sort(function (a, b) { return b.sc - a.sc; }).slice(0, 9).map(function (x) { return x.i; });
+    }
+    function draw() {
+      var list = $('.sp-list', el);
+      list.innerHTML = hits.length ? hits.map(function (h, n) {
+        return '<button type="button" class="sp-item' + (n === sel ? ' on' : '') + '" data-n="' + n + '" role="option" aria-selected="' + (n === sel) + '">' +
+          '<span class="sp-ic">' + icon(h.icon) + '</span><span class="sp-t"><b>' + esc(h.title) + '</b>' + (h.sub ? '<span>' + esc(h.sub) + '</span>' : '') + '</span><i>' + h.kind + '</i></button>';
+      }).join('') : '<p class="sp-none">No matches. Try "Letchworth", "music" or "contact".</p>';
+      var on = $('.sp-item.on', el); if (on) on.scrollIntoView({ block: 'nearest' });
+    }
+    function open() {
+      if (mode !== 'mac') return;
+      if (!el) {
+        el = document.createElement('div'); el.className = 'sp'; el.hidden = true;
+        el.innerHTML = '<div class="sp-box" role="dialog" aria-label="Search davekorr.com"><div class="sp-in"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>' +
+          '<input type="search" placeholder="Search photos, albums, music, contact…" aria-label="Search" autocomplete="off" spellcheck="false"><kbd>esc</kbd></div><div class="sp-list" role="listbox"></div></div>';
+        document.body.appendChild(el);
+        var inp = $('input', el);
+        inp.addEventListener('input', function () { hits = search(inp.value); sel = 0; draw(); });
+        inp.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowDown') { e.preventDefault(); sel = Math.min(sel + 1, hits.length - 1); draw(); }
+          else if (e.key === 'ArrowUp') { e.preventDefault(); sel = Math.max(sel - 1, 0); draw(); }
+          else if (e.key === 'Enter' && hits[sel]) { var h = hits[sel]; close(); h.run(); }
+          else if (e.key === 'Escape') close();
+        });
+        el.addEventListener('click', function (e) {
+          var b = e.target.closest('.sp-item'); if (b) { var h = hits[+b.dataset.n]; close(); h.run(); return; }
+          if (!e.target.closest('.sp-box')) close();
+        });
+      }
+      build(); el.hidden = false; var inp2 = $('input', el); inp2.value = ''; hits = search(''); sel = 0; draw(); inp2.focus();
+    }
+    function close() { if (el) el.hidden = true; }
+    document.addEventListener('keydown', function (e) {
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) { if (mode !== 'mac') return; e.preventDefault(); if (el && !el.hidden) close(); else open(); }
+    });
+    $('#mbSearch').addEventListener('click', open);
+    return { open: open, close: close };
+  })();
+
   // Deep links: davekorr.com/photos/<album>, /music, /contact ... skip the lock screen and open that app.
   // Old portfolio links (#albums, #album-<id>) still work.
   (function () {
