@@ -80,10 +80,32 @@
   var mode = null, unlocked = false, instances = {};
   function isPhone() { return matchMedia('(max-width: 767px)').matches; }
 
+  /* Permanent addresses: davekorr.com/photos/letchworth, /music, /contact ... The address bar follows what's open,
+     and opening one of those links opens that app straight away (tools/pages/build.js makes the matching pages). */
+  var APP_PATH = { photos: 'photos', music: 'music', contacts: 'contact', notes: 'notes' };
+  var PATH_APP = { photos: 'photos', music: 'music', contact: 'contacts', about: 'contacts', notes: 'notes', prints: 'safari' };
+  function setPath(p, title) {
+    try { if (location.pathname.replace(/\/$/, '') !== '/' + p && !(p === '' && location.pathname === '/')) history.replaceState(history.state, '', '/' + p); } catch (e) {}
+    document.title = title || 'Dave Korr — Photographer';
+  }
+  function routeFromPath() {
+    var parts = location.pathname.replace(/^\/+|\/+$/g, '').split('/'), id = PATH_APP[parts[0]];
+    if (!id) return null;
+    var o = {};
+    if (parts[0] === 'prints') o.tab = 'shop';
+    if (id === 'photos' && parts[1] && S.albums.some(function (a) { return a.id === parts[1]; })) o.album = parts[1];
+    return { id: id, opts: o };
+  }
   function openApp(id, opts, fromEl) {
     var app = APPS[id]; if (!app) return;
     if (app.link) { window.open(app.link, '_blank', 'noopener'); return; }
     if (mode === 'mac') WM.open(id, opts || {}); else Phone.open(id, opts || {}, fromEl);
+    if (id === 'safari' && opts && opts.tab === 'shop') setPath('prints', 'Prints — Dave Korr');
+  }
+  var photosPath = ['photos', 'Photos — Dave Korr'];
+  function pathFor(id) {
+    if (id === 'photos') setPath(photosPath[0], photosPath[1]);
+    else setPath(APP_PATH[id] || '', APPS[id] ? APPS[id].name + ' — Dave Korr' : '');
   }
 
   /* ---------------- Clock ---------------- */
@@ -320,7 +342,7 @@
       var w = this.wins[id]; if (!w) return;
       Object.keys(this.wins).forEach(function (k) { WM.wins[k].el.classList.toggle('focused', k === id); });
       w.el.style.zIndex = ++this.z; $('#mbApp').textContent = APPS[id].name;
-      dockAuto();
+      pathFor(id); dockAuto();
     },
     close: function (id) {
       var w = this.wins[id]; if (!w) return; delete this.wins[id];
@@ -331,6 +353,7 @@
       var rest = Object.keys(this.wins).filter(function (k) { return !WM.wins[k].min; });
       if (rest.length) this.focus(rest.sort(function (a, b) { return WM.wins[b].el.style.zIndex - WM.wins[a].el.style.zIndex; })[0]);
       else $('#mbApp').textContent = 'Finder';
+      if (!Object.keys(this.wins).length) setPath('');
       dockAuto();
     },
     closeAll: function () { Object.keys(this.wins).forEach(function (k) { WM.wins[k].el.remove(); var dk = $('.dk[data-app="' + k + '"]'); if (dk) dk.classList.remove('open'); }); this.wins = {}; $('#mbApp').textContent = 'Finder'; },
@@ -396,7 +419,7 @@
         (label ? '<span class="tile-label">' + esc(a.name) + '</span>' : '') + '</' + (a.link ? 'a' : 'button') + '>';
     };
     $('#home').innerHTML = '<div class="home-grid">' +
-      '<button type="button" class="widget" data-widget="1" aria-label="Open ' + esc(alb.name) + ' album"><img src="' + esc(latest.thumb) + '" alt=""><span class="w-cap"><b>' + esc(alb.name) + '</b>New album</span></button>' +
+      '<button type="button" class="widget" data-widget="1" aria-label="' + esc(alb.name) + ', new album"><img src="' + esc(latest.thumb) + '" alt=""><span class="w-cap"><b>' + esc(alb.name) + '</b>New album</span></button>' +
       PHONE_GRID.map(function (id) { return tile(id, true); }).join('') + '</div>' + nowPlayingCard('np-home') +
       '<div class="pdock">' + PHONE_DOCK.map(function (id) { return tile(id, false); }).join('') + '</div>';
 
@@ -417,6 +440,7 @@
       el.querySelector('.home-btn').addEventListener('click', function () { self.close(); });
       // phone/browser Back gesture returns to the home screen
       try { history.pushState({ dkApp: id }, ''); this.pushed = true; } catch (e) {}
+      pathFor(id);
       $('#appLayer').appendChild(el);
       var self = this;
       this.cur = { id: id, el: el, from: fromEl };
@@ -535,6 +559,8 @@
       }).join('') + '</div>';
     }
     function draw() {
+      var al = album && S.albums.filter(function (a) { return a.id === album; })[0];
+      photosPath = [al ? 'photos/' + al.id : 'photos', (al ? al.name : 'Photos') + ' — Dave Korr']; setPath(photosPath[0], photosPath[1]);
       Array.prototype.forEach.call(root.querySelectorAll('.ph-tabs button, .ph-side [data-tab]'), function (b) { b.classList.toggle('on', !album && b.dataset.tab === tab); });
       Array.prototype.forEach.call(root.querySelectorAll('.ph-side-a'), function (b) { b.classList.toggle('on', b.dataset.id === album); });
       back.hidden = !album;
@@ -876,9 +902,9 @@
       $('.npc-el', el).textContent = mmss(t); $('.npc-rem', el).textContent = '-' + mmss(total - t);
       $('.npc-bar b', el).style.width = (t / total * 100).toFixed(2) + '%';
     }, 1000);
-    return '<div class="ntf npc" role="button" tabindex="0" aria-label="Now playing: ' + esc(s.title) + ' by ' + esc(s.artist) + '. Open Music">' +
-      '<span class="ntf-ic">' + cover(s, 38) + '</span><span class="ntf-main"><span class="ntf-row"><span class="ntf-title">' + esc(s.title) +
-      '</span><span class="ntf-time">Now Playing</span></span><span class="ntf-body">' + esc(s.artist) + '</span>' +
+    return '<div class="ntf npc">' +
+      '<span class="ntf-ic">' + cover(s, 38) + '</span><span class="ntf-main"><span class="ntf-row"><button type="button" class="ntf-title npc-open">' + esc(s.title) + '</button>' +
+      '<span class="ntf-time">Now Playing</span></span><span class="ntf-body">' + esc(s.artist) + '</span>' +
       '<span class="npc-bar"><span class="npc-el">' + mmss(START) + '</span><i><b style="width:' + (START / total * 100).toFixed(2) + '%"></b></i><span class="npc-rem">-' + mmss(total - START) + '</span></span></span>' +
       '<a class="npc-play" href="' + esc(amUrl(s)) + '" target="_blank" rel="noopener" aria-label="Play ' + esc(s.title) + ' in Apple Music">' + SV.play + '</a></div>';
   }
@@ -1059,13 +1085,18 @@
     buildLock(); if (m === 'mac') buildMac(); else buildPhone();
   }
   addEventListener('popstate', function () {
-    if (Phone.skipPop) { Phone.skipPop = false; return; }
+    if (Phone.skipPop) { Phone.skipPop = false; setPath(''); return; }
     if (mode === 'phone' && Phone.cur) Phone.close(false, true);
+    if (mode === 'phone') setPath('');
   });
   var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(setMode, 150); });
   setMode(); tick(); setInterval(tick, 10000);
-  // Deep links (used by old portfolio URLs): #albums, #album-<id>
+  // Deep links: davekorr.com/photos/<album>, /music, /contact ... skip the lock screen and open that app.
+  // Old portfolio links (#albums, #album-<id>) still work.
   (function () {
+    var r = routeFromPath();
+    if (r) { unlock(function () { openApp(r.id, r.opts); }); return; }
+    if (location.pathname !== '/') setPath('');
     var h = (location.hash || '').slice(1); if (!h) return;
     if (h === 'albums') unlock(function () { openApp('photos', { tab: 'albums' }); });
     else if (h.indexOf('album-') === 0 && S.albums.some(function (a) { return a.id === h.slice(6); })) unlock(function () { openApp('photos', { album: h.slice(6) }); });

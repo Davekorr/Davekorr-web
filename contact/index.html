@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1a1513">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<base href="/">
+<!--META-->
+<title>Contact — Dave Korr</title>
+<meta name="description" content="Get in touch with Dave Korr, photographer in Rochester, NY. Email, Instagram and a contact card to save.">
+<link rel="canonical" href="https://davekorr.com/contact">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Dave Korr">
+<meta property="og:title" content="Contact — Dave Korr">
+<meta property="og:description" content="Get in touch with Dave Korr, photographer in Rochester, NY. Email, Instagram and a contact card to save.">
+<meta property="og:url" content="https://davekorr.com/contact">
+<meta property="og:image" content="https://davekorr.com/img/hero.webp">
+<meta name="twitter:card" content="summary_large_image">
+<!--/META-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=5f36e5d8">
+</head>
+<body>
+<!--SEO--><main id="seo" class="sr-only"><h1>Contact Dave Korr</h1><p>I shoot the lakes and gorges of upstate New York and the cities I travel through, mostly at golden hour.</p><p>Email: <a href="mailto:hello@davekorr.com">hello@davekorr.com</a> · Instagram: <a href="https://instagram.com/dave_korir">@dave_korir</a> · <a href="/dave-korr.vcf">Save contact card</a></p><nav><a href="/">Home</a> · <a href="/photos">Photos</a> · <a href="/music">Music</a> · <a href="/contact">Contact</a> · <a href="/prints">Prints</a></nav></main><!--/SEO-->
+
+<!-- LOCK SCREEN -->
+<div id="lock" aria-label="Lock screen">
+  <img class="wall" id="lockWall" alt="">
+  <div class="lock-top">
+    <div class="lock-date" id="lockDate"></div>
+    <div class="lock-time" id="lockTime"></div>
+  </div>
+  <div class="lock-notes" id="lockNotes" aria-label="Notifications"></div>
+  <button class="lock-hint" id="unlockBtn" type="button">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
+    <span>Swipe up to unlock</span>
+  </button>
+  <div class="lock-bar" aria-hidden="true"></div>
+</div>
+
+<!-- DESKTOP / HOME -->
+<div id="shell" aria-hidden="true">
+
+  <!-- Mac -->
+  <div id="mac">
+    <img class="wall" id="macWall" alt="">
+    <div class="menubar">
+      <button class="mb-name" id="mbName" type="button" aria-haspopup="true"></button>
+      <span class="mb-app" id="mbApp">Finder</span>
+      <span>File</span><span>Edit</span><span>View</span><span>Window</span>
+      <div class="mb-right">
+        <svg width="17" height="13" viewBox="0 0 17 13" aria-hidden="true"><path d="M8.5 11.6l1.9-2a2.7 2.7 0 0 0-3.8 0zM4.6 7.5l1.3 1.3a3.7 3.7 0 0 1 5.2 0l1.3-1.3a5.5 5.5 0 0 0-7.8 0zM1.8 4.7l1.3 1.3a7.6 7.6 0 0 1 10.8 0l1.3-1.3a9.4 9.4 0 0 0-13.4 0z" fill="currentColor"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12" aria-hidden="true"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="16" height="8" rx="1.6" fill="currentColor"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".5"/></svg>
+        <span id="mbClock"></span>
+      </div>
+    </div>
+    <div class="mb-menu" id="mbMenu" hidden>
+      <button type="button" data-menu="about">About Dave Korr</button>
+      <hr>
+      <button type="button" data-menu="lock">Lock Screen</button>
+    </div>
+    <div id="winLayer"></div>
+    <div class="dock-wrap"><nav class="dock" id="dock" aria-label="Dock"></nav></div>
+  </div>
+
+  <!-- iPhone -->
+  <div id="phone">
+    <img class="wall" id="phoneWall" alt="">
+    <div class="status" id="status">
+      <span id="stClock"></span>
+      <span class="st-r" aria-hidden="true">
+        <svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+        <svg width="17" height="12" viewBox="0 0 17 13"><path d="M8.5 11.6l1.9-2a2.7 2.7 0 0 0-3.8 0zM4.6 7.5l1.3 1.3a3.7 3.7 0 0 1 5.2 0l1.3-1.3a5.5 5.5 0 0 0-7.8 0zM1.8 4.7l1.3 1.3a7.6 7.6 0 0 1 10.8 0l1.3-1.3a9.4 9.4 0 0 0-13.4 0z" fill="currentColor"/></svg>
+        <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="17" height="9" rx="2" fill="currentColor"/><rect x="25" y="4.5" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".45"/></svg>
+      </span>
+    </div>
+    <div class="home" id="home"></div>
+    <div id="appLayer"></div>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="config.js?v=13a757ac"></script>
+<script>/* photo list from R2: preview copy on preview links, live copy on davekorr.com */
+(function(){var live=/^(www\.)?davekorr\.com$/.test(location.hostname);var t=Math.floor(Date.now()/60000);document.write('<script src="https://images.davekorr.com/'+(live?'manifest.js':'manifest-preview.js')+'?t='+t+'"><\/script><script src="https://images.davekorr.com/music.js?t='+t+'"><\/script><script src="https://images.davekorr.com/news.js?t='+t+'"><\/script>');})();</script>
+<script src="r2.js?v=cee7f0fe"></script>
+<script src="map.js?v=7c4a232e"></script>
+<script src="app.js?v=027be370"></script>
+</body>
+</html>

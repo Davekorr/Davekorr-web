@@ -9,3 +9,6 @@ for f in ['styles.css','config.js','r2.js','map.js','app.js']:
 open('index.html','w').write(h)
 print('stamped')
 PY
+
+# Build the shareable section pages (/photos/<album>, /music, /contact ...), sitemap and robots.txt
+node tools/pages/build.js
