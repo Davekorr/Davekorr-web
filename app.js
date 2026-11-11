@@ -1058,8 +1058,8 @@
     var card = $('.ct-card', root), timers = [], flipped = false;
     function flip(v) { flipped = typeof v === 'boolean' ? v : !flipped; card.classList.toggle('flipped', flipped); }
     function stopAuto() { timers.forEach(clearTimeout); timers = []; }
-    // Shows the back once (after 3 s), turns to the front again 3 s later, then stays on the front
-    if (!reduce) timers = [setTimeout(function () { flip(true); }, 3000), setTimeout(function () { flip(false); }, 6000)];
+    // Shows the back once (after 1 s), holds it for 2 s, turns back to the front, then stays there
+    if (!reduce) timers = [setTimeout(function () { flip(true); }, 1000), setTimeout(function () { flip(false); }, 3000)];
     card.addEventListener('click', function (e) { if (e.target.closest('a,button')) return; stopAuto(); flip(); });
     root.addEventListener('click', function (e) {
       var b = e.target.closest('[data-act]'); if (!b) return; stopAuto();
