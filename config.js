@@ -398,6 +398,6 @@ window.SITE = {
     instagram: { mac: 'icons/mac/instagram.png', phone: 'icons/ios/instagram.png' },
     music:     { mac: 'icons/mac/music.png',     phone: 'icons/ios/music.png' },
     camera:    { mac: 'icons/mac/camera.png',    phone: 'icons/ios/camera.png' },
-    contacts:  { mac: 'icons/mac/contacts.png',  phone: 'icons/ios/contacts.png' }
+    contacts:  { mac: 'icons/mac/contacts-macos.png',  phone: 'icons/ios/contacts-macos.png' }
   }
 };
