@@ -173,8 +173,9 @@
     if (news && live && news.open && live.album && news.open.album === live.album) news = null;
     lockList = [live, news, ev.length ? ev[day % ev.length] : null].filter(Boolean);
     var music = nowPlayingMini();
-    $('#lockMusic').innerHTML = mode === 'mac' ? music : '';
-    $('#lockNotes').innerHTML = (mode === 'mac' ? '' : music) + lockList.map(function (n, i) {
+    $('#lockMusic').innerHTML = music;          // top right on computers, top banner on phones
+    $('#lock').classList.toggle('has-music', !!music);
+    $('#lockNotes').innerHTML = lockList.map(function (n, i) {
       var tag = n.link ? 'a href="' + esc(n.link) + '" target="_blank" rel="noopener"' : 'button type="button"';
       return '<' + tag + ' class="ntf" data-n="' + i + '" style="animation-delay:' + (300 + i * 140) + 'ms">' +
         '<span class="ntf-ic">' + icon(n.app) + '</span><span class="ntf-main"><span class="ntf-row"><span class="ntf-title">' + esc(n.title) +

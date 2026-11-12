@@ -569,6 +569,11 @@ body.dock-auto.dock-peek .dock-wrap{transform:none}
 .lock-music{position:absolute;top:22px;right:22px;width:360px;z-index:3}
 .lock-music:empty{display:none}
 .lock-music .ntf{animation:banner-in .6s cubic-bezier(.22,1,.36,1) .25s both}
-.mode-phone .lock-music{display:none}
+/* phones: a compact banner across the top, above the clock */
+.mode-phone .lock-music{top:max(10px,env(safe-area-inset-top));left:10px;right:10px;width:auto}
+.mode-phone .lock-music .ntf{padding:10px 12px;border-radius:18px}
+.mode-phone .lock-music .npc-kicker{margin:-1px 0 4px;font-size:11.5px}
+.mode-phone .lock-music .npc-bar{margin-top:5px}
+.mode-phone #lock.has-music .lock-top{margin-top:calc(7vh + 92px)}
 .npc{flex-wrap:wrap}
 .npc-kicker{flex:0 0 100%;font-size:12px;font-weight:600;letter-spacing:.01em;color:rgba(255,255,255,.85);margin:-2px 0 6px}
