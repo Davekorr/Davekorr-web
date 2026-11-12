@@ -1,4 +1,4 @@
-# © Dave Korr. Photos are copyrighted. No AI training, datasets or bulk downloading. Policy: https://davekorr.com/copyright
+# © Dave Korir (Dave Korr). Photos are copyrighted. No AI training, datasets or bulk downloading. Policy: https://davekorr.com/copyright
 
 User-agent: GPTBot
 User-agent: ClaudeBot

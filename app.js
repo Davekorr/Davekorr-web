@@ -629,7 +629,7 @@
       $('.v-title b', v).textContent = p.title || albumOf(p).name || '';
       $('.v-title span', v).textContent = p.taken ? fmtDate(p.taken, true) : (p.title ? albumOf(p).name || '' : '');
       $('[data-count]', v).textContent = (vi + 1) + ' / ' + list.length;
-      $('.v-exif', v).textContent = [p.camera, p.fl, p.f, p.ss && p.ss + 's', p.iso && 'ISO ' + p.iso, '© Dave Korr'].filter(Boolean).join(' · ');
+      $('.v-exif', v).textContent = [p.camera, p.fl, p.f, p.ss && p.ss + 's', p.iso && 'ISO ' + p.iso, '© Dave Korir'].filter(Boolean).join(' · ');
       var stage = $('.v-stage', v), old = $('img', stage); if (old) old.remove();
       if (stage.resetZoom) stage.resetZoom();
       var img = new Image(); setPhoto(img, p); img.alt = p.alt; img.draggable = false; stage.insertBefore(img, stage.firstChild);
@@ -1080,7 +1080,7 @@
       '<div class="ct-btns">' +
         '<a class="ct-btn primary" href="/dave-korr.vcf" download="Dave Korr.vcf">' + ic.save + '<span>' + saveLbl + '<small>' + saveSub + '</small></span></a></div>' +
       '<p class="ct-other">Tap the card to flip it. On another device? Scan the code on the back.</p>' +
-      '<p class="ct-other">© ' + new Date().getFullYear() + ' Dave Korr · <button type="button" class="ct-link" data-act="copyright">Copyright &amp; AI policy</button></p>' +
+      '<p class="ct-other">© ' + new Date().getFullYear() + ' Dave Korir · <button type="button" class="ct-link" data-act="copyright">Copyright &amp; AI policy</button></p>' +
       '</div></div></div>';
     var card = $('.ct-card', root), timers = [], flipped = false;
     function flip(v) { flipped = typeof v === 'boolean' ? v : !flipped; card.classList.toggle('flipped', flipped); }

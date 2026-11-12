@@ -43,7 +43,7 @@ const pages = [
     body: `<h1>Now</h1>${nav}<ul>` + ((S.now && S.now.items) || []).map(i => `<li>${esc(i.label)}: ${esc(i.text)}</li>`).join('') + '</ul>' },
   { p: 'reading', title: 'Reading — Dave Korr', desc: "What Dave Korr is reading: " + (S.reading || []).map(b => b.title + ' by ' + b.author).join('; ') + '.',
     body: `<h1>Reading</h1>${nav}<ul>` + (S.reading || []).map(b => `<li>${esc(b.title)} by ${esc(b.author)} (${b.status === 'reading' ? 'reading now' : b.status === 'next' ? 'up next' : 'finished'})</li>`).join('') + '</ul>' },
-  { p: 'copyright', title: 'Copyright & AI policy — Dave Korr', desc: '© Dave Korr. All photographs on davekorr.com are protected by copyright. No downloading, reuse or AI training without written permission.',
+  { p: 'copyright', title: 'Copyright & AI policy — Dave Korr', desc: '© Dave Korir (Dave Korr). All photographs on davekorr.com are protected by copyright. No downloading, reuse or AI training without written permission.',
     body: `<h1>Copyright &amp; AI policy</h1>` + esc(((S.notes || []).find(n => n.id === '21.04') || {}).body || '').split('\n').map(l => `<p>${l}</p>`).join('') + nav },
   { p: 'notes', title: 'Notes — Dave Korr', desc: 'Field notes from Dave Korr.', body: `<h1>Notes</h1>${nav}` }
 ];
@@ -56,7 +56,7 @@ for (const pg of pages) {
   const meta = `<!--META-->\n<title>${esc(src.title)}</title>\n<meta name="description" content="${esc(src.desc)}">\n` +
     `<link rel="canonical" href="${url}">\n<meta property="og:type" content="website">\n<meta property="og:site_name" content="Dave Korr">\n` +
     `<meta property="og:title" content="${esc(src.title)}">\n<meta property="og:description" content="${esc(src.desc)}">\n<meta property="og:url" content="${url}">\n` +
-    `<meta property="og:image" content="${esc(img)}">\n<meta name="twitter:card" content="summary_large_image">\n<meta name="robots" content="noai, noimageai">\n<meta name="tdm-reservation" content="1">\n<meta name="copyright" content="© ${new Date().getFullYear()} Dave Korr. All rights reserved.">\n<!--/META-->`;
+    `<meta property="og:image" content="${esc(img)}">\n<meta name="twitter:card" content="summary_large_image">\n<meta name="robots" content="noai, noimageai">\n<meta name="tdm-reservation" content="1">\n<meta name="copyright" content="© ${new Date().getFullYear()} Dave Korir (Dave Korr). All rights reserved.">\n<!--/META-->`;
   let html = tpl.replace(/<!--META-->[\s\S]*?<!--\/META-->/, meta)
                 .replace(/<!--SEO-->[\s\S]*?<!--\/SEO-->/, `<!--SEO--><main id="seo" class="sr-only">${src.body}</main><!--/SEO-->`);
   const out = pg.p ? path.join(ROOT, pg.p, 'index.html') : path.join(ROOT, 'index.html');
@@ -69,7 +69,7 @@ fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), '<?xml version="1.0" encoding="
 const AI_BOTS = ['GPTBot', 'ClaudeBot', 'anthropic-ai', 'CCBot', 'Google-Extended', 'Applebot-Extended', 'Bytespider', 'meta-externalagent',
   'FacebookBot', 'cohere-ai', 'cohere-training-data-crawler', 'PerplexityBot', 'Diffbot', 'img2dataset', 'Omgilibot', 'Timpibot', 'ImagesiftBot', 'AI2Bot'];
 fs.writeFileSync(path.join(ROOT, 'robots.txt'),
-  '# © Dave Korr. Photos are copyrighted. No AI training, datasets or bulk downloading. Policy: ' + ORIGIN + '/copyright\n\n' +
+  '# © Dave Korir (Dave Korr). Photos are copyrighted. No AI training, datasets or bulk downloading. Policy: ' + ORIGIN + '/copyright\n\n' +
   AI_BOTS.map(b => 'User-agent: ' + b).join('\n') + '\nDisallow: /\n\n' +
   'User-agent: *\nContent-Signal: search=yes, ai-train=no, ai-input=no\nAllow: /\n\nSitemap: ' + ORIGIN + '/sitemap.xml\n');
 fs.mkdirSync(path.join(ROOT, '.well-known'), { recursive: true });

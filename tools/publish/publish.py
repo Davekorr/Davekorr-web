@@ -82,12 +82,12 @@ def make_master(src, out):
     # Only copyright info goes into the file (never GPS or camera serials): Artist, Copyright, and an
     # XMP note that AI training / data mining is not allowed (IPTC "Data Mining: prohibited")
     year = (meta.get('taken') or '')[:4] or time.strftime('%Y')
-    ex = Image.Exif(); ex[0x013B] = 'Dave Korr'; ex[0x8298] = f'Copyright {year} Dave Korr. All rights reserved. No AI training.'  # EXIF text is plain ASCII
+    ex = Image.Exif(); ex[0x013B] = 'Dave Korir'; ex[0x8298] = f'Copyright {year} Dave Korir (Dave Korr). All rights reserved. No AI training.'  # EXIF text is plain ASCII
     xmp = ('<x:xmpmeta xmlns:x="adobe:ns:meta/"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">'
            '<rdf:Description xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xmpRights="http://ns.adobe.com/xap/1.0/rights/" '
            'xmlns:plus="http://ns.useplus.org/ldf/xmp/1.0/">'
-           f'<dc:creator><rdf:Seq><rdf:li>Dave Korr</rdf:li></rdf:Seq></dc:creator>'
-           f'<dc:rights><rdf:Alt><rdf:li xml:lang="x-default">© {year} Dave Korr. All rights reserved.</rdf:li></rdf:Alt></dc:rights>'
+           f'<dc:creator><rdf:Seq><rdf:li>Dave Korir</rdf:li></rdf:Seq></dc:creator>'
+           f'<dc:rights><rdf:Alt><rdf:li xml:lang="x-default">© {year} Dave Korir (Dave Korr). All rights reserved.</rdf:li></rdf:Alt></dc:rights>'
            '<xmpRights:Marked>True</xmpRights:Marked><xmpRights:WebStatement>https://davekorr.com/copyright</xmpRights:WebStatement>'
            '<plus:DataMining>http://ns.useplus.org/ldf/vocab/DMI-PROHIBITED</plus:DataMining>'
            '</rdf:Description></rdf:RDF></x:xmpmeta>')
