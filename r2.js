@@ -9,7 +9,7 @@
   if (!S || !M || !M.photos || !M.photos.length) return;
   var R = S.r2 || {}, base = M.base || 'https://images.davekorr.com';
   // Cloudflare resizes on the fly: one master per photo, any width we ask for, WebP/AVIF when the browser supports it
-  var sized = function (key, w) { return base + '/cdn-cgi/image/width=' + w + ',quality=82,fit=scale-down,format=auto/' + key; };
+  var sized = function (key, w) { return base + '/cdn-cgi/image/width=' + w + ',quality=82,fit=scale-down,format=auto,metadata=copyright/' + key; };
   var titleCase = function (id) { return id.replace(/-/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); }); };
 
   var byAlbum = {};

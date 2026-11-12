@@ -83,7 +83,7 @@
   /* Permanent addresses: davekorr.com/photos/letchworth, /music, /contact ... The address bar follows what's open,
      and opening one of those links opens that app straight away (tools/pages/build.js makes the matching pages). */
   var APP_PATH = { photos: 'photos', music: 'music', contacts: 'contact', notes: 'notes' };
-  var PATH_APP = { photos: 'photos', music: 'music', contact: 'contacts', about: 'contacts', notes: 'notes', prints: 'safari', reading: 'safari', now: 'safari' };
+  var PATH_APP = { photos: 'photos', music: 'music', contact: 'contacts', about: 'contacts', notes: 'notes', prints: 'safari', reading: 'safari', now: 'safari', copyright: 'notes' };
   function setPath(p, title) {
     try { if (location.pathname.replace(/\/$/, '') !== '/' + p && !(p === '' && location.pathname === '/')) history.replaceState(history.state, '', '/' + p); } catch (e) {}
     document.title = title || 'Dave Korr — Photographer';
@@ -94,6 +94,7 @@
     var o = {};
     if (parts[0] === 'prints') o.tab = 'shop';
     if (parts[0] === 'reading' || parts[0] === 'now') o.tab = parts[0];
+    if (parts[0] === 'copyright') o.doc = '21.04';
     if (id === 'photos' && parts[1] && S.albums.some(function (a) { return a.id === parts[1]; })) o.album = parts[1];
     return { id: id, opts: o };
   }
@@ -102,10 +103,11 @@
     if (app.link) { window.open(app.link, '_blank', 'noopener'); return; }
     if (mode === 'mac') WM.open(id, opts || {}); else Phone.open(id, opts || {}, fromEl);
   }
-  var photosPath = ['photos', 'Photos — Dave Korr'], safariPath = ['prints', 'Prints — Dave Korr'];
+  var photosPath = ['photos', 'Photos — Dave Korr'], safariPath = ['prints', 'Prints — Dave Korr'], notesPath = ['notes', 'Notes — Dave Korr'];
   function pathFor(id) {
     if (id === 'photos') setPath(photosPath[0], photosPath[1]);
     else if (id === 'safari') setPath(safariPath[0], safariPath[1]);
+    else if (id === 'notes') setPath(notesPath[0], notesPath[1]);
     else setPath(APP_PATH[id] || '', APPS[id] ? APPS[id].name + ' — Dave Korr' : '');
   }
 
@@ -627,7 +629,7 @@
       $('.v-title b', v).textContent = p.title || albumOf(p).name || '';
       $('.v-title span', v).textContent = p.taken ? fmtDate(p.taken, true) : (p.title ? albumOf(p).name || '' : '');
       $('[data-count]', v).textContent = (vi + 1) + ' / ' + list.length;
-      $('.v-exif', v).textContent = [p.camera, p.fl, p.f, p.ss && p.ss + 's', p.iso && 'ISO ' + p.iso].filter(Boolean).join(' · ');
+      $('.v-exif', v).textContent = [p.camera, p.fl, p.f, p.ss && p.ss + 's', p.iso && 'ISO ' + p.iso, '© Dave Korr'].filter(Boolean).join(' · ');
       var stage = $('.v-stage', v), old = $('img', stage); if (old) old.remove();
       if (stage.resetZoom) stage.resetZoom();
       var img = new Image(); setPhoto(img, p); img.alt = p.alt; img.draggable = false; stage.insertBefore(img, stage.firstChild);
@@ -863,6 +865,8 @@
       if (o.compose && byType('compose')) { doc = byType('compose').id; showList = false; }
       if (o.doc) { doc = o.doc; showList = false; }
       draw();
+      notesPath = doc === '21.04' && !showList ? ['copyright', 'Copyright & AI policy — Dave Korr'] : ['notes', 'Notes — Dave Korr'];
+      setPath(notesPath[0], notesPath[1]);
     }
     update(opts || {});
     return { update: update };
@@ -1076,6 +1080,7 @@
       '<div class="ct-btns">' +
         '<a class="ct-btn primary" href="/dave-korr.vcf" download="Dave Korr.vcf">' + ic.save + '<span>' + saveLbl + '<small>' + saveSub + '</small></span></a></div>' +
       '<p class="ct-other">Tap the card to flip it. On another device? Scan the code on the back.</p>' +
+      '<p class="ct-other">© ' + new Date().getFullYear() + ' Dave Korr · <button type="button" class="ct-link" data-act="copyright">Copyright &amp; AI policy</button></p>' +
       '</div></div></div>';
     var card = $('.ct-card', root), timers = [], flipped = false;
     function flip(v) { flipped = typeof v === 'boolean' ? v : !flipped; card.classList.toggle('flipped', flipped); }
@@ -1087,6 +1092,7 @@
       var b = e.target.closest('[data-act]'); if (!b) return; stopAuto();
       if (b.dataset.act === 'flip') flip();
       else if (b.dataset.act === 'prints') openApp('safari', { tab: 'shop' });
+      else if (b.dataset.act === 'copyright') openApp('notes', { doc: '21.04' });
     });
     root.addEventListener('pointerdown', stopAuto);
     return { destroy: stopAuto };
@@ -1147,6 +1153,10 @@
   });
   var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(setMode, 150); });
   setMode(); tick(); setInterval(tick, 10000);
+  /* Photos are copyrighted: no right-click "Save image" or drag-out on photos (a polite deterrent, not a lock) */
+  document.addEventListener('contextmenu', function (e) { if (e.target.closest('.v-stage img, .ph-cell img, .ph-grid img, .widget img, .ps-img')) e.preventDefault(); });
+  document.addEventListener('dragstart', function (e) { if (e.target.tagName === 'IMG') e.preventDefault(); });
+
   /* Spotlight (computers only): ⌘K / Ctrl+K or the magnifier in the menu bar. Searches apps, albums,
      songs and quick actions; arrow keys + Enter, Esc closes. */
   var Spot = (function () {
@@ -1161,6 +1171,7 @@
       S.albums.forEach(function (a) { if (albumPhotos(a.id).length) items.push({ kind: 'Album', title: a.name, keys: (a.pin || '') + ' photos ' + (a.eyebrow || ''), icon: 'photos', run: go('photos', { album: a.id }) }); });
       items.push({ kind: 'Action', title: 'Email Dave', keys: 'contact mail hello', icon: 'mail', run: link('mailto:' + S.email) });
       items.push({ kind: 'Action', title: 'Save Dave\'s contact card', keys: 'vcard download contact about', icon: 'contacts', run: function () { location.href = '/dave-korr.vcf'; } });
+      items.push({ kind: 'Action', title: 'Copyright & AI policy', keys: 'copyright license licensing rights ai policy usage permission', icon: 'notes', run: go('notes', { doc: '21.04' }) });
       items.push({ kind: 'Action', title: 'Now: what Dave is up to', keys: 'now currently update shooting', icon: 'safari', run: go('safari', { tab: 'now' }) });
       items.push({ kind: 'Action', title: 'Reading list', keys: 'books reading what dave reads ' + (S.reading || []).map(function (b) { return b.title + ' ' + b.author; }).join(' '), icon: 'safari', run: go('safari', { tab: 'reading' }) });
       items.push({ kind: 'Action', title: 'Buy a print', keys: 'prints shop store', icon: 'safari', run: go('safari', { tab: 'shop' }) });

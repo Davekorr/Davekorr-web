@@ -590,3 +590,5 @@ body.dock-auto.dock-peek .dock-wrap{transform:none}
 .npm-bar i b{display:block;height:100%;background:#fff;transition:width 1s linear}
 .npm-play{flex:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(255,255,255,.14)}
 .npm-play svg{width:20px;height:20px}
+.v-stage img,.ph-cell img,.widget img,.ps-img{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}
+.ct-link{background:none;border:0;padding:0;color:#ff9f63;font:inherit;cursor:pointer;text-decoration:underline}

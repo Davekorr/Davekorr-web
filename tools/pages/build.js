@@ -23,7 +23,7 @@ function albumPhotos(id) {
 const albums = S.albums.map(a => ({ ...a, photos: albumPhotos(a.id) })).filter(a => a.photos.length);
 const DEF_IMG = abs('img/hero.webp'), INTRO = (S.about && S.about.bio) || 'Photographer based in Rochester, New York.';
 const albumLinks = () => '<ul>' + albums.map(a => `<li><a href="/photos/${a.id}">${esc(a.name)}</a> (${a.photos.length} photos)</li>`).join('') + '</ul>';
-const nav = '<nav><a href="/">Home</a> · <a href="/photos">Photos</a> · <a href="/music">Music</a> · <a href="/contact">Contact</a> · <a href="/prints">Prints</a></nav>';
+const nav = '<nav><a href="/">Home</a> · <a href="/photos">Photos</a> · <a href="/music">Music</a> · <a href="/contact">Contact</a> · <a href="/prints">Prints</a> · <a href="/copyright">Copyright</a></nav>';
 const pages = [
   { p: '', title: 'Dave Korr — Photographer', desc: 'Dave Korr — photographer based in Rochester, New York. ' + INTRO,
     body: `<h1>Dave Korr</h1><p>${esc(INTRO)}</p>${nav}<h2>Albums</h2>${albumLinks()}` },
@@ -43,6 +43,8 @@ const pages = [
     body: `<h1>Now</h1>${nav}<ul>` + ((S.now && S.now.items) || []).map(i => `<li>${esc(i.label)}: ${esc(i.text)}</li>`).join('') + '</ul>' },
   { p: 'reading', title: 'Reading — Dave Korr', desc: "What Dave Korr is reading: " + (S.reading || []).map(b => b.title + ' by ' + b.author).join('; ') + '.',
     body: `<h1>Reading</h1>${nav}<ul>` + (S.reading || []).map(b => `<li>${esc(b.title)} by ${esc(b.author)} (${b.status === 'reading' ? 'reading now' : b.status === 'next' ? 'up next' : 'finished'})</li>`).join('') + '</ul>' },
+  { p: 'copyright', title: 'Copyright & AI policy — Dave Korr', desc: '© Dave Korr. All photographs on davekorr.com are protected by copyright. No downloading, reuse or AI training without written permission.',
+    body: `<h1>Copyright &amp; AI policy</h1>` + esc(((S.notes || []).find(n => n.id === '21.04') || {}).body || '').split('\n').map(l => `<p>${l}</p>`).join('') + nav },
   { p: 'notes', title: 'Notes — Dave Korr', desc: 'Field notes from Dave Korr.', body: `<h1>Notes</h1>${nav}` }
 ];
 const tpl = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
@@ -54,7 +56,7 @@ for (const pg of pages) {
   const meta = `<!--META-->\n<title>${esc(src.title)}</title>\n<meta name="description" content="${esc(src.desc)}">\n` +
     `<link rel="canonical" href="${url}">\n<meta property="og:type" content="website">\n<meta property="og:site_name" content="Dave Korr">\n` +
     `<meta property="og:title" content="${esc(src.title)}">\n<meta property="og:description" content="${esc(src.desc)}">\n<meta property="og:url" content="${url}">\n` +
-    `<meta property="og:image" content="${esc(img)}">\n<meta name="twitter:card" content="summary_large_image">\n<!--/META-->`;
+    `<meta property="og:image" content="${esc(img)}">\n<meta name="twitter:card" content="summary_large_image">\n<meta name="robots" content="noai, noimageai">\n<meta name="tdm-reservation" content="1">\n<meta name="copyright" content="© ${new Date().getFullYear()} Dave Korr. All rights reserved.">\n<!--/META-->`;
   let html = tpl.replace(/<!--META-->[\s\S]*?<!--\/META-->/, meta)
                 .replace(/<!--SEO-->[\s\S]*?<!--\/SEO-->/, `<!--SEO--><main id="seo" class="sr-only">${src.body}</main><!--/SEO-->`);
   const out = pg.p ? path.join(ROOT, pg.p, 'index.html') : path.join(ROOT, 'index.html');
@@ -63,5 +65,13 @@ for (const pg of pages) {
 }
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
   sitemap.map(u => `  <url><loc>${u}</loc></url>`).join('\n') + '\n</urlset>\n');
-fs.writeFileSync(path.join(ROOT, 'robots.txt'), 'User-agent: *\nAllow: /\n\nSitemap: ' + ORIGIN + '/sitemap.xml\n');
+// AI training / dataset crawlers: not allowed anywhere (search engines are still welcome)
+const AI_BOTS = ['GPTBot', 'ClaudeBot', 'anthropic-ai', 'CCBot', 'Google-Extended', 'Applebot-Extended', 'Bytespider', 'meta-externalagent',
+  'FacebookBot', 'cohere-ai', 'cohere-training-data-crawler', 'PerplexityBot', 'Diffbot', 'img2dataset', 'Omgilibot', 'Timpibot', 'ImagesiftBot', 'AI2Bot'];
+fs.writeFileSync(path.join(ROOT, 'robots.txt'),
+  '# © Dave Korr. Photos are copyrighted. No AI training, datasets or bulk downloading. Policy: ' + ORIGIN + '/copyright\n\n' +
+  AI_BOTS.map(b => 'User-agent: ' + b).join('\n') + '\nDisallow: /\n\n' +
+  'User-agent: *\nContent-Signal: search=yes, ai-train=no, ai-input=no\nAllow: /\n\nSitemap: ' + ORIGIN + '/sitemap.xml\n');
+fs.mkdirSync(path.join(ROOT, '.well-known'), { recursive: true });
+fs.writeFileSync(path.join(ROOT, '.well-known', 'tdmrep.json'), JSON.stringify([{ location: '/', 'tdm-reservation': 1, 'tdm-policy': ORIGIN + '/copyright' }], null, 2) + '\n');
 console.log('pages:', pages.length, '| albums:', albums.map(a => a.id + '(' + a.photos.length + ')').join(' '));

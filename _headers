@@ -1,3 +1,9 @@
+# Every page: ask AI systems not to train on or mine this site (copyright reserved)
+/*
+  X-Robots-Tag: noai, noimageai
+  tdm-reservation: 1
+  tdm-policy: https://davekorr.com/copyright
+
 # Always check for a newer version of the page and code (cheap: unchanged files return 304)
 /
   Cache-Control: no-cache
