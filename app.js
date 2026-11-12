@@ -142,10 +142,7 @@
     if (toSet > 0 && toSet <= 60) return { app: 'photos', title: '🌅 Golden hour in Rochester, right now', body: toSet + ' min of warm light left before sunset.', time: 'live', open: open };
     if (toSet <= 0 && toSet > -35) return { app: 'photos', title: '🌙 Blue hour in Rochester', body: 'The sun set at ' + rocTime(t.set) + '. The sky is turning blue.', time: 'live', open: open };
     if (toRise > -60 && toRise <= 30) return { app: 'photos', title: toRise > 0 ? '🌄 Sunrise in Rochester in ' + toRise + ' min' : '🌄 Morning light in Rochester', body: 'Sunrise ' + (toRise > 0 ? 'at ' : 'was at ') + rocTime(t.rise) + '. Golden hour, round one.', time: 'live', open: open };
-    if (toRise <= -60 && toSet > 180) {           // daytime: show the newest album instead
-      var na = S.albums.filter(function (a) { return albumPhotos(a.id).length; })[0];
-      if (na) return { app: 'photos', title: 'New drop 🍂', body: na.name + ' is live — fresh frames.', time: 'new', open: { app: 'photos', album: na.id }, album: na.id };
-    }
+    if (toRise <= -60 && toSet > 180) return null;   // daytime: no light card (the "New drop" card is always there)
     var nextRise = toRise > 0 ? t.rise : sunTimes(new Date(now.getTime() + 864e5)).rise;
     return { app: 'photos', title: '🌙 ' + rocTime(now) + ' in Rochester', body: 'Next sunrise at ' + rocTime(nextRise) + '.', time: 'live', open: open };
   }
@@ -169,9 +166,14 @@
   function buildLock() {
     $('#lockWall').src = mode === 'phone' ? S.wallpapers.lockPhone : S.wallpapers.lockDesktop;
     var ev = S.notifications || [], day = Math.floor((Date.now() - new Date().getTimezoneOffset() * 6e4) / 864e5);
+    // Up to 3 cards: New drop (newest album, always), Rochester's light (when there's something to say),
+    // then the latest news, or the daily rotating one when there's no news.
+    var na = S.albums.filter(function (a) { return albumPhotos(a.id).length; })[0];
+    var mo = new Date().getMonth(), leaf = mo < 2 || mo === 11 ? '❄️' : mo < 5 ? '🌱' : mo < 8 ? '☀️' : '🍂';
+    var drop = na ? { app: 'photos', title: 'New drop ' + leaf, body: na.name + ' is live — fresh frames.', time: 'new', open: { app: 'photos', album: na.id } } : null;
     var live = liveNote(), news = newsNote();
-    if (news && live && news.open && live.album && news.open.album === live.album) news = null;
-    lockList = [live, news, ev.length ? ev[day % ev.length] : null].filter(Boolean);
+    if (news && drop && news.open && news.open.album === drop.open.album) { drop.time = news.time; news = null; }
+    lockList = [drop, live, news || (ev.length ? ev[day % ev.length] : null)].filter(Boolean);
     var music = nowPlayingMini();
     $('#lockMusic').innerHTML = music;          // top right on computers, top banner on phones
     $('#lock').classList.toggle('has-music', !!music);
