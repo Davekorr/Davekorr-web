@@ -267,7 +267,7 @@
     setTimeout(function () {
       lock.hidden = true; shell.style.transition = ''; document.body.classList.remove('animating');
       if (then) then();
-      setTimeout(macBanner, mode === 'mac' ? 1800 : 900);
+      if (mode === 'mac') setTimeout(macBanner, 1800);
     }, ms ? ms - 40 : 0);
   }
   function relock() {
@@ -941,7 +941,7 @@
   var npTimer = null;
   function nowPlayingMini() {
     var s = pinSong(); if (!s) return '';
-    var total = +s.dur || 210, t0 = Date.now(), START = 83;
+    var total = +s.dur || 210, t0 = NP_T0, START = 83;
     clearInterval(npTimer);
     npTimer = setInterval(function () {
       var el = $('#lock .npc'); if (!el) return clearInterval(npTimer);
@@ -957,15 +957,22 @@
       '<span class="npc-bar"><span class="npc-el">' + mmss(START) + '</span><i><b style="width:' + (START / total * 100).toFixed(2) + '%"></b></i><span class="npc-rem">-' + mmss(total - START) + '</span></span></span>' +
       '<a class="npc-play" href="' + esc(amUrl(s)) + '" target="_blank" rel="noopener" aria-label="Play ' + esc(s.title) + ' in Apple Music">' + SV.play + '</a></div>';
   }
+  /* Phone home screen: compact Now Playing (one row), same running time as the lock screen (starts 1:23 in) */
+  var NP_T0 = Date.now(), npHomeT = null;
+  document.addEventListener('click', function (e) { var b = e.target.closest('.npm-open'); if (b) openApp('music', null, b); });
+  function npTimes(total) { var t = (83 + (Date.now() - NP_T0) / 1000) % total; return { t: t, left: total - t, pct: t / total * 100 }; }
   function nowPlayingCard(cls) {
-    var M = S.music; if (!M || !M.songs.length) return '';
-    var s = pinSong(), i = 0;
-    var prev = M.songs[M.songs.length - 1], next = M.songs[0];
-    return '<div class="np ' + (cls || '') + '"><div class="np-top">' + cover(s, 54) + '<div class="np-txt"><b>' + esc(s.title) + '</b><span>' + esc(s.artist) + '</span></div></div>' +
-      '<div class="np-bar"><span>0:00</span><i></i><span>' + esc(M.playlist) + '</span></div>' +
-      '<div class="np-ctl"><a href="' + esc(amUrl(prev)) + '" target="_blank" rel="noopener" aria-label="Previous: ' + esc(prev.title) + '">' + SV.prev + '</a>' +
-      '<a class="np-play" href="' + esc(amUrl(s)) + '" target="_blank" rel="noopener" aria-label="Play ' + esc(s.title) + ' in Apple Music">' + SV.play + '</a>' +
-      '<a href="' + esc(amUrl(next)) + '" target="_blank" rel="noopener" aria-label="Next: ' + esc(next.title) + '">' + SV.next + '</a></div></div>';
+    var s = pinSong(); if (!s) return '';
+    var total = +s.dur || 210, x = npTimes(total);
+    clearInterval(npHomeT);
+    npHomeT = setInterval(function () {
+      var el = $('.np-mini'); if (!el) return clearInterval(npHomeT);
+      var y = npTimes(total); $('.npm-el', el).textContent = mmss(y.t); $('.npm-rem', el).textContent = '-' + mmss(y.left); $('.npm-bar b', el).style.width = y.pct.toFixed(2) + '%';
+    }, 1000);
+    return '<div class="np-mini ' + (cls || '') + '"><button type="button" class="npm-open" data-open="music" aria-label="Open Music: ' + esc(s.title) + ' by ' + esc(s.artist) + '">' + cover(s, 44) +
+      '<span class="npm-txt"><b>' + esc(s.title) + '</b><span>' + esc(s.artist) + '</span>' +
+      '<span class="npm-bar"><span class="npm-el">' + mmss(x.t) + '</span><i><b style="width:' + x.pct.toFixed(2) + '%"></b></i><span class="npm-rem">-' + mmss(x.left) + '</span></span></span></button>' +
+      '<a class="npm-play" href="' + esc(amUrl(s)) + '" target="_blank" rel="noopener" aria-label="Play ' + esc(s.title) + ' in Apple Music">' + SV.play + '</a></div>';
   }
   var SV = {
     play: '<svg width="34" height="34" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>',
