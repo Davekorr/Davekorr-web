@@ -175,8 +175,8 @@
     if (news && drop && news.open && news.open.album === drop.open.album) { drop.time = news.time; news = null; }
     lockList = [drop, live, news || (ev.length ? ev[day % ev.length] : null)].filter(Boolean);
     var music = nowPlayingMini();
-    $('#lockMusic').innerHTML = music;          // top right on computers, top banner on phones
-    $('#lock').classList.toggle('has-music', !!music);
+    $('#lockMusic').innerHTML = mode === 'mac' ? music : '';   // computers: top right of the lock screen. Phones: shown after unlocking
+    $('#lock').classList.toggle('has-music', mode === 'mac' && !!music);
     $('#lockNotes').innerHTML = lockList.map(function (n, i) {
       var tag = n.link ? 'a href="' + esc(n.link) + '" target="_blank" rel="noopener"' : 'button type="button"';
       return '<' + tag + ' class="ntf" data-n="' + i + '" style="animation-delay:' + (300 + i * 140) + 'ms">' +
@@ -267,7 +267,7 @@
     setTimeout(function () {
       lock.hidden = true; shell.style.transition = ''; document.body.classList.remove('animating');
       if (then) then();
-      if (mode === 'mac') setTimeout(macBanner, 1800);
+      setTimeout(macBanner, mode === 'mac' ? 1800 : 900);
     }, ms ? ms - 40 : 0);
   }
   function relock() {
@@ -313,12 +313,13 @@
     if (b.dataset.menu === 'lock') relock(); else openApp('notes', { doc: '21.01' });
   });
   function macBanner() {
-    if (mode !== 'mac' || !unlocked || $('.mac-banner')) return;
+    if (!unlocked || $('.mac-banner')) return;
+    if (mode === 'phone' && Phone.cur) return;           // not on top of an app someone just opened
     var b = document.createElement('button'); b.type = 'button'; b.className = 'mac-banner';
     var s = pinSong(); if (!s) return;
     b.innerHTML = '<span class="ntf-ic">' + cover(s, 36) + '</span><span class="ntf-main"><span class="ntf-row"><span class="ntf-title">Check out what Dave\'s listening to 🎵</span></span><span class="ntf-body">' + esc(s.title) + ' · ' + esc(s.artist) + '</span></span>';
     b.addEventListener('click', function () { b.remove(); openApp('music'); });
-    $('#mac').appendChild(b);
+    $(mode === 'mac' ? '#mac' : '#phone').appendChild(b);
     setTimeout(function () { if (b.isConnected) { b.style.transition = 'opacity .4s, transform .4s'; b.style.opacity = 0; b.style.transform = 'translateX(30px)'; setTimeout(function () { b.remove(); }, 400); } }, 9000);
   }
 
